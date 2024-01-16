@@ -112,7 +112,7 @@ def run_divine_command(source_path, destination_path):
     """Runs the divine command to create a .pak file from the mod folder."""
     try:
         subprocess.run([
-            "e:\ExportTool-v1.18.7\Tools\divine.exe",
+            "divine",
             "--action", "create-package",
             "--game", "bg3",
             "--source", source_path,
@@ -160,7 +160,7 @@ def generate_and_package_mods():
                     events['combat'] = combat
 
                     # Create mod variation folder with necessary files
-                    mod_path = create_mod_variations(interval, events)
+                    create_mod_variations(interval, events)
 
     # Copy the zip_README.txt file to the output folder
     shutil.copy("zip_README.txt", os.path.join(OUTPUT_PATH, "README.txt"))
