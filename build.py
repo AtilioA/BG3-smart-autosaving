@@ -48,14 +48,17 @@ def create_mod_variations(interval, events: dict):
     folder_name = f"{MOD_NAME} - {interval}min"
     mod_path = os.path.join(OUTPUT_PATH, folder_name)
     os.makedirs(mod_path, exist_ok=True)
-    subfolder_name = os.path.join(mod_path, f"{interval}min_{'_'.join(included_events)}")
+    subfolder_name = f"{interval}min_{'_'.join(included_events)}"
+    subfolder_path = os.path.join(mod_path, subfolder_name)
 
     # Copy Lua and Config.json files
-    mods_folder_path = os.path.join(subfolder_name, "Mods")
-    script_extender_path = os.path.join(mods_folder_path, "ScriptExtender")
+    mods_folder_path = os.path.join(subfolder_path, "Mods")
+    proper_mod_folder_path = os.path.join(mods_folder_path, subfolder_name)
+    script_extender_path = os.path.join(proper_mod_folder_path, "ScriptExtender")
     lua_path = os.path.join(script_extender_path, "Lua")
 
     os.makedirs(mods_folder_path, exist_ok=True)
+    os.makedirs(proper_mod_folder_path, exist_ok=True)
     os.makedirs(lua_path, exist_ok=True)
 
     shutil.copy("SmartAutosaving/ScriptExtender/Config.json", script_extender_path)
@@ -65,19 +68,19 @@ def create_mod_variations(interval, events: dict):
     generate_config_file(lua_path, interval, events)
 
     # Create meta.lsx for this mod variation
-    create_meta_lsx(mods_folder_path, interval, included_events)
+    create_meta_lsx(subfolder_name, proper_mod_folder_path, interval, included_events)
 
     # Package the mod into a .pak file
     # Get absolute path to the mod folder
-    mod_abs_path = os.path.abspath(subfolder_name)
-    mod_name = os.path.basename(subfolder_name)
+    mod_abs_path = os.path.abspath(subfolder_path)
+    mod_name = os.path.basename(subfolder_path)
     pak_path = package_mod(mod_abs_path, mod_name)
 
     zip_mod_files(pak_path, mod_name)
 
     return mod_path
 
-def create_meta_lsx(mod_path, interval, events):
+def create_meta_lsx(folder, output_dir, interval, events):
     """Creates the meta.lsx file for the mod variation."""
     meta_template_path = "SmartAutosaving/meta.lsx"
     tree = ET.parse(meta_template_path)
@@ -96,9 +99,10 @@ def create_meta_lsx(mod_path, interval, events):
     module_info.find(".//attribute[@id='Description']").set('value', description)
     module_info.find(".//attribute[@id='UUID']").set('value', UUID)
     module_info.find(".//attribute[@id='Version']").set('value', str(INT64_VERSION))
+    module_info.find(".//attribute[@id='Folder']").set('value', folder)
 
     # Write the updated meta.lsx file
-    new_meta_file = os.path.join(mod_path, "meta.lsx")
+    new_meta_file = os.path.join(output_dir, "meta.lsx")
     tree.write(new_meta_file, encoding="UTF-8", xml_declaration=True)
 
 def clear_paks_from_output_folder():
