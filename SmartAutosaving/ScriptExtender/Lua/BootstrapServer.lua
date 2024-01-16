@@ -1,7 +1,7 @@
 -- Config file for setting the autosaving period and enabling/disabling events
 local Config = Ext.Require("config.lua")
 
-print("Smart Autosaving: version 1.0.0 loaded")
+print("Smart Autosaving: version 1.0.1 loaded")
 
 local TIMER = "Volitios_Smart_Autosaving"
 local AUTOSAVING_PERIOD = Config.AUTOSAVING_PERIOD
