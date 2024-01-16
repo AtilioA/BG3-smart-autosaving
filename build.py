@@ -5,8 +5,8 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 UUID = "0c8bb2e9-aa96-4de7-b793-a733d68ee6f0"
-VERSION = "1.0.0.0"
-INT64_VERSION = "36028797018963968"
+VERSION = "1.0.1"
+INT64_VERSION = "36028799166447616"
 MOD_NAME = "Smart Autosaving"
 OUTPUT_PATH = "output"
 
@@ -65,7 +65,7 @@ def create_mod_variations(interval, events: dict):
     generate_config_file(lua_path, interval, events)
 
     # Create meta.lsx for this mod variation
-    create_meta_lsx(script_extender_path, interval, included_events)
+    create_meta_lsx(mods_folder_path, interval, included_events)
 
     # Package the mod into a .pak file
     # Get absolute path to the mod folder
