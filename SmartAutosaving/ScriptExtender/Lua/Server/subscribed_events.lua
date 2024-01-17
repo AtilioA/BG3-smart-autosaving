@@ -52,9 +52,10 @@ local function SubscribeToEvents()
     Ext.Osiris.RegisterListener("StoppedLockpicking", 2, "before", EHandlers.OnLockpickingEnd)
   end
 
-  -- WIP:
-  -- Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)
-  -- Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
+  if JsonConfig.EVENTS.using_items then
+    Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)
+    Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
+  end
 
   -- if JsonConfig.EVENTS.looting_containers then
   --   Ext.Osiris.RegisterListener("Opened", 1, "before", EHandlers.onOpened)
