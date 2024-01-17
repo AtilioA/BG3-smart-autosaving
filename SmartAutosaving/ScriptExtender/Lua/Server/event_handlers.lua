@@ -93,27 +93,33 @@ function EHandlers.onCharacterLootedCharacter()
   Config.DebugPrint(2, "CharacterLootedCharacter")
 end
 
--- TODO:
-  -- function EHandlers.OnCharacterCreationStart()
---     print("Character creation started")
+-- WIP/looking for means of detection
+-- function EHandlers.OnCharacterCreationStart()
+--     Config.DebugPrint(2, "Character creation started")
 -- end
 
--- function EHandlers.OnUseStarted(character, item)
---     if (Utils.IsInPartyWith(character)) then
---         print("UseStarted: " .. character .. " " .. item)
---     end
--- end
--- function EHandlers.OnUseEnded(character, item, result)
---     if (Utils.IsInPartyWith(character)) then
---         print("UseEnded: " .. character .. " " .. item .. " " .. result)
---     end
--- end
--- function EHandlers.onOpened(item)
---     print("Opened item: " .. item)
--- end
+function EHandlers.OnUseStarted(character, item)
+  if (Osi.IsInPartyWith(character)) then
+    Config.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
+    -- TODO: ...
+  end
+end
 
--- function EHandlers.onClosed()
---     print("onClosed")
--- end
+function EHandlers.OnUseEnded(character, item, result)
+  if (Osi.IsInPartyWith(character)) then
+    Config.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
+    -- TODO: ...
+  end
+end
+
+function EHandlers.onOpened(item)
+  Config.DebugPrint(2, "Opened item: " .. item)
+  -- TODO: ...
+end
+
+function EHandlers.onClosed()
+  Config.DebugPrint(2, "onClosed")
+  -- TODO: ...
+end
 
 return EHandlers
