@@ -43,7 +43,7 @@ local function SubscribeToEvents()
     -- Ext.Osiris.RegisterListener("CombatRoundStarted", 1, "before", EHandlers.onCombatRoundStarted)
   end
 
-  if JsonConfig.EVENTS.turnEnd then
+  if JsonConfig.EVENTS.combat_turn then
     Ext.Osiris.RegisterListener("TurnEnded", 1, "before", EHandlers.OnTurnEnded)
   end
 
