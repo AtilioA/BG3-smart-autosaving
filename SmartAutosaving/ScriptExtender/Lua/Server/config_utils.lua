@@ -13,7 +13,7 @@ Config.defaultConfig = {
         combat = true,                     -- after combat
         combat_turn = true,                -- after turn ends (not mutually exclusive with combat)
         lockpicking = true,                -- after lockpicking
-        open_containers = true,            -- after closing containers
+        looting_containers = true,            -- after closing containers
         using_items = true,                -- after using an item
         looting_characters = true          -- after looting characters
     },
