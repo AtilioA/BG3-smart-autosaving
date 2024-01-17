@@ -1,9 +1,10 @@
 local Config = {}
 
-Config.configFilePath = "config.json"
+FolderName = "SmartAutosaving"
+Config.configFilePath = "smart_autosaving_config.json"
 Config.defaultConfig = {
     TIMER = {
-        autosaving_period_in_minutes = 10, -- 10 minutes
+        autosaving_period_in_minutes = 60, -- 10 minutes
         save_aware = true,                 -- Reset timer when manual/quick/autosaves are made
         load_aware = true                  -- Reset timer when loading a save
     },
@@ -11,10 +12,10 @@ Config.defaultConfig = {
         dialogue = true,                   -- after dialogue
         trade = true,                      -- after trade
         combat = true,                     -- after combat
-        combat_turn = true,                -- after turn ends (not mutually exclusive with combat)
+        combat_end_turn = true,            -- after turn ends (not mutually exclusive with combat)
         lockpicking = true,                -- after lockpicking
-        looting_containers = true,            -- after closing containers
         using_items = true,                -- after using an item
+        looting_containers = true,         -- after closing containers
         looting_characters = true          -- after looting characters
     },
     DEBUG = {
@@ -22,10 +23,19 @@ Config.defaultConfig = {
     }
 }
 
+function Config.DebugPrint(level, ...)
+    if Config.jsonConfig and Config.jsonConfig.DEBUG and Config.jsonConfig.DEBUG.level >= level then
+        print(...)
+    end
+end
+
+function Config.GetModPath(filePath)
+    return FolderName .. '/' .. filePath
+end
 
 -- Load a JSON configuration file and return a table or nil
 function Config.LoadConfig(filePath)
-    local configFileContent = Ext.IO.LoadFile(filePath)
+    local configFileContent = Ext.IO.LoadFile(Config.GetModPath(filePath))
     if configFileContent and configFileContent ~= "" then
         Config.DebugPrint(1, "Loaded config file: " .. filePath)
         return Ext.Json.Parse(configFileContent)
@@ -38,7 +48,7 @@ end
 -- Save a config table to a JSON file
 function Config.SaveConfig(filePath, config)
     local configFileContent = Ext.Json.Stringify(config, { Beautify = true })
-    Ext.IO.SaveFile(filePath, configFileContent)
+    Ext.IO.SaveFile(Config.GetModPath(filePath), configFileContent)
 end
 
 function Config.LoadJSONConfig()
@@ -56,10 +66,6 @@ function Config.LoadJSONConfig()
     return jsonConfig
 end
 
-Config.jsonConfig = Config.LoadJSONConfig()
+JsonConfig = Config.LoadJSONConfig()
 
-function Config.DebugPrint(level, ...)
-    if Config.jsonConfig.DEBUG.level >= level then
-        print(...)
-    end
-end
+return Config
