@@ -1,22 +1,3 @@
-local Config = Ext.Require("Server/config_utils.lua")
-local jsonConfig = Config.LoadConfig(Config.configFilePath)
-if not jsonConfig then
-    print("Loading default configuration.")
-    jsonConfig = Config.defaultConfig
-    Config.SaveConfig(Config.configFilePath, jsonConfig)
-end
-
--- Continue with mod initialization using the loaded/created config
-print("Loaded autosaving period: " .. tostring(jsonConfig.TIMER.autosaving_period_in_minutes))
-
-local TIMER = "Volitios_Smart_Autosaving"
-local AUTOSAVING_PERIOD = jsonConfig.autosaving_period_in_minutes
-
-local EventSubscription = Ext.Require("Server/subscribed_events.lua")
-
-EventSubscription.SubscribeToEvents(jsonConfig)
-
-
 local Autosaving = {}
 
 -- State tracking variables
@@ -27,13 +8,6 @@ Autosaving.isInCombat = false
 Autosaving.isLockpicking = false
 Autosaving.waitingForAutosave = false
 Autosaving.combatTurnEnded = false
-
--- Function to start or restart the timer
-function Autosaving.StartOrRestartTimer()
-  Osi.TimerCancel(TIMER)
-  Osi.TimerLaunch(TIMER, AUTOSAVING_PERIOD * 1000)
-  Autosaving.waitingForAutosave = false
-end
 
 function Autosaving.Autosave()
   Osi.AutoSave()
@@ -64,15 +38,5 @@ function Autosaving.SaveIfWaiting()
   end
 end
 
--- Handler when the timer finishes
-function Autosaving.OnTimerFinished(timer)
-  if timer == TIMER then
-      if Autosaving.CanAutosave() then
-        Autosaving.Autosave()
-      else -- timer finished but we can't autosave yet, so we'll wait for the next event to try again
-          Autosaving.waitingForAutosave = true
-      end
-  end
-end
 
 return Autosaving
