@@ -5,7 +5,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 UUID = "0c8bb2e9-aa96-4de7-b793-a733d68ee6f0"
-VERSION = "1.0.1"
+VERSION = "2.0.0"
 INT64_VERSION = "36028799166447616"
 MOD_NAME = "Smart Autosaving"
 OUTPUT_PATH = "output"
