@@ -1,5 +1,5 @@
-local Utils = Ext.Require("utils.lua")
-local Autosaving = Ext.Require("autosaving.lua")
+local Utils = Ext.Require("Server/utils.lua")
+local Autosaving = Ext.Require("Server/autosaving.lua")
 
 local EHandlers = {}
 

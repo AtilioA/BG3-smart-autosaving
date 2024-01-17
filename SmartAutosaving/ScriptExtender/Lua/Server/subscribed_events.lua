@@ -1,12 +1,23 @@
 
-local EHandlers = Ext.Require("event_handlers.lua")
-local jsonConfig = Ext.Json.Parse(Ext.IO.LoadFile("config.json"))
+local EHandlers = Ext.Require("Server/event_handlers.lua")
 
-local function SubscribeToEvents()
+-- Handler when the timer finishes
+local function OnTimerFinished(timer)
+  print("Timer finished: " .. timer)
+end
+
+local function StartOrRestartTimer()
+  Osi.TimerCancel(TIMER)
+  Osi.TimerLaunch(TIMER, AUTOSAVING_PERIOD * 1000)
+  Autosaving.waitingForAutosave = false
+end
+
+local function SubscribeToEvents(jsonConfig)
+  print("Subscribing to events with config: " .. Ext.Json.Stringify(jsonConfig, {Beautify = true}))
   -- Registering general Osiris event listeners
   -- Start the timer when the game is loaded
-  Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.StartOrRestartTimer)
-  Ext.Osiris.RegisterListener("TimerFinished", 1, "before", EHandlers.OnTimerFinished)
+  Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", StartOrRestartTimer)
+  Ext.Osiris.RegisterListener("TimerFinished", 1, "before", OnTimerFinished)
 
   -- Subscribe to the GameStateChanged event to detect when saves are created and reset the timer
   -- Note that it will also trigger with the mod's own autosaves, but there shouldn't be any issues with that

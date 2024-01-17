@@ -1,7 +1,21 @@
-local jsonConfig = Ext.Json.Parse(Ext.IO.LoadFile("config.json"))
+local Config = Ext.Require("Server/config_utils.lua")
+local jsonConfig = Config.LoadConfig(Config.configFilePath)
+if not jsonConfig then
+    print("Loading default configuration.")
+    jsonConfig = Config.defaultConfig
+    Config.SaveConfig(Config.configFilePath, jsonConfig)
+end
+
+-- Continue with mod initialization using the loaded/created config
+print("Loaded autosaving period: " .. tostring(jsonConfig.TIMER.autosaving_period_in_minutes))
 
 local TIMER = "Volitios_Smart_Autosaving"
-local AUTOSAVING_PERIOD = jsonConfig.AUTOSAVING_PERIOD
+local AUTOSAVING_PERIOD = jsonConfig.autosaving_period_in_minutes
+
+local EventSubscription = Ext.Require("Server/subscribed_events.lua")
+
+EventSubscription.SubscribeToEvents(jsonConfig)
+
 
 local Autosaving = {}
 
@@ -32,7 +46,6 @@ function Autosaving.CanAutosave()
   -- We can autosave if we're at the start of a combat round, or if we're not in combat, dialogue, lockpicking or trading
   return Autosaving.combatTurnEnded or (not Autosaving.isInDialogue and not Autosaving.isInCombat and not Autosaving.isLockpicking and not Autosaving.isInTrade)
 end
-
 
 -- Handlers to update states and check for delayed autosave
 -- Function to handle potential autosave after actions
