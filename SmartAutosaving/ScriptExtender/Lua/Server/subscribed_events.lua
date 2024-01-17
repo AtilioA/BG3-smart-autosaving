@@ -1,8 +1,10 @@
 local EHandlers = Ext.Require("Server/event_handlers.lua")
+-- For some reason I'm not able to use Config.jsonConfig here
 local Config = Ext.Require("Server/config_utils.lua")
 
 local function SubscribeToEvents()
-  Config.DebugPrint(2, "Subscribing to events with JSON config: " .. Ext.Json.Stringify(Config.jsonConfig, { Beautify = true }))
+  -- Config.DebugPrint(2, "Subscribing to events with JSON config: " .. Ext.Json.Stringify(JsonConfig, { Beautify = true }))
+  -- print("Subscribing to events with JSON config: " .. Ext.Json.Stringify(JsonConfig, { Beautify = true }))
   -- Registering general Osiris event listeners
   -- Start the timer when the game is loaded
   Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.StartOrRestartTimer)
@@ -10,42 +12,42 @@ local function SubscribeToEvents()
 
   -- Subscribe to the GameStateChanged event to detect when saves are created and reset the timer
   -- Note that it will also trigger with the mod's own autosaves, but there shouldn't be any issues with that
-  if Config.jsonConfig.TIMER.save_aware then
+  if JsonConfig.TIMER.save_aware then
     Ext.Events.GameStateChanged:Subscribe(EHandlers.OnGameStateChange)
   end
 
   -- TODO: reset timer
-  if Config.jsonConfig.TIMER.load_aware then
+  if JsonConfig.TIMER.load_aware then
     Ext.Osiris.RegisterListener("SavegameLoaded", 0, "before", EHandlers.SavegameLoaded)
   end
 
   -- Events that can restrict autosaving
   -- Dialogue
-  if Config.jsonConfig.EVENTS.dialogue then
+  if JsonConfig.EVENTS.dialogue then
     Ext.Osiris.RegisterListener("DialogStartRequested", 2, "before", EHandlers.OnDialogStart)
     Ext.Osiris.RegisterListener("DialogStarted", 2, "before", EHandlers.OnDialogStart)
     Ext.Osiris.RegisterListener("DialogEnded", 2, "before", EHandlers.OnDialogEnd)
   end
 
   -- Trading
-  if Config.jsonConfig.EVENTS.trade then
+  if JsonConfig.EVENTS.trade then
     Ext.Osiris.RegisterListener("RequestTrade", 4, "before", EHandlers.OnTradeStart)
     Ext.Osiris.RegisterListener("TradeEnds", 2, "before", EHandlers.OnTradeEnd)
   end
 
   -- Combat
-  if Config.jsonConfig.EVENTS.combat then
+  if JsonConfig.EVENTS.combat then
     Ext.Osiris.RegisterListener("CombatStarted", 1, "before", EHandlers.OnCombatStart)
     Ext.Osiris.RegisterListener("CombatEnded", 1, "before", EHandlers.OnCombatEnd)
     -- (Not actually working)
     -- Ext.Osiris.RegisterListener("CombatRoundStarted", 1, "before", EHandlers.onCombatRoundStarted)
   end
 
-  if Config.jsonConfig.EVENTS.turnEnd then
+  if JsonConfig.EVENTS.turnEnd then
     Ext.Osiris.RegisterListener("TurnEnded", 1, "before", EHandlers.OnTurnEnded)
   end
 
-  if Config.jsonConfig.EVENTS.lockpicking then
+  if JsonConfig.EVENTS.lockpicking then
     Ext.Osiris.RegisterListener("StartedLockpicking", 2, "before", EHandlers.OnLockpickingStart)
     Ext.Osiris.RegisterListener("StoppedLockpicking", 2, "before", EHandlers.OnLockpickingEnd)
   end
@@ -54,13 +56,13 @@ local function SubscribeToEvents()
   -- Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)
   -- Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
 
-  if Config.jsonConfig.EVENTS.looting_containers then
+  if JsonConfig.EVENTS.looting_containers then
     Ext.Osiris.RegisterListener("Opened", 1, "before", EHandlers.onOpened)
     Ext.Osiris.RegisterListener("Closed", 1, "before", EHandlers.onClosed)
   end
 
   -- I still gotta try out event trigger in-game
-  if Config.jsonConfig.EVENTS.looting_character then
+  if JsonConfig.EVENTS.looting_character then
     Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", EHandlers.onCharacterLootedCharacter)
   end
 
@@ -71,7 +73,7 @@ local function SubscribeToEvents()
   -- Osi.EnteredSharedForceTurnBased(object, zoneId)
 
   -- Osi.AnimationEvent(object, eventName, wasFromLoad)
-  
+
   -- Osi.LevelGameplayStarted(levelName, isEditorMode)
   -- Osi.LevelLoaded(newLevel)
   -- Osi.LevelTemplateLoaded(levelTemplate)
