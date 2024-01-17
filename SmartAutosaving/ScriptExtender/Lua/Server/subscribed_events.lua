@@ -62,7 +62,8 @@ local function SubscribeToEvents()
   -- end
 
   -- I still gotta try out event trigger in-game
-  if JsonConfig.EVENTS.looting_character then
+  if JsonConfig.EVENTS.looting_characters then
+    Ext.Osiris.RegisterListener("RequestCanLoot", 2, "before", EHandlers.onRequestCanLoot)
     Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", EHandlers.onCharacterLootedCharacter)
   end
 

@@ -91,8 +91,17 @@ function EHandlers.OnLockpickingEnd()
   Autosaving.HandlePotentialAutosave()
 end
 
-function EHandlers.onCharacterLootedCharacter()
-  Config.DebugPrint(2, "CharacterLootedCharacter")
+-- This might cause problems if the target is 'owned' (has red highlight)
+function EHandlers.onRequestCanLoot(looter, target)
+  -- Config.DebugPrint(2, "RequestCanLoot: " .. looter .. " " .. target)
+  print("RequestCanLoot: " .. looter .. " " .. target)
+  Autosaving.isLootingCharacter = true
+end
+
+function EHandlers.onCharacterLootedCharacter(player, lootedCharacter)
+  -- Config.DebugPrint(2, "CharacterLootedCharacter")
+  print("CharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
+  Autosaving.isLootingCharacter = false
 end
 
 -- WIP/looking for means of detection
