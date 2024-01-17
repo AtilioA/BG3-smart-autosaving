@@ -37,10 +37,10 @@ end
 function Config.LoadConfig(filePath)
     local configFileContent = Ext.IO.LoadFile(Config.GetModPath(filePath))
     if configFileContent and configFileContent ~= "" then
-        Config.DebugPrint(1, "Loaded config file: " .. filePath)
+        -- Config.DebugPrint(1, "Loaded config file: " .. filePath)
         return Ext.Json.Parse(configFileContent)
     else
-        Config.DebugPrint(1, "File not found: " .. filePath)
+        -- Config.DebugPrint(1, "File not found: " .. filePath)
         return nil
     end
 end
@@ -57,10 +57,10 @@ function Config.LoadJSONConfig()
     if not jsonConfig then
         -- Load default config if the file doesn't exist
         jsonConfig = Config.defaultConfig
-        Config.DebugPrint(1, "Default config file loaded.")
+        -- Config.DebugPrint(1, "Default config file loaded.")
         Config.SaveConfig(Config.configFilePath, jsonConfig)
     else
-        Config.DebugPrint(1, "Config file loaded.")
+        -- Config.DebugPrint(1, "Config file loaded.")
     end
 
     return jsonConfig
