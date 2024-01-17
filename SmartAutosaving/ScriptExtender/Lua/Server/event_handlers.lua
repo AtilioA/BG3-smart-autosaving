@@ -3,20 +3,21 @@ local Config = Ext.Require("Server/config_utils.lua")
 
 local EHandlers = {}
 
-local TIMER = "Volitios_Smart_Autosaving"
-local AUTOSAVING_PERIOD = Config.jsonConfig.autosaving_period_in_minutes -- * 60
+local TIMER_NAME = "Volitios_Smart_Autosaving"
+local AUTOSAVING_PERIOD = JsonConfig.TIMER.autosaving_period_in_minutes * 60
 
 function EHandlers.StartOrRestartTimer()
-  Osi.TimerCancel(TIMER)
-  Osi.TimerLaunch(TIMER, AUTOSAVING_PERIOD * 1000)
+  Osi.TimerCancel(TIMER_NAME)
+  Osi.TimerLaunch(TIMER_NAME, AUTOSAVING_PERIOD * 1000)
   Autosaving.waitingForAutosave = false
 end
 
 -- Handler when the timer finishes
 function EHandlers.OnTimerFinished(timer)
-  if timer == TIMER then
+  if timer == TIMER_NAME then
     if Autosaving.CanAutosave() then
       Autosaving.Autosave()
+      EHandlers.StartOrRestartTimer()
     else   -- timer finished but we can't autosave yet, so we'll wait for the next event to try again
       Autosaving.waitingForAutosave = true
     end

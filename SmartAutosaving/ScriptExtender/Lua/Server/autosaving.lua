@@ -13,7 +13,6 @@ function Autosaving.Autosave()
   Osi.AutoSave()
   print("Smart Autosaving: Game saved")
   Autosaving.waitingForAutosave = false
-  Autosaving.StartOrRestartTimer()
 end
 
 function Autosaving.CanAutosave()
