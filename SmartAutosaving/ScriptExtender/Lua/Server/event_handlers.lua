@@ -1,5 +1,5 @@
 local Autosaving = Ext.Require("Server/autosaving.lua")
-local Config = Ext.Require("Server/config_utils.lua")
+local Config = Ext.Require("config.lua")
 
 local EHandlers = {}
 
@@ -18,7 +18,7 @@ function EHandlers.OnTimerFinished(timer)
     if Autosaving.CanAutosave() then
       Autosaving.Autosave()
       EHandlers.StartOrRestartTimer()
-    else   -- timer finished but we can't autosave yet, so we'll wait for the next event to try again
+    else -- timer finished but we can't autosave yet, so we'll wait for the next event to try again
       Autosaving.waitingForAutosave = true
     end
   end
@@ -56,6 +56,7 @@ end
 
 function EHandlers.OnTradeEnd()
   Autosaving.isInTrade = false;
+  -- Save regardless of dialogue state
   Autosaving.SaveIfWaiting()
 end
 
@@ -100,27 +101,36 @@ end
 -- end
 
 function EHandlers.OnUseStarted(character, item)
-  if (Osi.IsInPartyWith(character)) then
-    Config.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
+  if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
+    -- Config.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
+    print("UseStarted: " .. character .. " " .. item)
+    Autosaving.isUsingItem = true
     -- TODO: ...
   end
 end
 
 function EHandlers.OnUseEnded(character, item, result)
-  if (Osi.IsInPartyWith(character)) then
-    Config.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
-    -- TODO: ...
+  if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
+    -- Config.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
+    print("UseEnded: " .. character .. " " .. item .. " " .. result)
+    Autosaving.isUsingItem = false
+    Autosaving.HandlePotentialAutosave()
   end
 end
 
-function EHandlers.onOpened(item)
-  Config.DebugPrint(2, "Opened item: " .. item)
-  -- TODO: ...
-end
+-- function EHandlers.onOpened(item)
+--   -- Config.DebugPrint(2, "Opened item: " .. item)
+--   print("Opened item: " .. item)
+--   Autosaving.isInContainer = true
+--   -- TODO: ...
+-- end
 
-function EHandlers.onClosed()
-  Config.DebugPrint(2, "onClosed")
-  -- TODO: ...
-end
+-- function EHandlers.onClosed()
+--   -- Config.DebugPrint(2, "onClosed")
+--   print("onClosed")
+--   Autosaving.isInContainer = false
+--   Autosaving.HandlePotentialAutosave()
+--   -- TODO: ...
+-- end
 
 return EHandlers

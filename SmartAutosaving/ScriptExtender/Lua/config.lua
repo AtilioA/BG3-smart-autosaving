@@ -2,6 +2,8 @@ local Config = {}
 
 FolderName = "SmartAutosaving"
 Config.configFilePath = "smart_autosaving_config.json"
+
+-- looting_containers = true,         -- after closing containers (might not be a good event to work with)
 Config.defaultConfig = {
     TIMER = {
         autosaving_period_in_minutes = 60, -- 10 minutes
@@ -15,7 +17,6 @@ Config.defaultConfig = {
         combat_end_turn = true,            -- after turn ends (not mutually exclusive with combat)
         lockpicking = true,                -- after lockpicking
         using_items = true,                -- after using an item
-        looting_containers = true,         -- after closing containers
         looting_characters = true          -- after looting characters
     },
     DEBUG = {

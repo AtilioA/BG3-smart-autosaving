@@ -1,6 +1,6 @@
 local EHandlers = Ext.Require("Server/event_handlers.lua")
 -- For some reason I'm not able to use Config.jsonConfig here
-local Config = Ext.Require("Server/config_utils.lua")
+local Config = Ext.Require("config.lua")
 
 local function SubscribeToEvents()
   -- Config.DebugPrint(2, "Subscribing to events with JSON config: " .. Ext.Json.Stringify(JsonConfig, { Beautify = true }))
@@ -56,10 +56,10 @@ local function SubscribeToEvents()
   -- Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)
   -- Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
 
-  if JsonConfig.EVENTS.looting_containers then
-    Ext.Osiris.RegisterListener("Opened", 1, "before", EHandlers.onOpened)
-    Ext.Osiris.RegisterListener("Closed", 1, "before", EHandlers.onClosed)
-  end
+  -- if JsonConfig.EVENTS.looting_containers then
+  --   Ext.Osiris.RegisterListener("Opened", 1, "before", EHandlers.onOpened)
+  --   Ext.Osiris.RegisterListener("Closed", 1, "before", EHandlers.onClosed)
+  -- end
 
   -- I still gotta try out event trigger in-game
   if JsonConfig.EVENTS.looting_character then
