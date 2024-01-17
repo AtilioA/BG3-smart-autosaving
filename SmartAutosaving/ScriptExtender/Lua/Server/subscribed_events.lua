@@ -63,6 +63,34 @@ local function SubscribeToEvents()
   if Config.jsonConfig.EVENTS.looting_character then
     Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", EHandlers.onCharacterLootedCharacter)
   end
+
+  -- Events to investigate further
+  -- Osi.UserEvent(userID, userEvent)
+
+  -- Osi.EnteredForceTurnBased(object) and Osi.LeftForceTurnBased(object)
+  -- Osi.EnteredSharedForceTurnBased(object, zoneId)
+
+  -- Osi.AnimationEvent(object, eventName, wasFromLoad)
+  
+  -- Osi.LevelGameplayStarted(levelName, isEditorMode)
+  -- Osi.LevelLoaded(newLevel)
+  -- Osi.LevelTemplateLoaded(levelTemplate)
+  -- Osi.LevelUnloading(level)
+  -- Osi.RespecCancelled(character)
+  -- Osi.RespecCompleted(character)
+
+  --  Osi.PuzzleUIUsed(character, uIInstance, type, command, elementId),  Osi.PuzzleUIClosed(character, uIInstance, type)
+
+  -- Osi.Falling(entity, cause) and Osi.Fell(entity, cause)
+
+  -- Osi.RequestCanCombine(character, item1, item2, item3, item4, item5, requestID)
+  -- Osi.Combined(item1, item2, item3, item4, item5, character, newItem)
+  -- Osi.StoppedCombining(character, item1, item2, item3, item4, item5)
+
+  -- https://www.youtube.com/watch?v=o5LlIdAd5h8
+  -- Osi.VoiceBarkEnded(bark, instanceID)
+  -- Osi.VoiceBarkFailed(bark)
+  -- Osi.VoiceBarkStarted(bark, instanceID)
 end
 
 return {
