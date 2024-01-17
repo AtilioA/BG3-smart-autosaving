@@ -2,7 +2,7 @@ local EHandlers = Ext.Require("Server/event_handlers.lua")
 local Config = Ext.Require("Server/config_utils.lua")
 
 local function SubscribeToEvents()
-  Config.DebugPrint(2, "Subscribing to events with config: " .. Ext.Json.Stringify(Config.jsonConfig, { Beautify = true }))
+  Config.DebugPrint(2, "Subscribing to events with JSON config: " .. Ext.Json.Stringify(Config.jsonConfig, { Beautify = true }))
   -- Registering general Osiris event listeners
   -- Start the timer when the game is loaded
   Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.StartOrRestartTimer)
@@ -42,7 +42,7 @@ local function SubscribeToEvents()
   end
 
   if Config.jsonConfig.EVENTS.turnEnd then
-    Ext.Osiris.RegisterListener("TurnEnded", 2, "before", EHandlers.OnTurnEnded)
+    Ext.Osiris.RegisterListener("TurnEnded", 1, "before", EHandlers.OnTurnEnded)
   end
 
   if Config.jsonConfig.EVENTS.lockpicking then
