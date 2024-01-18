@@ -39,6 +39,7 @@ luac.out
 *.x86_64
 *.hex
 
-old/
+ignore/
 output/
 *.pak
+*.code-workspace
