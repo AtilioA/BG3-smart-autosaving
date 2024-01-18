@@ -36,10 +36,15 @@ def package_mod(mod_path, mod_name):
 
 def cleanup():
     if os.path.exists(f"Smart Autosaving {VERSION}.zip"):
+        print("Cleaning .zip | ", end="")
         os.remove(f"Smart Autosaving {VERSION}.zip")
+    if os.path.exists(f"Smart Autosaving.pak"):
+        print("Cleaning .pak")
+        os.remove(f"Smart Autosaving.pak")
 
 
 if __name__ == "__main__":
     cleanup()
+
     pak_path = package_mod("./Smart Autosaving/", MOD_NAME)
-    shutil.make_archive(f"{MOD_NAME} {VERSION}", "zip", pak_path)
+    shutil.make_archive(f"Smart Autosaving {VERSION}", "zip", os.path.dirname(pak_path), os.path.basename(pak_path))
