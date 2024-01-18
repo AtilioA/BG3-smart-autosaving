@@ -1,9 +1,11 @@
+local Config = Ext.Require("config.lua")
 local Autosaving = {}
 
 -- State tracking variables
 -- These will never be set to true if the corresponding event is disabled in the config
 Autosaving.isInDialogue = false
 Autosaving.isInTrade = false
+Autosaving.isInCombat = false
 
 Autosaving.isLootingCharacter = false
 -- Autosaving.isInContainer = false
@@ -20,15 +22,25 @@ function Autosaving.Autosave()
   Autosaving.waitingForAutosave = false
 end
 
--- TODO: fix combat detection (i.e. when loading into combat)
+function Autosaving.ShouldCombatBlock()
+  if JsonConfig.EVENTS.combat == true then
+    return Osi.IsInCombat(GetHostCharacter()) == 1
+  end
+  return false
+end
+
 function Autosaving.CanAutosave()
-  -- We can autosave if we're at the start of a combat round, or if none of the other states are true
-  return Autosaving.combatTurnEnded or (not Autosaving.isInDialogue and
-    not Autosaving.isInCombat and
-    not Autosaving.isLockpicking and
-    not Autosaving.isInTrade and
-    -- not Autosaving.isInContainer and
-    not Autosaving.isUsingItem)
+  local combatCheck = Autosaving.ShouldCombatBlock()
+  
+  local notInAnyBlockingState = not Autosaving.isInDialogue and
+      not Autosaving.isInCombat and
+      not combatCheck and
+      not Autosaving.isLockpicking and
+      not Autosaving.isInTurnBased and
+      not Autosaving.isInTrade and
+      not Autosaving.isUsingItem
+
+  return (Autosaving.combatTurnEnded or notInAnyBlockingState)
 end
 
 -- Handlers to update states and check for delayed autosave
