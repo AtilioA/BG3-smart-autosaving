@@ -6,6 +6,7 @@ Config.configFilePath = "smart_autosaving_config.json"
 -- looting_containers = true,         -- after closing containers (might not be a good event to work with)
 Config.defaultConfig = {
     TIMER = {
+        enabled = true,                    -- Effectively disable the whole mod
         autosaving_period_in_minutes = 10, -- 10 minutes
         save_aware = true,                 -- Reset timer when manual/quick/autosaves are made
         load_aware = true                  -- Reset timer when loading a save
