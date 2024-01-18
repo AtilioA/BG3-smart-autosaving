@@ -39,12 +39,12 @@ function EHandlers.SavegameLoaded()
 end
 
 function EHandlers.OnDialogStart()
-  Config.DebugPrint(2, "Dialogue started")
+  -- Config.DebugPrint(2, "Dialogue started")
   Autosaving.isInDialogue = true
 end
 
 function EHandlers.OnDialogEnd()
-  Config.DebugPrint(2, "Dialogue ended")
+  -- Config.DebugPrint(2, "Dialogue ended")
 
   Autosaving.isInDialogue = false;
   Autosaving.HandlePotentialAutosave()
@@ -94,25 +94,25 @@ end
 -- This might cause problems if the target is 'owned' (has red highlight)
 function EHandlers.onRequestCanLoot(looter, target)
   -- Config.DebugPrint(2, "RequestCanLoot: " .. looter .. " " .. target)
-  print("RequestCanLoot: " .. looter .. " " .. target)
+  -- print("RequestCanLoot: " .. looter .. " " .. target)
   Autosaving.isLootingCharacter = true
 end
 
 function EHandlers.onCharacterLootedCharacter(player, lootedCharacter)
   -- Config.DebugPrint(2, "CharacterLootedCharacter")
-  print("CharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
+  -- print("CharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
   Autosaving.isLootingCharacter = false
 end
 
 -- WIP/looking for means of detection
 -- function EHandlers.OnCharacterCreationStart()
---     Config.DebugPrint(2, "Character creation started")
+    -- Config.DebugPrint(2, "Character creation started")
 -- end
 
 function EHandlers.OnUseStarted(character, item)
   if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
     -- Config.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
-    print("UseStarted: " .. character .. " " .. item)
+    -- print("UseStarted: " .. character .. " " .. item)
     Autosaving.isUsingItem = true
     -- TODO: ...
   end
@@ -121,22 +121,22 @@ end
 function EHandlers.OnUseEnded(character, item, result)
   if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
     -- Config.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
-    print("UseEnded: " .. character .. " " .. item .. " " .. result)
+    -- print("UseEnded: " .. character .. " " .. item .. " " .. result)
     Autosaving.isUsingItem = false
     Autosaving.HandlePotentialAutosave()
   end
 end
 
 -- function EHandlers.onOpened(item)
---   -- Config.DebugPrint(2, "Opened item: " .. item)
---   print("Opened item: " .. item)
+  -- Config.DebugPrint(2, "Opened item: " .. item)
+  -- print("Opened item: " .. item)
 --   Autosaving.isInContainer = true
 --   -- TODO: ...
 -- end
 
 -- function EHandlers.onClosed()
---   -- Config.DebugPrint(2, "onClosed")
---   print("onClosed")
+  -- Config.DebugPrint(2, "onClosed")
+  -- print("onClosed")
 --   Autosaving.isInContainer = false
 --   Autosaving.HandlePotentialAutosave()
 --   -- TODO: ...
