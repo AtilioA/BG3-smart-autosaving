@@ -91,10 +91,11 @@ local function SubscribeToEvents()
   -- Osi.Combined(item1, item2, item3, item4, item5, character, newItem)
   -- Osi.StoppedCombining(character, item1, item2, item3, item4, item5)
 
-  -- https://www.youtube.com/watch?v=o5LlIdAd5h8
-  -- Osi.VoiceBarkEnded(bark, instanceID)
-  -- Osi.VoiceBarkFailed(bark)
-  -- Osi.VoiceBarkStarted(bark, instanceID)
+
+  if JsonConfig.EVENTS.turn_based then
+    Ext.Osiris.RegisterListener("EnteredForceTurnBased", 1, "before", EHandlers.OnEnteredForceTurnBased)
+    Ext.Osiris.RegisterListener("LeftForceTurnBased", 1, "before", EHandlers.OnLeftForceTurnBased)
+  end
 end
 
 return {

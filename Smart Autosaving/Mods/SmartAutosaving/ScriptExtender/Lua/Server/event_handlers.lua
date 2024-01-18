@@ -1,5 +1,7 @@
 local Autosaving = Ext.Require("Server/autosaving.lua")
 local Config = Ext.Require("config.lua")
+local Utils = Ext.Require("Server/utils.lua")
+local Object = Ext.Require("Server/Helpers/Object.lua")
 
 local EHandlers = {}
 
@@ -142,5 +144,17 @@ end
 --   Autosaving.HandlePotentialAutosave()
 --   -- TODO: ...
 -- end
+-- Entered and Left Force Turn-Based
+function EHandlers.OnEnteredForceTurnBased(object)
+  if Object.IsCharacter(object) and Osi.IsInPartyWith(object, GetHostCharacter()) == 1 then
+    Autosaving.isInTurnBased = true
+  end
+end
+
+function EHandlers.OnLeftForceTurnBased(object)
+    if Object.IsCharacter(object) and Osi.IsInPartyWith(object, GetHostCharacter()) == 1 then
+      Autosaving.isInTurnBased = false
+    end
+end
 
 return EHandlers
