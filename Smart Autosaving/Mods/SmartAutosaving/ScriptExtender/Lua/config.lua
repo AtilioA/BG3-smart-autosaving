@@ -16,6 +16,7 @@ Config.defaultConfig = {
         trade = true,                      -- after trade
         combat = true,                     -- after combat
         combat_turn = true,                -- after party member turn ends (not mutually exclusive with combat)
+        turn_based = true,                 -- after exiting turn-based mode
         lockpicking = true,                -- after lockpicking
         using_items = true,                -- after using an item
         looting_characters = true          -- after looting characters

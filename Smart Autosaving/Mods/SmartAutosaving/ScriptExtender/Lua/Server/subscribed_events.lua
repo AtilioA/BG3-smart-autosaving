@@ -46,7 +46,7 @@ local function SubscribeToEvents()
     end
 
     if JsonConfig.EVENTS.combat_turn then
-      Ext.Osiris.RegisterListener("TurnEnded", 1, "before", EHandlers.OnTurnEnded)
+      Ext.Osiris.RegisterListener("TurnEnded", 1, "after", EHandlers.OnTurnEnded)
     end
 
     if JsonConfig.EVENTS.lockpicking then

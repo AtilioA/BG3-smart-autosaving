@@ -7,6 +7,7 @@ Autosaving.isInDialogue = false
 Autosaving.isInTrade = false
 Autosaving.isInCombat = false
 
+Autosaving.isInTurnBased = false
 Autosaving.isLootingCharacter = false
 -- Autosaving.isInContainer = false
 Autosaving.isUsingItem = false
