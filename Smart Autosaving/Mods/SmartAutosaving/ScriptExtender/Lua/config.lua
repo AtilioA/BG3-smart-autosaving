@@ -3,7 +3,6 @@ local Config = {}
 FolderName = "SmartAutosaving"
 Config.configFilePath = "smart_autosaving_config.json"
 
--- TODO: update player config file on load to add new options
 Config.defaultConfig = {
     TIMER = {
         enabled = true,                    -- Effectively disable the whole mod
@@ -56,16 +55,40 @@ function Config.SaveConfig(filePath, config)
     Ext.IO.SaveFile(Config.GetModPath(filePath), configFileContent)
 end
 
+function Config.UpdateConfig(existingConfig, defaultConfig)
+    local updated = false
+    for key, value in pairs(defaultConfig) do
+        if existingConfig[key] == nil then
+            existingConfig[key] = value
+            updated = true
+            -- Config.DebugPrint(1, "Added new config option:", key)
+            print("Added new config option:", key)
+        elseif type(value) == "table" then
+            -- Recursively update for nested tables
+            if Config.UpdateConfig(existingConfig[key], value) then
+                updated = true
+            end
+        end
+    end
+    return updated
+end
+
 function Config.LoadJSONConfig()
-    -- Try to load the config file
     local jsonConfig = Config.LoadConfig(Config.configFilePath)
     if not jsonConfig then
-        -- Load default config if the file doesn't exist
         jsonConfig = Config.defaultConfig
-        -- Config.DebugPrint(1, "Default config file loaded.")
         Config.SaveConfig(Config.configFilePath, jsonConfig)
+        -- Config.DebugPrint(1, "Default config file loaded.")
+        print("Default config file loaded.")
     else
-        -- Config.DebugPrint(1, "Config file loaded.")
+        if Config.UpdateConfig(jsonConfig, Config.defaultConfig) then
+            Config.SaveConfig(Config.configFilePath, jsonConfig)
+            -- Config.DebugPrint(1, "Config file updated with new options.")
+            print("Config file updated with new options.")
+        else
+            -- Config.DebugPrint(1, "Config file loaded.")
+            print("Config file loaded.")
+        end
     end
 
     return jsonConfig
