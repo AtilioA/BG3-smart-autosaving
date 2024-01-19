@@ -57,11 +57,11 @@ local function SubscribeToEvents()
     if JsonConfig.EVENTS.using_items then
       Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)
       Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
-      Ext.Osiris.RegisterListener("TemplateOpening", 1, "before", EHandlers.onOpened)
     end
 
     -- if JsonConfig.EVENTS.looting_containers then
-    --   Ext.Osiris.RegisterListener("Closed", 1, "before", EHandlers.onClosed)
+      -- Ext.Osiris.RegisterListener("TemplateOpening", 3, "before", EHandlers.onOpened)
+      -- Ext.Osiris.RegisterListener("Closed", 1, "before", EHandlers.onClosed)
     -- end
 
     -- I still gotta try out event trigger in-game
@@ -79,15 +79,24 @@ local function SubscribeToEvents()
     end
     -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
 
-    Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.OnLevelGameplayStarted)
-    Ext.Osiris.RegisterListener("LevelUnloading", 1, "before", EHandlers.OnLevelUnloading)
+    -- Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.OnLevelGameplayStarted)
+    -- Ext.Osiris.RegisterListener("LevelLoaded", 1, "before", EHandlers.OnLevelLoaded)
+    -- Ext.Osiris.RegisterListener("LevelTemplateLoaded", 1, "before", EHandlers.OnLevelTemplateLoaded)
+    -- Ext.Osiris.RegisterListener("LevelUnloading", 1, "before", EHandlers.OnLevelUnloading)
 
     if JsonConfig.EVENTS.respec_and_mirror then
       Ext.Osiris.RegisterListener("RespecCancelled", 1, "before", EHandlers.OnRespecCancelled)
       Ext.Osiris.RegisterListener("RespecCompleted", 1, "before", EHandlers.OnRespecCompleted)
-    do
+    end
 
-  end
+    -- Ext.Osiris.RegisterListener("PuzzleUIUsed", 5, "before", EHandlers.OnPuzzleUIUsed)
+    -- Ext.Osiris.RegisterListener("PuzzleUIClosed", 3, "before", EHandlers.OnPuzzleUIClosed)
+
+    -- -- https://www.youtube.com/watch?v=o5LlIdAd5h8
+    -- Ext.Osiris.RegisterListener("VoiceBarkEnded", 2, "before", EHandlers.OnVoiceBarkEnded)
+    -- Ext.Osiris.RegisterListener("VoiceBarkFailed", 1, "before", EHandlers.OnVoiceBarkFailed)
+    -- Ext.Osiris.RegisterListener("VoiceBarkStarted", 2, "before", EHandlers.OnVoiceBarkStarted)
+    end
 end
 
 return {

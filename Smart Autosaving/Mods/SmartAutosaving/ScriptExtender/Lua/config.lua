@@ -3,7 +3,6 @@ local Config = {}
 FolderName = "SmartAutosaving"
 Config.configFilePath = "smart_autosaving_config.json"
 
--- looting_containers = true,         -- after closing containers (might not be a good event to work with)
 -- TODO: update player config file on load to add new options
 Config.defaultConfig = {
     TIMER = {
@@ -19,8 +18,9 @@ Config.defaultConfig = {
         combat_turn = true,                -- after party member turn ends (not mutually exclusive with combat)
         turn_based = true,                 -- after exiting turn-based mode
         lockpicking = true,                -- after lockpicking
-        using_items = true,                -- after using an item
+        using_items = true,                -- after using an item (you use a container while looting)
         looting_characters = true,         -- after looting characters
+        looting_containers = true,         -- after closing containers (not currently used)
         respec_and_mirror = true,          -- after respeccing or using mirror
     },
     DEBUG = {
