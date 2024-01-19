@@ -50,7 +50,6 @@ local function SubscribeToEvents()
     end
 
     if JsonConfig.EVENTS.lockpicking then
-      Ext.Osiris.RegisterListener("OnRequestCanLockpick", 3, "before", EHandlers.OnRequestCanLockpick)
       Ext.Osiris.RegisterListener("StartedLockpicking", 2, "before", EHandlers.OnLockpickingStart)
       Ext.Osiris.RegisterListener("StoppedLockpicking", 2, "before", EHandlers.OnLockpickingEnd)
     end
