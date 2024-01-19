@@ -157,4 +157,17 @@ function EHandlers.OnLeftForceTurnBased(object)
     end
 end
 
+-- Respec Events
+function EHandlers.OnRespecCancelled(character)
+  Autosaving.respecEnded = true
+  Autosaving.HandlePotentialAutosave()
+end
+
+function EHandlers.OnRespecCompleted(character)
+  Autosaving.respecEnded = true
+  Autosaving.HandlePotentialAutosave()
+end
+
+-- Puzzle UI Events
+
 return EHandlers

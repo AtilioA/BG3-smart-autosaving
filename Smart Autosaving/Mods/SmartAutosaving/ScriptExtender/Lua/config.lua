@@ -4,6 +4,7 @@ FolderName = "SmartAutosaving"
 Config.configFilePath = "smart_autosaving_config.json"
 
 -- looting_containers = true,         -- after closing containers (might not be a good event to work with)
+-- TODO: update player config file on load to add new options
 Config.defaultConfig = {
     TIMER = {
         enabled = true,                    -- Effectively disable the whole mod
@@ -19,7 +20,8 @@ Config.defaultConfig = {
         turn_based = true,                 -- after exiting turn-based mode
         lockpicking = true,                -- after lockpicking
         using_items = true,                -- after using an item
-        looting_characters = true          -- after looting characters
+        looting_characters = true,         -- after looting characters
+        respec_and_mirror = true,          -- after respeccing or using mirror
     },
     DEBUG = {
         level = 0 -- 0 = no debug, 1 = minimal, 2 = verbose logs

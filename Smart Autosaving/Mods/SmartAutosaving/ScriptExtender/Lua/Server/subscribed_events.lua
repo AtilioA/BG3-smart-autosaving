@@ -79,6 +79,12 @@ local function SubscribeToEvents()
       Ext.Osiris.RegisterListener("LeftForceTurnBased", 1, "before", EHandlers.OnLeftForceTurnBased)
     end
     -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
+
+    if JsonConfig.EVENTS.respec_and_mirror then
+      Ext.Osiris.RegisterListener("RespecCancelled", 1, "before", EHandlers.OnRespecCancelled)
+      Ext.Osiris.RegisterListener("RespecCompleted", 1, "before", EHandlers.OnRespecCompleted)
+    do
+
   end
 end
 

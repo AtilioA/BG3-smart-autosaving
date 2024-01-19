@@ -5,15 +5,18 @@ local Autosaving = {}
 -- These will never be set to true if the corresponding event is disabled in the config
 Autosaving.isInDialogue = false
 Autosaving.isInTrade = false
-Autosaving.isInCombat = false
 
 Autosaving.isInTurnBased = false
-Autosaving.isLootingCharacter = false
--- Autosaving.isInContainer = false
+Autosaving.isInCombat = false
+Autosaving.combatTurnEnded = false
+
 Autosaving.isUsingItem = false
+-- Autosaving.isInContainer = false
+Autosaving.isLootingCharacter = false
+
 Autosaving.isLockpicking = false
 
-Autosaving.combatTurnEnded = false
+Autosaving.respecEnded = false
 
 Autosaving.waitingForAutosave = false
 
@@ -30,16 +33,28 @@ function Autosaving.ShouldCombatBlock()
   return false
 end
 
+function Autosaving.ProxyIsUsingRespecOrMirror()
+  -- Does not work
+  -- local rows = Osi.DB_InCharacterRespec:Get(nil, nil)
+
+  local respecProxy = (not entity.CCState.Canceled or entity.CCState.HasDummy)
+  print("Is respeccing or using mirror? " .. tostring(respecProxy))
+
+  return respecProxy
+end
+
 function Autosaving.CanAutosave()
+  local isRespeccingOrUsingMirror = Autosaving.ProxyIsUsingRespecOrMirror() and not Autosaving.respecEnded
   local combatCheck = Autosaving.ShouldCombatBlock()
-  
+
   local notInAnyBlockingState = not Autosaving.isInDialogue and
       not Autosaving.isInCombat and
-      not combatCheck and
       not Autosaving.isLockpicking and
       not Autosaving.isInTurnBased and
       not Autosaving.isInTrade and
-      not Autosaving.isUsingItem
+      not Autosaving.isUsingItem and
+      not combatCheck and
+      not isRespeccingOrUsingMirror
 
   return (Autosaving.combatTurnEnded or notInAnyBlockingState)
 end
