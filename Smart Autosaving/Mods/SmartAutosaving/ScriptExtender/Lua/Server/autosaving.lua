@@ -16,6 +16,8 @@ Autosaving.isLootingCharacter = false
 
 Autosaving.isLockpicking = false
 
+Autosaving.isInCharacterCreation = false
+
 Autosaving.respecEnded = false
 
 Autosaving.waitingForAutosave = false
@@ -26,7 +28,7 @@ function Autosaving.Autosave()
   Autosaving.waitingForAutosave = false
 end
 
-function Autosaving.ShouldCombatBlock()
+function Autosaving.ShouldCombatBlockSaving()
   if JsonConfig.EVENTS.combat == true then
     return Osi.IsInCombat(GetHostCharacter()) == 1
   end
@@ -37,15 +39,23 @@ function Autosaving.ProxyIsUsingRespecOrMirror()
   -- Does not work
   -- local rows = Osi.DB_InCharacterRespec:Get(nil, nil)
 
-  local respecProxy = (not entity.CCState.Canceled or entity.CCState.HasDummy)
-  print("Is respeccing or using mirror? " .. tostring(respecProxy))
+  -- If entity has CCState, use HasDummy. If it doesn't, it is still on character creation, so return true
+  local respecProxy = false
+  if entity.CCState then
+    respecProxy = entity.CCState.HasDummy
+  else
+    respecProxy = true
+  end
+
+
+  -- print("Is respeccing or using mirror? " .. tostring(respecProxy))
 
   return respecProxy
 end
 
 function Autosaving.CanAutosave()
   local isRespeccingOrUsingMirror = Autosaving.ProxyIsUsingRespecOrMirror() and not Autosaving.respecEnded
-  local combatCheck = Autosaving.ShouldCombatBlock()
+  local combatCheck = Autosaving.ShouldCombatBlockSaving()
 
   local notInAnyBlockingState = not Autosaving.isInDialogue and
       not Autosaving.isInCombat and
@@ -53,6 +63,7 @@ function Autosaving.CanAutosave()
       not Autosaving.isInTurnBased and
       not Autosaving.isInTrade and
       not Autosaving.isUsingItem and
+      not Autosaving.isInCharacterCreation and
       not combatCheck and
       not isRespeccingOrUsingMirror
 

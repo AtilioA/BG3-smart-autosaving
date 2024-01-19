@@ -80,6 +80,9 @@ local function SubscribeToEvents()
     end
     -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
 
+    Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.OnLevelGameplayStarted)
+    Ext.Osiris.RegisterListener("LevelUnloading", 1, "before", EHandlers.OnLevelUnloading)
+
     if JsonConfig.EVENTS.respec_and_mirror then
       Ext.Osiris.RegisterListener("RespecCancelled", 1, "before", EHandlers.OnRespecCancelled)
       Ext.Osiris.RegisterListener("RespecCompleted", 1, "before", EHandlers.OnRespecCompleted)

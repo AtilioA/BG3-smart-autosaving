@@ -157,6 +157,21 @@ function EHandlers.OnLeftForceTurnBased(object)
     end
 end
 
+
+function EHandlers.OnLevelGameplayStarted(levelName, isEditorMode)
+  print("OnLevelGameplayStarted called")
+  if levelName == 'SYS_CC_I' then
+    Autosaving.isInCharacterCreation = true
+  end
+end
+
+function EHandlers.OnLevelUnloading(level)
+  if level == 'SYS_CC_I' then
+    print("Character creation ended")
+    Autosaving.isInCharacterCreation = false
+  end
+end
+
 -- Respec Events
 function EHandlers.OnRespecCancelled(character)
   Autosaving.respecEnded = true
