@@ -42,6 +42,7 @@ function Autosaving.ProxyIsUsingRespecOrMirror()
   -- So let's use a proxy for that:
   -- If entity has CCState, use HasDummy. If it doesn't, it is still on character creation, so return true
   local respecProxy = false
+  local entity = Ext.Entity.Get(Osi.GetHostCharacter())
   if entity.CCState then
     respecProxy = entity.CCState.HasDummy
   else
