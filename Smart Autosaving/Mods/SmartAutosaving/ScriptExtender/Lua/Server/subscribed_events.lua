@@ -18,7 +18,6 @@ local function SubscribeToEvents()
       Ext.Events.GameStateChanged:Subscribe(EHandlers.OnGameStateChange)
     end
 
-    -- TODO: reset timer
     if JsonConfig.TIMER.load_aware then
       Ext.Osiris.RegisterListener("SavegameLoaded", 0, "after", EHandlers.SavegameLoaded)
     end
@@ -66,12 +65,9 @@ local function SubscribeToEvents()
 
     -- I still gotta try out event trigger in-game
     if JsonConfig.EVENTS.looting_characters then
-      -- TODO: check 'before' vs 'after'
       Ext.Osiris.RegisterListener("RequestCanLoot", 2, "after", EHandlers.onRequestCanLoot)
       Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", EHandlers.onCharacterLootedCharacter)
     end
-
-    Ext.Osiris.RegisterListener("UserEvent", 2, "before", EHandlers.OnUserEvent)
 
     if JsonConfig.EVENTS.turn_based then
       Ext.Osiris.RegisterListener("EnteredForceTurnBased", 1, "before", EHandlers.OnEnteredForceTurnBased)
@@ -79,6 +75,7 @@ local function SubscribeToEvents()
     end
     -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
 
+    -- Ext.Osiris.RegisterListener("UserEvent", 2, "before", EHandlers.OnUserEvent)
     -- Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.OnLevelGameplayStarted)
     -- Ext.Osiris.RegisterListener("LevelLoaded", 1, "before", EHandlers.OnLevelLoaded)
     -- Ext.Osiris.RegisterListener("LevelTemplateLoaded", 1, "before", EHandlers.OnLevelTemplateLoaded)
