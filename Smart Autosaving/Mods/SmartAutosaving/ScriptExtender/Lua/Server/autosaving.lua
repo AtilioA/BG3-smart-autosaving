@@ -36,9 +36,10 @@ function Autosaving.ShouldCombatBlockSaving()
 end
 
 function Autosaving.ProxyIsUsingRespecOrMirror()
-  -- Does not work
+  -- Does not seem to work:
   -- local rows = Osi.DB_InCharacterRespec:Get(nil, nil)
 
+  -- So let's use a proxy for that:
   -- If entity has CCState, use HasDummy. If it doesn't, it is still on character creation, so return true
   local respecProxy = false
   if entity.CCState then
@@ -46,7 +47,6 @@ function Autosaving.ProxyIsUsingRespecOrMirror()
   else
     respecProxy = true
   end
-
 
   -- print("Is respeccing or using mirror? " .. tostring(respecProxy))
 

@@ -117,7 +117,6 @@ function EHandlers.OnUseStarted(character, item)
     -- Config.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
     -- print("UseStarted: " .. character .. " " .. item)
     Autosaving.isUsingItem = true
-    -- TODO: ...
   end
 end
 
@@ -130,13 +129,12 @@ function EHandlers.OnUseEnded(character, item, result)
   end
 end
 
--- function EHandlers.onOpened(item)
+-- function EHandlers.onOpened(ITEMROOT, ITEM, CHARACTER)
   -- Config.DebugPrint(2, "Opened item: " .. item)
-  -- print("Opened item: " .. item)
---   Autosaving.isInContainer = true
---   -- TODO: ...
+  -- print("Opened (template): ")
+  -- If in party ...
+  -- Autosaving.isInContainer = true
 -- end
-
 -- function EHandlers.onClosed()
   -- Config.DebugPrint(2, "onClosed")
   -- print("onClosed")
@@ -144,6 +142,7 @@ end
 --   Autosaving.HandlePotentialAutosave()
 --   -- TODO: ...
 -- end
+
 -- Entered and Left Force Turn-Based
 function EHandlers.OnEnteredForceTurnBased(object)
   if Object.IsCharacter(object) and Osi.IsInPartyWith(object, GetHostCharacter()) == 1 then
@@ -156,7 +155,14 @@ function EHandlers.OnLeftForceTurnBased(object)
       Autosaving.isInTurnBased = false
     end
 end
-
+-- Entered Shared Force Turn-Based
+-- This is probably used with Shadow Curse, etc
+-- function EHandlers.OnEnteredSharedForceTurnBased(object, zoneId)
+--   -- Handler logic for shared force turn-based mode
+--   print("OnEnteredSharedForceTurnBased called")
+--   print("object:", object)
+--   print("zoneId:", zoneId)
+-- end
 
 function EHandlers.OnLevelGameplayStarted(levelName, isEditorMode)
   print("OnLevelGameplayStarted called")

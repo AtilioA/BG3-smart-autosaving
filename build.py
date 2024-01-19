@@ -5,7 +5,6 @@ import xml.etree.ElementTree as ET
 
 UUID = "0c8bb2e9-aa96-4de7-b793-a733d68ee6f0"
 VERSION = "2.0.0"
-INT64_VERSION = "72057594037927936"
 MOD_NAME = "Smart Autosaving"
 
 def run_divine_command(source_path, destination_path):
