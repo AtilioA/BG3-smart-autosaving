@@ -1,4 +1,4 @@
-local Config = {}
+Config = {}
 
 FolderName = "SmartAutosaving"
 Config.configFilePath = "smart_autosaving_config.json"
@@ -27,11 +27,6 @@ Config.defaultConfig = {
     }
 }
 
-function Config.DebugPrint(level, ...)
-    if Config.jsonConfig and Config.jsonConfig.DEBUG and Config.jsonConfig.DEBUG.level >= level then
-        print(...)
-    end
-end
 
 function Config.GetModPath(filePath)
     return FolderName .. '/' .. filePath
@@ -41,10 +36,10 @@ end
 function Config.LoadConfig(filePath)
     local configFileContent = Ext.IO.LoadFile(Config.GetModPath(filePath))
     if configFileContent and configFileContent ~= "" then
-        -- Config.DebugPrint(1, "Loaded config file: " .. filePath)
+        Utils.DebugPrint(1, "Loaded config file: " .. filePath)
         return Ext.Json.Parse(configFileContent)
     else
-        -- Config.DebugPrint(1, "File not found: " .. filePath)
+        Utils.DebugPrint(1, "File not found: " .. filePath)
         return nil
     end
 end
@@ -61,8 +56,7 @@ function Config.UpdateConfig(existingConfig, defaultConfig)
         if existingConfig[key] == nil then
             existingConfig[key] = value
             updated = true
-            -- Config.DebugPrint(1, "Added new config option:", key)
-            -- print("Added new config option:", key)
+            Utils.DebugPrint(1, "Added new config option:", key)
         elseif type(value) == "table" then
             -- Recursively update for nested tables
             if Config.UpdateConfig(existingConfig[key], value) then
@@ -78,16 +72,13 @@ function Config.LoadJSONConfig()
     if not jsonConfig then
         jsonConfig = Config.defaultConfig
         Config.SaveConfig(Config.configFilePath, jsonConfig)
-        -- Config.DebugPrint(1, "Default config file loaded.")
-        -- print("Default config file loaded.")
+        Utils.DebugPrint(1, "Default config file loaded.")
     else
         if Config.UpdateConfig(jsonConfig, Config.defaultConfig) then
             Config.SaveConfig(Config.configFilePath, jsonConfig)
-            -- Config.DebugPrint(1, "Config file updated with new options.")
-            -- print("Smart Autosaving config file updated with new options.")
+            Utils.DebugPrint(1, "Config file updated with new options.")
         else
-            -- Config.DebugPrint(1, "Config file loaded.")
-            -- print("Config file loaded.")
+            Utils.DebugPrint(1, "Config file loaded.")
         end
     end
 
