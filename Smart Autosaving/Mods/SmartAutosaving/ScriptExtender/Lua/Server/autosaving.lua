@@ -77,8 +77,9 @@ function Autosaving.StartOrRestartTimer()
 end
 
 function Autosaving.ProxyIsUsingRespecOrMirror()
-  -- Does not seem to work:
+  -- Neither seem to work:
   -- local rows = Osi.DB_InCharacterRespec:Get(nil, nil)
+  -- local rows2 = Osi.DB_RelaunchCharacterRespec:Get(nil)
 
   -- So let's use a proxy for that:
   -- If entity has CCState, use HasDummy. If it doesn't, it is still on character creation, so return true
@@ -96,7 +97,7 @@ function Autosaving.ProxyIsUsingRespecOrMirror()
 end
 
 function Autosaving.CanAutosave()
-  local isRespeccingOrUsingMirror = Autosaving.ProxyIsUsingRespecOrMirror() and not Autosaving.states.respecEnded
+  local isRespeccingOrUsingMirror = Autosaving.ProxyIsUsingRespecOrMirror() -- and not Autosaving.states.respecEnded
 
   -- These checks ensure that players loading a save in combat or dialogue will not autosave (if the corresponding options are set to true)
   -- We could just use this instead of listening to the events, but most logic is done through events (which is also more efficient)

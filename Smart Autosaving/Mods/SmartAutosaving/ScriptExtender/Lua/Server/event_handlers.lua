@@ -9,6 +9,7 @@ function EHandlers.OnTimerFinished(timer)
       Autosaving.Autosave()
       Autosaving.StartOrRestartTimer()
     else -- timer finished but we can't autosave yet, so we'll wait for the next event to try again
+      Utils.DebugPrint(2, "OnTimerFinished: Can't autosave yet, waiting for next event")
       Autosaving.UpdateState("waitingForAutosave", true)
     end
   end
@@ -162,12 +163,16 @@ end
 -- Respec Events
 function EHandlers.OnRespecCancelled(character)
   Utils.DebugPrint(2, "Character" .. character .. " cancelled respec")
+  -- We can't actually use this, since it will break logic for players who respec then use the mirror
   Autosaving.UpdateState("respecEnded", true)
+  Autosaving.SaveIfWaiting()
 end
 
 function EHandlers.OnRespecCompleted(character)
   Utils.DebugPrint(2, "Character" .. character .. " completed respec")
+  -- We can't actually use this, since it will break logic for players who respec then use the mirror
   Autosaving.UpdateState("respecEnded", true)
+  Autosaving.SaveIfWaiting()
 end
 
 -- TODO:
