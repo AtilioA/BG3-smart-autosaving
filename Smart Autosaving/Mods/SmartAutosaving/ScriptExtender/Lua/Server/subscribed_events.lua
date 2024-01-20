@@ -1,6 +1,5 @@
 local function SubscribeToEvents()
-  -- Config.DebugPrint(2, "Subscribing to events with JSON config: " .. Ext.Json.Stringify(JsonConfig, { Beautify = true }))
-  -- print("Subscribing to events with JSON config: " .. Ext.Json.Stringify(JsonConfig, { Beautify = true }))
+  Utils.DebugPrint(2, "Subscribing to events with JSON config: " .. Ext.Json.Stringify(JsonConfig, { Beautify = true }))
 
   if JsonConfig.TIMER.enabled == true then
     -- Registering general Osiris event listeners
@@ -34,6 +33,7 @@ local function SubscribeToEvents()
 
     -- Combat
     if JsonConfig.EVENTS.combat then
+      -- REVIEW: I don't know if this event is triggered when combat starts only with the player or with any character, perhaps we should not listen to this at all (combat is already handled with other checks anyways)
       Ext.Osiris.RegisterListener("CombatStarted", 1, "before", EHandlers.OnCombatStart)
       Ext.Osiris.RegisterListener("CombatEnded", 1, "before", EHandlers.OnCombatEnd)
       -- (Not actually working)
@@ -55,8 +55,8 @@ local function SubscribeToEvents()
     end
 
     -- if JsonConfig.EVENTS.looting_containers then
-      -- Ext.Osiris.RegisterListener("TemplateOpening", 3, "before", EHandlers.onOpened)
-      -- Ext.Osiris.RegisterListener("Closed", 1, "before", EHandlers.onClosed)
+    -- Ext.Osiris.RegisterListener("TemplateOpening", 3, "before", EHandlers.onOpened)
+    -- Ext.Osiris.RegisterListener("Closed", 1, "before", EHandlers.onClosed)
     -- end
 
     -- I still gotta try out this event trigger in-game
@@ -91,7 +91,7 @@ local function SubscribeToEvents()
     -- Ext.Osiris.RegisterListener("VoiceBarkEnded", 2, "before", EHandlers.OnVoiceBarkEnded)
     -- Ext.Osiris.RegisterListener("VoiceBarkFailed", 1, "before", EHandlers.OnVoiceBarkFailed)
     -- Ext.Osiris.RegisterListener("VoiceBarkStarted", 2, "before", EHandlers.OnVoiceBarkStarted)
-    end
+  end
 end
 
 return {

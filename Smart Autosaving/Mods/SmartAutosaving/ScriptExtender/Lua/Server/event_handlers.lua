@@ -29,7 +29,7 @@ function EHandlers.SavegameLoaded()
 end
 
 function EHandlers.OnDialogStart()
-  -- Config.DebugPrint(2, "Dialogue started")
+  Utils.DebugPrint(2, "Dialogue started")
   -- entity = Ext.Entity.Get(Osi.GetHostCharacter())
   -- Ext.IO.SaveFile('character-entity.json', Ext.DumpExport(entity:GetAllComponents()))
   -- print(entity:GetAllComponents().ServerCharacter)
@@ -38,31 +38,35 @@ function EHandlers.OnDialogStart()
 end
 
 function EHandlers.OnDialogEnd()
-  -- Config.DebugPrint(2, "Dialogue ended")
+  Utils.DebugPrint(2, "Dialogue ended")
 
   Autosaving.UpdateState("isInDialogue", false)
 end
 
 function EHandlers.OnTradeStart()
+  Utils.DebugPrint(2, "OnTradeStart")
   Autosaving.UpdateState("isInTrade", true)
 end
 
 function EHandlers.OnTradeEnd()
+  Utils.DebugPrint(2, "OnTradeEnd")
   Autosaving.UpdateState("isInTrade", false)
   -- Save regardless of dialogue state
   Autosaving.SaveIfWaiting()
 end
 
 function EHandlers.OnCombatStart()
+  Utils.DebugPrint(2, "OnCombatStart")
   Autosaving.UpdateState("isInCombat", true)
 end
 
 -- I didn't manage to get this to work, so I'm using TurnEnded instead
 -- function EHandlers.onCombatRoundStarted()
+  -- Utils.DebugPrint(2, "onCombatRoundStarted")
 --     Autosaving.UpdateState("combatTurnEnded", true)
---
 -- end
 function EHandlers.OnCombatEnd()
+  Utils.DebugPrint(2, "OnCombatEnd")
   Autosaving.UpdateState("isInCombat", false)
 end
 
@@ -70,61 +74,58 @@ function EHandlers.OnTurnEnded(char)
   -- Potentially save if the turn ended for the avatar or party member (this should not trigger multiplayer or summons)
   if Osi.IsInPartyWith(char, GetHostCharacter()) == 1 then
     -- Autosaving.UpdateState("isInCombat", true -- hacky way to 'initialize' it if player loads into combat)
+    Utils.DebugPrint(2, "OnTurnEnded: " .. char)
     Autosaving.UpdateState("combatTurnEnded", true)
   end
 end
 
 function EHandlers.OnLockpickingStart()
+  Utils.DebugPrint(2, "Lockpicking started")
   Autosaving.UpdateState("isLockpicking", true)
 end
 
 function EHandlers.OnLockpickingEnd()
+  Utils.DebugPrint(2, "Lockpicking ended")
   Autosaving.UpdateState("isLockpicking", false)
 end
 
 -- This might cause problems if the target is 'owned' (has red highlight)
 function EHandlers.onRequestCanLoot(looter, target)
-  -- Config.DebugPrint(2, "RequestCanLoot: " .. looter .. " " .. target)
-  print("RequestCanLoot: " .. looter .. " " .. target)
+  Utils.DebugPrint(2, "RequestCanLoot: " .. looter .. " " .. target)
   Autosaving.UpdateState("isLootingCharacter", true)
 end
 
 function EHandlers.onCharacterLootedCharacter(player, lootedCharacter)
-  -- Config.DebugPrint(2, "CharacterLootedCharacter")
-  print("CharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
+  Utils.DebugPrint(2, "CharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
   Autosaving.UpdateState("isLootingCharacter", false)
 end
 
 -- WIP/looking for means of detection
 -- function EHandlers.OnCharacterCreationStart()
--- Config.DebugPrint(2, "Character creation started")
+-- Utils.DebugPrint(2, "Character creation started")
 -- end
 
 function EHandlers.OnUseStarted(character, item)
   if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
-    -- Config.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
-    -- print("UseStarted: " .. character .. " " .. item)
+    Utils.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
     Autosaving.UpdateState("isUsingItem", true)
   end
 end
 
 function EHandlers.OnUseEnded(character, item, result)
   if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
-    -- Config.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
-    -- print("UseEnded: " .. character .. " " .. item .. " " .. result)
+    Utils.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
     Autosaving.UpdateState("isUsingItem", false)
   end
 end
 
 -- function EHandlers.onOpened(ITEMROOT, ITEM, CHARACTER)
--- Config.DebugPrint(2, "Opened item: " .. item)
--- print("Opened (template): ")
+-- Utils.DebugPrint(2, "Opened item: " .. item)
 -- If in party ...
 -- Autosaving.UpdateState("isInContainer", true)
 -- end
 -- function EHandlers.onClosed()
--- Config.DebugPrint(2, "onClosed")
--- print("onClosed")
+-- Utils.DebugPrint(2, "onClosed")
 --   Autosaving.UpdateState("isInContainer", false)
 --
 --   -- TODO: ...
@@ -133,12 +134,14 @@ end
 -- Entered and Left Force Turn-Based
 function EHandlers.OnEnteredForceTurnBased(object)
   if Object.IsCharacter(object) and Osi.IsInPartyWith(object, GetHostCharacter()) == 1 then
+    Utils.DebugPrint(2, "Entered force turn-based: " .. object)
     Autosaving.UpdateState("isInTurnBased", true)
   end
 end
 
 function EHandlers.OnLeftForceTurnBased(object)
   if Object.IsCharacter(object) and Osi.IsInPartyWith(object, GetHostCharacter()) == 1 then
+    Utils.DebugPrint(2, "Left force turn-based: " .. object)
     Autosaving.UpdateState("isInTurnBased", false)
   end
 end
@@ -152,17 +155,18 @@ end
 
 function EHandlers.OnLevelUnloading(level)
   if level == 'SYS_CC_I' then
-    -- print("Character creation ended")
     Autosaving.UpdateState("isInCharacterCreation", false)
   end
 end
 
 -- Respec Events
 function EHandlers.OnRespecCancelled(character)
+  Utils.DebugPrint(2, "Character" .. character .. " cancelled respec")
   Autosaving.UpdateState("respecEnded", true)
 end
 
 function EHandlers.OnRespecCompleted(character)
+  Utils.DebugPrint(2, "Character" .. character .. " completed respec")
   Autosaving.UpdateState("respecEnded", true)
 end
 
@@ -170,68 +174,68 @@ end
 -- UserEvent
 -- function EHandlers.OnUserEvent(userID, userEvent)
 --   -- Handler logic for UserEvent
---   print("OnUserEvent called")
---   print("userID:", userID)
---   print("userEvent:", userEvent)
+--   Utils.DebugPrint(2, "OnUserEvent called")
+--   Utils.DebugPrint(2, "userID:", userID)
+--   Utils.DebugPrint(2, "userEvent:", userEvent)
 -- end
 
 -- -- Level Loaded
 -- function EHandlers.OnLevelLoaded(newLevel)
 --   -- Handler logic when a new level is loaded
---   print("OnLevelLoaded called")
---   print("newLevel:", newLevel)
+--   Utils.DebugPrint(2, "OnLevelLoaded called")
+--   Utils.DebugPrint(2, "newLevel:", newLevel)
 -- end
 
 -- -- Level Template Loaded
 -- function EHandlers.OnLevelTemplateLoaded(levelTemplate)
 --   -- Handler logic for level template load
---   print("OnLevelTemplateLoaded called")
---   print("levelTemplate:", levelTemplate)
+--   Utils.DebugPrint(2, "OnLevelTemplateLoaded called")
+--   Utils.DebugPrint(2, "levelTemplate:", levelTemplate)
 -- end
 
 -- function EHandlers.OnLevelGameplayStarted()
 --   -- Handler logic for level template load
---   print("OnLevelGameplayStarted called")
+--   Utils.DebugPrint(2, "OnLevelGameplayStarted called")
 -- end
 
 -- Puzzle UI Events
 -- function EHandlers.OnPuzzleUIUsed(character, uIInstance, type, command, elementId)
 --   -- Handler logic for puzzle UI use
---   print("OnPuzzleUIUsed called")
---   print("character:", character)
---   print("uIInstance:", uIInstance)
---   print("type:", type)
---   print("command:", command)
---   print("elementId:", elementId)
+--   Utils.DebugPrint(2, "OnPuzzleUIUsed called")
+--   Utils.DebugPrint(2, "character:", character)
+--   Utils.DebugPrint(2, "uIInstance:", uIInstance)
+--   Utils.DebugPrint(2, "type:", type)
+--   Utils.DebugPrint(2, "command:", command)
+--   Utils.DebugPrint(2, "elementId:", elementId)
 -- end
 
 -- function EHandlers.OnPuzzleUIClosed(character, uIInstance, type)
 --   -- Handler logic when puzzle UI is closed
---   print("OnPuzzleUIClosed called")
---   print("character:", character)
---   print("uIInstance:", uIInstance)
---   print("type:", type)
+--   Utils.DebugPrint(2, "OnPuzzleUIClosed called")
+--   Utils.DebugPrint(2, "character:", character)
+--   Utils.DebugPrint(2, "uIInstance:", uIInstance)
+--   Utils.DebugPrint(2, "type:", type)
 -- end
 
 -- -- Voice Bark Events
 -- function EHandlers.OnVoiceBarkStarted(bark, instanceID)
 --   -- Handler logic when a voice bark starts
---   print("OnVoiceBarkStarted called")
---   print("bark:", bark)
---   print("instanceID:", instanceID)
+--   Utils.DebugPrint(2, "OnVoiceBarkStarted called")
+--   Utils.DebugPrint(2, "bark:", bark)
+--   Utils.DebugPrint(2, "instanceID:", instanceID)
 -- end
 
 -- function EHandlers.OnVoiceBarkEnded(bark, instanceID)
 --   -- Handler logic when a voice bark ends
---   print("OnVoiceBarkEnded called")
---   print("bark:", bark)
---   print("instanceID:", instanceID)
+--   Utils.DebugPrint(2, "OnVoiceBarkEnded called")
+--   Utils.DebugPrint(2, "bark:", bark)
+--   Utils.DebugPrint(2, "instanceID:", instanceID)
 -- end
 
 -- function EHandlers.OnVoiceBarkFailed(bark)
 --   -- Handler logic when a voice bark fails
---   print("OnVoiceBarkFailed called")
---   print("bark:", bark)
+--   Utils.DebugPrint(2, "OnVoiceBarkFailed called")
+--   Utils.DebugPrint(2, "bark:", bark)
 -- end
 
 return EHandlers

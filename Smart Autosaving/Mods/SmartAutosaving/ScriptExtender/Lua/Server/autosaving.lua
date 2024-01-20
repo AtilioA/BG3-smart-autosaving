@@ -90,7 +90,7 @@ function Autosaving.ProxyIsUsingRespecOrMirror()
     respecProxy = true
   end
 
-  -- print("Is respeccing or using mirror? " .. tostring(respecProxy))
+  Utils.DebugPrint(2, "Is respeccing or using mirror? " .. tostring(respecProxy))
 
   return respecProxy
 end
