@@ -4,8 +4,6 @@ EHandlers = {}
 function EHandlers.OnTimerFinished(timer)
   -- entity = Ext.Entity.Get(Osi.GetHostCharacter())
   -- Ext.IO.SaveFile('character-entity.json', Ext.DumpExport(entity:GetAllComponents()))
-  -- print(entity:GetAllComponents().ServerCharacter.CharCreationInProgress)
-  print("OnTimerFinished called")
   if timer == Autosaving.TIMER_NAME then
     if Autosaving.CanAutosave() then
       Autosaving.Autosave()
@@ -174,10 +172,75 @@ function EHandlers.OnRespecCancelled(character)
 end
 
 function EHandlers.OnRespecCompleted(character)
-  Autosaving.respecEnded = true
-  Autosaving.HandlePotentialAutosave()
+  Autosaving.UpdateState("respecEnded", true)
 end
 
+-- TODO:
+-- UserEvent
+-- function EHandlers.OnUserEvent(userID, userEvent)
+--   -- Handler logic for UserEvent
+--   print("OnUserEvent called")
+--   print("userID:", userID)
+--   print("userEvent:", userEvent)
+-- end
+
+-- -- Level Loaded
+-- function EHandlers.OnLevelLoaded(newLevel)
+--   -- Handler logic when a new level is loaded
+--   print("OnLevelLoaded called")
+--   print("newLevel:", newLevel)
+-- end
+
+-- -- Level Template Loaded
+-- function EHandlers.OnLevelTemplateLoaded(levelTemplate)
+--   -- Handler logic for level template load
+--   print("OnLevelTemplateLoaded called")
+--   print("levelTemplate:", levelTemplate)
+-- end
+
+-- function EHandlers.OnLevelGameplayStarted()
+--   -- Handler logic for level template load
+--   print("OnLevelGameplayStarted called")
+-- end
+
 -- Puzzle UI Events
+-- function EHandlers.OnPuzzleUIUsed(character, uIInstance, type, command, elementId)
+--   -- Handler logic for puzzle UI use
+--   print("OnPuzzleUIUsed called")
+--   print("character:", character)
+--   print("uIInstance:", uIInstance)
+--   print("type:", type)
+--   print("command:", command)
+--   print("elementId:", elementId)
+-- end
+
+-- function EHandlers.OnPuzzleUIClosed(character, uIInstance, type)
+--   -- Handler logic when puzzle UI is closed
+--   print("OnPuzzleUIClosed called")
+--   print("character:", character)
+--   print("uIInstance:", uIInstance)
+--   print("type:", type)
+-- end
+
+-- -- Voice Bark Events
+-- function EHandlers.OnVoiceBarkStarted(bark, instanceID)
+--   -- Handler logic when a voice bark starts
+--   print("OnVoiceBarkStarted called")
+--   print("bark:", bark)
+--   print("instanceID:", instanceID)
+-- end
+
+-- function EHandlers.OnVoiceBarkEnded(bark, instanceID)
+--   -- Handler logic when a voice bark ends
+--   print("OnVoiceBarkEnded called")
+--   print("bark:", bark)
+--   print("instanceID:", instanceID)
+-- end
+
+-- function EHandlers.OnVoiceBarkFailed(bark)
+--   -- Handler logic when a voice bark fails
+--   print("OnVoiceBarkFailed called")
+--   print("bark:", bark)
+-- end
 
 return EHandlers
