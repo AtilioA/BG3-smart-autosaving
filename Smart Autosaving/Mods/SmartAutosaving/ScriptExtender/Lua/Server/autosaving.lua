@@ -55,6 +55,14 @@ function Autosaving.Autosave()
   Autosaving.UpdateState("waitingForAutosave", false)
 end
 
+function Autosaving.ShouldDialogueBlockSaving()
+  if JsonConfig.EVENTS.dialogue == true then
+    local entity = Ext.Entity.Get(Osi.GetHostCharacter())
+    return entity.ServerCharacter.Flags.InDialog
+  end
+  return false
+end
+
 function Autosaving.ShouldCombatBlockSaving()
   if JsonConfig.EVENTS.combat == true then
     return Osi.IsInCombat(GetHostCharacter()) == 1
@@ -89,7 +97,11 @@ end
 
 function Autosaving.CanAutosave()
   local isRespeccingOrUsingMirror = Autosaving.ProxyIsUsingRespecOrMirror() and not Autosaving.states.respecEnded
+
+  -- These checks ensure that players loading a save in combat or dialogue will not autosave (if the corresponding options are set to true)
+  -- We could just use this instead of listening to the events, but most logic is done through events (which is also more efficient)
   local combatCheck = Autosaving.ShouldCombatBlockSaving()
+  local dialogueCheck = Autosaving.ShouldDialogueBlockSaving()
 
   local notInAnyBlockingState = not Autosaving.states.isInDialogue and
       not Autosaving.states.isInCombat and
@@ -99,6 +111,7 @@ function Autosaving.CanAutosave()
       not Autosaving.states.isUsingItem and
       not Autosaving.states.isInCharacterCreation and
       not combatCheck and
+      not dialogueCheck and
       not isRespeccingOrUsingMirror
 
   return (Autosaving.states.combatTurnEnded or notInAnyBlockingState)
