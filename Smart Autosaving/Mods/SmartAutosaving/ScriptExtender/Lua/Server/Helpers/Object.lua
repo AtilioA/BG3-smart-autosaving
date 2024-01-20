@@ -1,4 +1,4 @@
-local Object = {}
+Object = {}
 
 -- Courtesy of Focus/Focus Core (https://www.nexusmods.com/baldursgate3/mods/5972)
 function Object.IsCharacter(object)

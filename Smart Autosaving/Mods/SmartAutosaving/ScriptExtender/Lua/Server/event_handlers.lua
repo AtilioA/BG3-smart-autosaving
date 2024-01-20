@@ -143,15 +143,6 @@ function EHandlers.OnLeftForceTurnBased(object)
   end
 end
 
--- Entered Shared Force Turn-Based
--- This is probably used with Shadow Curse, etc
--- function EHandlers.OnEnteredSharedForceTurnBased(object, zoneId)
---   -- Handler logic for shared force turn-based mode
---   print("OnEnteredSharedForceTurnBased called")
---   print("object:", object)
---   print("zoneId:", zoneId)
--- end
-
 function EHandlers.OnLevelGameplayStarted(levelName, isEditorMode)
   -- print("OnLevelGameplayStarted called")
   if levelName == 'SYS_CC_I' then

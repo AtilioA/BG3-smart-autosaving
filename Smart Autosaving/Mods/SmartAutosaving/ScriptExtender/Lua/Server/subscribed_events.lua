@@ -68,19 +68,21 @@ local function SubscribeToEvents()
     if JsonConfig.EVENTS.turn_based then
       Ext.Osiris.RegisterListener("EnteredForceTurnBased", 1, "before", EHandlers.OnEnteredForceTurnBased)
       Ext.Osiris.RegisterListener("LeftForceTurnBased", 1, "before", EHandlers.OnLeftForceTurnBased)
+      -- I don't know what this is used for, it is not for things like shadow-curse
+      -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
     end
-    -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
-
-    -- Ext.Osiris.RegisterListener("UserEvent", 2, "before", EHandlers.OnUserEvent)
-    -- Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.OnLevelGameplayStarted)
-    -- Ext.Osiris.RegisterListener("LevelLoaded", 1, "before", EHandlers.OnLevelLoaded)
-    -- Ext.Osiris.RegisterListener("LevelTemplateLoaded", 1, "before", EHandlers.OnLevelTemplateLoaded)
-    -- Ext.Osiris.RegisterListener("LevelUnloading", 1, "before", EHandlers.OnLevelUnloading)
 
     if JsonConfig.EVENTS.respec_and_mirror then
       Ext.Osiris.RegisterListener("RespecCancelled", 1, "before", EHandlers.OnRespecCancelled)
       Ext.Osiris.RegisterListener("RespecCompleted", 1, "before", EHandlers.OnRespecCompleted)
     end
+
+    -- Can't be used:
+    -- Ext.Osiris.RegisterListener("LeveledUp", 1, "before", EHandlers.OnLeveledUp)
+    -- Ext.Osiris.RegisterListener("UserEvent", 2, "before", EHandlers.OnUserEvent)
+    -- Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.OnLevelGameplayStarted)
+    -- Ext.Osiris.RegisterListener("LevelTemplateLoaded", 1, "before", EHandlers.OnLevelTemplateLoaded)
+    -- Ext.Osiris.RegisterListener("LevelUnloading", 1, "before", EHandlers.OnLevelUnloading)
 
     -- Ext.Osiris.RegisterListener("PuzzleUIUsed", 5, "before", EHandlers.OnPuzzleUIUsed)
     -- Ext.Osiris.RegisterListener("PuzzleUIClosed", 3, "before", EHandlers.OnPuzzleUIClosed)
