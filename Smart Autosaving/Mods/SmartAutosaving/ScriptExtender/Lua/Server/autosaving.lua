@@ -1,31 +1,58 @@
-local Config = Ext.Require("config.lua")
-local Autosaving = {}
+Autosaving = {}
+
+Autosaving.TIMER_NAME = "Volitios_Smart_Autosaving"
+Autosaving.AUTOSAVING_PERIOD = JsonConfig.TIMER.autosaving_period_in_minutes
 
 -- State tracking variables
--- These will never be set to true if the corresponding event is disabled in the config
-Autosaving.isInDialogue = false
-Autosaving.isInTrade = false
+-- These would never be set to true if the corresponding event is disabled in the config
+Autosaving.states = {
+  isInDialogue = false,
+  isInTrade = false,
 
-Autosaving.isInTurnBased = false
-Autosaving.isInCombat = false
-Autosaving.combatTurnEnded = false
+  isInTurnBased = false,
+  isInCombat = false,
+  combatTurnEnded = false,
 
-Autosaving.isUsingItem = false
--- Autosaving.isInContainer = false
-Autosaving.isLootingCharacter = false
+  isUsingItem = false,
+  -- isInContainer = false,
+  isLootingCharacter = false,
 
-Autosaving.isLockpicking = false
+  isLockpicking = false,
 
-Autosaving.isInCharacterCreation = false
+  isInCharacterCreation = false,
 
-Autosaving.respecEnded = false
+  respecEnded = false,
 
-Autosaving.waitingForAutosave = false
+  waitingForAutosave = false,
+}
+
+function Autosaving.UpdateState(state, value)
+  -- Check if 'value' is a boolean
+  if type(value) ~= "boolean" then
+    error("Value must be a boolean")
+    return
+  end
+
+  -- Check if 'state' is a valid key in 'Autosaving.states'
+  if Autosaving.states[state] == nil then
+    error("Invalid state: " .. tostring(state))
+    return
+  end
+
+  -- Update the state
+  Autosaving.states[state] = value
+
+  -- Handle potential autosaves if player leaves a state
+  -- print(value)
+  if value == false then
+    Autosaving.HandlePotentialAutosave()
+  end
+end
 
 function Autosaving.Autosave()
   Osi.AutoSave()
   print("Smart Autosaving: Game saved")
-  Autosaving.waitingForAutosave = false
+  Autosaving.UpdateState("waitingForAutosave", false)
 end
 
 function Autosaving.ShouldCombatBlockSaving()
@@ -33,6 +60,12 @@ function Autosaving.ShouldCombatBlockSaving()
     return Osi.IsInCombat(GetHostCharacter()) == 1
   end
   return false
+end
+
+function Autosaving.StartOrRestartTimer()
+  Osi.TimerCancel(Autosaving.TIMER_NAME)
+  Osi.TimerLaunch(Autosaving.TIMER_NAME, Autosaving.AUTOSAVING_PERIOD * 1000)
+  Autosaving.UpdateState("waitingForAutosave", false)
 end
 
 function Autosaving.ProxyIsUsingRespecOrMirror()
@@ -55,35 +88,36 @@ function Autosaving.ProxyIsUsingRespecOrMirror()
 end
 
 function Autosaving.CanAutosave()
-  local isRespeccingOrUsingMirror = Autosaving.ProxyIsUsingRespecOrMirror() and not Autosaving.respecEnded
+  local isRespeccingOrUsingMirror = Autosaving.ProxyIsUsingRespecOrMirror() and not Autosaving.states.respecEnded
   local combatCheck = Autosaving.ShouldCombatBlockSaving()
 
-  local notInAnyBlockingState = not Autosaving.isInDialogue and
-      not Autosaving.isInCombat and
-      not Autosaving.isLockpicking and
-      not Autosaving.isInTurnBased and
-      not Autosaving.isInTrade and
-      not Autosaving.isUsingItem and
-      not Autosaving.isInCharacterCreation and
+  local notInAnyBlockingState = not Autosaving.states.isInDialogue and
+      not Autosaving.states.isInCombat and
+      not Autosaving.states.isLockpicking and
+      not Autosaving.states.isInTurnBased and
+      not Autosaving.states.isInTrade and
+      not Autosaving.states.isUsingItem and
+      not Autosaving.states.isInCharacterCreation and
       not combatCheck and
       not isRespeccingOrUsingMirror
 
-  return (Autosaving.combatTurnEnded or notInAnyBlockingState)
+  return (Autosaving.states.combatTurnEnded or notInAnyBlockingState)
 end
 
 -- Handlers to update states and check for delayed autosave
 -- Function to handle potential autosave after actions
 function Autosaving.HandlePotentialAutosave()
   -- Do not autosave if the states are true, even if we're waiting for an autosave
-  if Autosaving.waitingForAutosave and Autosaving.CanAutosave() then
+  if Autosaving.states.waitingForAutosave and Autosaving.CanAutosave() then
     Autosaving.Autosave()
   end
   -- Set this to false regardless; if we're in combat, we'll set it to true again when a new round ends
+  -- Also don't use the function to update the state to avoid recursion
   Autosaving.combatTurnEnded = false
 end
 
 function Autosaving.SaveIfWaiting()
-  if Autosaving.waitingForAutosave then
+  if Autosaving.states.waitingForAutosave then
     Autosaving.Autosave()
   end
 end

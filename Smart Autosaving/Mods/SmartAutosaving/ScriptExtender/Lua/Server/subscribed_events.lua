@@ -1,7 +1,3 @@
-local EHandlers = Ext.Require("Server/event_handlers.lua")
--- For some reason I'm not able to use Config.jsonConfig here
-local Config = Ext.Require("config.lua")
-
 local function SubscribeToEvents()
   -- Config.DebugPrint(2, "Subscribing to events with JSON config: " .. Ext.Json.Stringify(JsonConfig, { Beautify = true }))
   -- print("Subscribing to events with JSON config: " .. Ext.Json.Stringify(JsonConfig, { Beautify = true }))
@@ -9,7 +5,7 @@ local function SubscribeToEvents()
   if JsonConfig.TIMER.enabled == true then
     -- Registering general Osiris event listeners
     -- Start the timer when the game is loaded
-    Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.StartOrRestartTimer)
+    Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", Autosaving.StartOrRestartTimer)
     Ext.Osiris.RegisterListener("TimerFinished", 1, "before", EHandlers.OnTimerFinished)
 
     -- Subscribe to the GameStateChanged event to detect when saves are created and reset the timer
@@ -63,7 +59,7 @@ local function SubscribeToEvents()
       -- Ext.Osiris.RegisterListener("Closed", 1, "before", EHandlers.onClosed)
     -- end
 
-    -- I still gotta try out event trigger in-game
+    -- I still gotta try out this event trigger in-game
     if JsonConfig.EVENTS.looting_characters then
       Ext.Osiris.RegisterListener("RequestCanLoot", 2, "after", EHandlers.onRequestCanLoot)
       Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", EHandlers.onCharacterLootedCharacter)

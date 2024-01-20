@@ -62,7 +62,7 @@ function Config.UpdateConfig(existingConfig, defaultConfig)
             existingConfig[key] = value
             updated = true
             -- Config.DebugPrint(1, "Added new config option:", key)
-            print("Added new config option:", key)
+            -- print("Added new config option:", key)
         elseif type(value) == "table" then
             -- Recursively update for nested tables
             if Config.UpdateConfig(existingConfig[key], value) then
@@ -79,15 +79,15 @@ function Config.LoadJSONConfig()
         jsonConfig = Config.defaultConfig
         Config.SaveConfig(Config.configFilePath, jsonConfig)
         -- Config.DebugPrint(1, "Default config file loaded.")
-        print("Default config file loaded.")
+        -- print("Default config file loaded.")
     else
         if Config.UpdateConfig(jsonConfig, Config.defaultConfig) then
             Config.SaveConfig(Config.configFilePath, jsonConfig)
             -- Config.DebugPrint(1, "Config file updated with new options.")
-            print("Config file updated with new options.")
+            -- print("Smart Autosaving config file updated with new options.")
         else
             -- Config.DebugPrint(1, "Config file loaded.")
-            print("Config file loaded.")
+            -- print("Config file loaded.")
         end
     end
 
