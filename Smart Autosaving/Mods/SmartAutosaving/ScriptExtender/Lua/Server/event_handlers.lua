@@ -92,13 +92,17 @@ end
 
 -- This might cause problems if the target is 'owned' (has red highlight)
 function EHandlers.onRequestCanLoot(looter, target)
-  Utils.DebugPrint(2, "RequestCanLoot: " .. looter .. " " .. target)
-  Autosaving.UpdateState("isLootingCharacter", true)
+  if Osi.IsInPartyWith(looter, GetHostCharacter()) == 1 then
+    Utils.DebugPrint(2, "RequestCanLoot: " .. looter .. " " .. target)
+    Autosaving.UpdateState("isLootingCharacter", true)
+  end
 end
 
 function EHandlers.onCharacterLootedCharacter(player, lootedCharacter)
-  Utils.DebugPrint(2, "CharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
-  Autosaving.UpdateState("isLootingCharacter", false)
+  if Osi.IsInPartyWith(player, GetHostCharacter()) == 1 then
+    Utils.DebugPrint(2, "CharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
+    Autosaving.UpdateState("isLootingCharacter", false)
+  end
 end
 
 -- WIP/looking for means of detection
