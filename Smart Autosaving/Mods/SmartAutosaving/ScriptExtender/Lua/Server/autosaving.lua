@@ -127,7 +127,7 @@ function Autosaving.HandlePotentialAutosave()
   end
   -- Set this to false regardless; if we're in combat, we'll set it to true again when a new round ends
   -- Also don't use the function to update the state to avoid recursion
-  Autosaving.combatTurnEnded = false
+  Autosaving.states.combatTurnEnded = false
 end
 
 function Autosaving.SaveIfWaiting()

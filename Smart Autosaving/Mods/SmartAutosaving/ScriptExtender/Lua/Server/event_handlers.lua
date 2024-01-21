@@ -74,9 +74,9 @@ end
 function EHandlers.OnTurnEnded(char)
   -- Potentially save if the turn ended for the avatar or party member (this should not trigger multiplayer or summons)
   if Osi.IsInPartyWith(char, GetHostCharacter()) == 1 then
-    -- Autosaving.UpdateState("isInCombat", true -- hacky way to 'initialize' it if player loads into combat)
     Utils.DebugPrint(2, "OnTurnEnded: " .. char)
     Autosaving.UpdateState("combatTurnEnded", true)
+    Autosaving.HandlePotentialAutosave()
   end
 end
 
