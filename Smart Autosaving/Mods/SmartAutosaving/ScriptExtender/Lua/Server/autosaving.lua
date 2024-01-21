@@ -118,6 +118,7 @@ function Autosaving.CanAutosave()
       not Autosaving.states.isInTrade and
       not Autosaving.states.isUsingItem and
       not Autosaving.states.isInCharacterCreation and
+      not Autosaving.states.isLootingCharacter and
       not combatCheck and
       not dialogueCheck and
       not isRespeccingOrUsingMirror
