@@ -1,7 +1,11 @@
 Autosaving = {}
 
 Autosaving.TIMER_NAME = "Volitios_Smart_Autosaving"
+
 Autosaving.AUTOSAVING_PERIOD = JsonConfig.TIMER.autosaving_period_in_minutes * 60
+if JsonConfig.DEBUG.timer_in_seconds then
+  Autosaving.AUTOSAVING_PERIOD = JsonConfig.TIMER.autosaving_period_in_minutes
+end
 
 -- State tracking variables
 -- These would never be set to true if the corresponding event is disabled in the config
@@ -51,8 +55,10 @@ end
 
 function Autosaving.Autosave()
   Osi.AutoSave()
-  print("Smart Autosaving: Game saved")
+  Utils.DebugPrint(0, "Smart Autosaving: Game saved")
   Autosaving.UpdateState("waitingForAutosave", false)
+  -- If autosave fails, we'll try again next time
+  Autosaving.StartOrRestartTimer()
 end
 
 function Autosaving.ShouldDialogueBlockSaving()
@@ -71,6 +77,7 @@ function Autosaving.ShouldCombatBlockSaving()
 end
 
 function Autosaving.StartOrRestartTimer()
+  Utils.DebugPrint(2, "Starting or restarting timer to " .. tostring(Autosaving.AUTOSAVING_PERIOD * 1000) .. "ms")
   Osi.TimerCancel(Autosaving.TIMER_NAME)
   Osi.TimerLaunch(Autosaving.TIMER_NAME, Autosaving.AUTOSAVING_PERIOD * 1000)
   Autosaving.UpdateState("waitingForAutosave", false)

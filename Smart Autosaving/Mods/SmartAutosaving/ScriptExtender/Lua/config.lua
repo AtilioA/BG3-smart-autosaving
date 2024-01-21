@@ -23,7 +23,8 @@ Config.defaultConfig = {
         respec_and_mirror = true,          -- after respeccing or using mirror
     },
     DEBUG = {
-        level = 0 -- 0 = no debug, 1 = minimal, 2 = verbose logs
+        level = 0, -- 0 = no debug, 1 = minimal, 2 = verbose logs
+        timer_in_seconds = false, -- Use seconds instead of minutes for the timer
     }
 }
 
