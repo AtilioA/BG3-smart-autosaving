@@ -1,7 +1,7 @@
 Autosaving = {}
 
 Autosaving.TIMER_NAME = "Volitios_Smart_Autosaving"
-Autosaving.AUTOSAVING_PERIOD = JsonConfig.TIMER.autosaving_period_in_minutes
+Autosaving.AUTOSAVING_PERIOD = JsonConfig.TIMER.autosaving_period_in_minutes * 60
 
 -- State tracking variables
 -- These would never be set to true if the corresponding event is disabled in the config
