@@ -1,5 +1,8 @@
 EHandlers = {}
 
+-- Stack-like variable to keep track of how many times the party has been involved in a Use event. This is useful for, e.g., looting nested containers, or waiting for all characters to climb a ladder.
+EHandlers.useCount = 0
+
 --- Handler when the timer finishes
 ---@param timer string The name of the timer that finished
 ---@return nil
@@ -68,7 +71,7 @@ end
 
 -- I didn't manage to get this to work, so I'm using TurnEnded instead
 -- function EHandlers.onCombatRoundStarted()
-  -- Utils.DebugPrint(2, "onCombatRoundStarted")
+-- Utils.DebugPrint(2, "onCombatRoundStarted")
 --     Autosaving.UpdateState("combatTurnEnded", true)
 -- end
 function EHandlers.OnCombatEnd()
@@ -118,6 +121,8 @@ end
 function EHandlers.OnUseStarted(character, item)
   if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
+
+    EHandlers.useCount = EHandlers.useCount + 1
     Autosaving.UpdateState("isUsingItem", true)
   end
 end
@@ -125,7 +130,11 @@ end
 function EHandlers.OnUseEnded(character, item, result)
   if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
-    Autosaving.UpdateState("isUsingItem", false)
+
+    EHandlers.useCount = EHandlers.useCount - 1
+    if EHandlers.useCount == 0 then
+      Autosaving.UpdateState("isUsingItem", false)
+    end
   end
 end
 
@@ -182,6 +191,10 @@ function EHandlers.OnRespecCompleted(character)
   -- We can't actually use this, since it will break logic for players who respec then use the mirror
   Autosaving.UpdateState("respecEnded", true)
   Autosaving.SaveIfWaiting()
+end
+
+function EHandlers.DebugEvent(...)
+  Utils.DebugPrint(2, "DebugEvent: ", ...)
 end
 
 -- TODO:
