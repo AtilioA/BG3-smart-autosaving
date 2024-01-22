@@ -193,8 +193,21 @@ function EHandlers.OnRespecCompleted(character)
   Autosaving.SaveIfWaiting()
 end
 
-function EHandlers.DebugEvent(...)
-  Utils.DebugPrint(2, "DebugEvent: ", ...)
+function EHandlers.DebugEvent(param1, param2, param3, param4)
+  local debugString = "DebugEvent: "
+  if param1 ~= nil then
+    debugString = debugString .. param1 .. " "
+  end
+  if param2 ~= nil then
+    debugString = debugString .. param2 .. " "
+  end
+  if param3 ~= nil then
+    debugString = debugString .. param3 .. " "
+  end
+  if param4 ~= nil then
+    debugString = debugString .. param4
+  end
+  Utils.DebugPrint(2, debugString)
 end
 
 -- TODO:

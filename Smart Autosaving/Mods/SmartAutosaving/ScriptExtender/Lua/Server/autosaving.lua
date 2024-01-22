@@ -84,7 +84,20 @@ end
 -- Only used if the corresponding option is enabled in the config JSON file.
 function Autosaving.ShouldCombatBlockSaving()
   if JsonConfig.EVENTS.combat == true then
-    return Osi.IsInCombat(GetHostCharacter()) == 1
+    return Osi.IsInCombat(Osi.GetHostCharacter()) == 1
+  end
+  return false
+end
+
+function Autosaving.ShouldMovementBlockSaving()
+  if JsonConfig.EVENTS.movement == true then
+    local partyMemberMoving = Utils.IsAnyPartyMemberMoving()
+    if partyMemberMoving then
+      Utils.DebugPrint(2, partyMemberMoving.CharacterCreationStats.Name .. " is moving")
+      return true
+    else
+      return false
+    end
   end
   return false
 end
@@ -104,7 +117,7 @@ function Autosaving.ProxyIsUsingRespecOrMirror()
   -- So let's use a proxy for that:
   -- If entity has CCState, use HasDummy. If it doesn't, it is still on character creation, so return true
   local respecProxy = false
-  local entity = Ext.Entity.Get(Osi.GetHostCharacter())
+  local entity = Utils.GetPlayerEntity()
   if entity.CCState then
     respecProxy = entity.CCState.HasDummy
   else
@@ -123,6 +136,7 @@ function Autosaving.CanAutosave()
   -- We could just use this instead of listening to the events, but most logic is done through events (which is also more efficient)
   local combatCheck = Autosaving.ShouldCombatBlockSaving()
   local dialogueCheck = Autosaving.ShouldDialogueBlockSaving()
+  local movementCheck = Autosaving.ShouldMovementBlockSaving()
 
   local notInAnyBlockingState = not Autosaving.states.isInDialogue and
       -- not Autosaving.states.isInCombat and -- Temporarily disabled since this event does not check players involved in combat
@@ -134,6 +148,7 @@ function Autosaving.CanAutosave()
       not Autosaving.states.isLootingCharacter and
       not combatCheck and
       not dialogueCheck and
+      not movementCheck and
       not isRespeccingOrUsingMirror
 
   return (Autosaving.states.combatTurnEnded or notInAnyBlockingState)

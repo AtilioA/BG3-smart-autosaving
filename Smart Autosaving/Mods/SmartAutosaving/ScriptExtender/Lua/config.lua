@@ -14,13 +14,14 @@ Config.defaultConfig = {
         dialogue = true,                   -- after dialogue
         trade = true,                      -- after trade
         combat = true,                     -- after combat
-        combat_turn = true,                -- after party member turn ends (not mutually exclusive with combat)
+        combat_turn = true,                -- after party member turn ends (not mutually exclusive with combat option)
         turn_based = true,                 -- after exiting turn-based mode
         lockpicking = true,                -- after lockpicking
-        using_items = true,                -- after using an item (you use a container while looting)
+        using_items = true,                -- after using an item (you 'use' a container while looting)
         looting_characters = true,         -- after looting characters
         looting_containers = true,         -- after closing containers (not currently used)
         respec_and_mirror = true,          -- after respeccing or using mirror
+        movement = true                    -- after moving
     },
     DEBUG = {
         level = 0, -- 0 = no debug, 1 = minimal, 2 = verbose logs
