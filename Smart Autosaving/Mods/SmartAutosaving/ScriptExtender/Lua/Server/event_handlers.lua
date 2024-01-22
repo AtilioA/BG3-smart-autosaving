@@ -1,6 +1,8 @@
 EHandlers = {}
 
--- Handler when the timer finishes
+--- Handler when the timer finishes
+---@param timer string The name of the timer that finished
+---@return nil
 function EHandlers.OnTimerFinished(timer)
   -- entity = Ext.Entity.Get(Osi.GetHostCharacter())
   -- Ext.IO.SaveFile('character-entity.json', Ext.DumpExport(entity:GetAllComponents()))
@@ -15,6 +17,9 @@ function EHandlers.OnTimerFinished(timer)
   end
 end
 
+--- Handler when the game state changes
+---@param e table The event object
+---@return nil
 function EHandlers.OnGameStateChange(e)
   -- Reset the timer if the game state changes to 'Save'
   -- String comparison isn't ideal, but it should be fine for this

@@ -30,6 +30,10 @@ Autosaving.states = {
   waitingForAutosave = false,
 }
 
+--- Updates the state of Autosaving
+--- @param state string The key of `states` to update (e.g., 'isInDialogue', 'isInTrade', ...)
+--- @param value boolean The new value for the state
+--- @return nil
 function Autosaving.UpdateState(state, value)
   -- Check if 'value' is a boolean
   if type(value) ~= "boolean" then
@@ -53,6 +57,11 @@ function Autosaving.UpdateState(state, value)
   end
 end
 
+--- Executes an autosave operation.
+--- Calls the Osi.AutoSave() function to save the game.
+--- Prints a debug message indicating that the game has been saved.
+--- Updates the state of the autosaving process.
+--- Restarts the autosave timer for the next autosave attempt.
 function Autosaving.Autosave()
   Osi.AutoSave()
   Utils.DebugPrint(0, "Smart Autosaving: Game saved")
@@ -61,6 +70,8 @@ function Autosaving.Autosave()
   Autosaving.StartOrRestartTimer()
 end
 
+--- Checks if dialogue should block saving by checking if player is in dialogue.
+-- Only used if the corresponding option is enabled in the config JSON file.
 function Autosaving.ShouldDialogueBlockSaving()
   if JsonConfig.EVENTS.dialogue == true then
     local entity = Ext.Entity.Get(Osi.GetHostCharacter())
@@ -69,6 +80,8 @@ function Autosaving.ShouldDialogueBlockSaving()
   return false
 end
 
+--- Checks if combat should block saving by checking if player is in combat.
+-- Only used if the corresponding option is enabled in the config JSON file.
 function Autosaving.ShouldCombatBlockSaving()
   if JsonConfig.EVENTS.combat == true then
     return Osi.IsInCombat(GetHostCharacter()) == 1
