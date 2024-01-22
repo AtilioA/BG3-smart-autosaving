@@ -125,7 +125,7 @@ function Autosaving.CanAutosave()
   local dialogueCheck = Autosaving.ShouldDialogueBlockSaving()
 
   local notInAnyBlockingState = not Autosaving.states.isInDialogue and
-      not Autosaving.states.isInCombat and
+      -- not Autosaving.states.isInCombat and -- Temporarily disabled since this event does not check players involved in combat
       not Autosaving.states.isLockpicking and
       not Autosaving.states.isInTurnBased and
       not Autosaving.states.isInTrade and
