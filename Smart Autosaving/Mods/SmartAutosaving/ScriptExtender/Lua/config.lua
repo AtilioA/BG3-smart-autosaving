@@ -21,7 +21,8 @@ Config.defaultConfig = {
         looting_characters = true,         -- after looting characters
         looting_containers = true,         -- after closing containers (not currently used)
         respec_and_mirror = true,          -- after respeccing or using mirror
-        movement = true                    -- after moving
+        movement = true,                   -- after moving
+        idle = true                        -- after returning from idle
     },
     DEBUG = {
         level = 0, -- 0 = no debug, 1 = minimal, 2 = verbose logs

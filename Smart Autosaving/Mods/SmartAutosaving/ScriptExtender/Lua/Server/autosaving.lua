@@ -30,6 +30,26 @@ Autosaving.states = {
   waitingForAutosave = false,
 }
 
+Autosaving.oldStates = {}
+Autosaving.UpdateOldStates()
+
+-- Function to check if any state has changed
+function Autosaving.HasStateChanged()
+  for state, value in pairs(Autosaving.states) do
+    if Autosaving.oldStates[state] ~= value then
+      return true
+    end
+  end
+  return false
+end
+
+-- Function to copy current states to oldStates
+function Autosaving.UpdateOldStates()
+  for state, value in pairs(Autosaving.states) do
+    Autosaving.oldStates[state] = value
+  end
+end
+
 --- Updates the state of Autosaving
 --- @param state string The key of `states` to update (e.g., 'isInDialogue', 'isInTrade', ...)
 --- @param value boolean The new value for the state
@@ -63,10 +83,16 @@ end
 --- Updates the state of the autosaving process.
 --- Restarts the autosave timer for the next autosave attempt.
 function Autosaving.Autosave()
-  Osi.AutoSave()
-  Utils.DebugPrint(0, "Smart Autosaving: Game saved")
-  Autosaving.UpdateState("waitingForAutosave", false)
-  -- If autosave fails, we'll try again next time
+  -- Check if idle detection is enabled and if any state has changed since the last autosave
+  if Autosaving.HasStateChanged() or not JsonConfig.EVENTS.idle then
+    Osi.AutoSave()
+    Utils.DebugPrint(0, "Game saved")
+    Autosaving.UpdateState("waitingForAutosave", false)
+    Autosaving.UpdateOldStates()
+  else
+    Utils.DebugPrint(0, "Idle detection active: no significant activity, skipping autosave")
+  end
+  -- Restart the timer for the next autosave attempt
   Autosaving.StartOrRestartTimer()
 end
 
