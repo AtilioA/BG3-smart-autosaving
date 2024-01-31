@@ -2,6 +2,7 @@ EHandlers = {}
 
 -- Stack-like variable to keep track of how many times the party has been involved in a Use event. This is useful for, e.g., looting nested containers, or waiting for all characters to climb a ladder.
 EHandlers.useCount = 0
+EHandlers.hasMovedItemDuringTrade = false
 
 --- Handler when the timer finishes
 ---@param timer string The name of the timer that finished
@@ -53,6 +54,7 @@ function EHandlers.OnDialogEnd()
 end
 
 function EHandlers.OnTradeStart()
+  EHandlers.hasMovedItemDuringTrade = false
   Utils.DebugPrint(2, "OnTradeStart")
   Autosaving.UpdateState("isInTrade", true)
 end
@@ -60,8 +62,21 @@ end
 function EHandlers.OnTradeEnd()
   Utils.DebugPrint(2, "OnTradeEnd")
   Autosaving.UpdateState("isInTrade", false)
-  -- Save regardless of dialogue state
-  Autosaving.SaveIfWaiting()
+
+  -- If moved item during trade, save
+  if EHandlers.hasMovedItemDuringTrade then
+    -- Save regardless of dialogue state
+    Autosaving.SaveIfWaiting()
+  else
+    Utils.DebugPrint(2, "No items moved during trade, not checking for autosave")
+  end
+end
+
+function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
+  if (Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) or Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter())) and isTrade == 1 then
+    Utils.DebugPrint(2, "OnMovedFromTo: " .. movedObject .. " " .. fromObject .. " " .. toObject .. " " .. isTrade)
+    EHandlers.hasMovedItemDuringTrade = true
+  end
 end
 
 function EHandlers.OnCombatStart()
@@ -134,7 +149,7 @@ function EHandlers.OnUseEnded(character, item, result)
     else
       EHandlers.useCount = EHandlers.useCount - 1
     end
-    
+
     Utils.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result .. " " .. EHandlers.useCount)
   end
 end
@@ -210,6 +225,9 @@ function EHandlers.DebugEvent(param1, param2, param3, param4)
   end
   Utils.DebugPrint(2, debugString)
 end
+
+-- IsMoving
+-- GetDebugCharacter
 
 -- TODO:
 -- UserEvent

@@ -29,6 +29,7 @@ local function SubscribeToEvents()
     if JsonConfig.EVENTS.trade then
       Ext.Osiris.RegisterListener("RequestTrade", 4, "before", EHandlers.OnTradeStart)
       Ext.Osiris.RegisterListener("TradeEnds", 2, "before", EHandlers.OnTradeEnd)
+      Ext.Osiris.RegisterListener("MovedFromTo", 4, "after", EHandlers.OnMovedFromTo)
     end
 
     -- Combat
