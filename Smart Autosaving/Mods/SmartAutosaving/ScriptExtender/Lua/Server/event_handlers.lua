@@ -129,12 +129,13 @@ end
 
 function EHandlers.OnUseEnded(character, item, result)
   if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
-    Utils.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result)
-
-    EHandlers.useCount = EHandlers.useCount - 1
     if EHandlers.useCount == 0 then
       Autosaving.UpdateState("isUsingItem", false)
+    else
+      EHandlers.useCount = EHandlers.useCount - 1
     end
+    
+    Utils.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result .. " " .. EHandlers.useCount)
   end
 end
 
