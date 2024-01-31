@@ -8,7 +8,7 @@
         <node id="ModuleInfo">
           <attribute id="Author" type="LSString" value="Volitio" />
           <attribute id="CharacterCreationLevelName" type="FixedString" value="" />
-          <attribute id="Description" type="LSString" value="Script Extender code that saves the game on set intervals, but avoids saving during events like dialog, trading, combat and lockpicking. Configurable through a .json file." />
+          <attribute id="Description" type="LSString" value="Autosaves the game on set intervals, but postpones saves during events like dialog, trading, combat, etc. Configurable through a .json file." />
           <attribute id="Folder" type="LSString" value="SmartAutosaving" />
           <attribute id="LobbyLevelName" type="FixedString" value="" />
           <attribute id="MD5" type="LSString" value="" />
