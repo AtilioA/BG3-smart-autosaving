@@ -30,25 +30,26 @@ Autosaving.states = {
   waitingForAutosave = false,
 }
 
-Autosaving.oldStates = {}
-Autosaving.UpdateOldStates()
+Autosaving.changedStates = {}
 
 -- Function to check if any state has changed
-function Autosaving.HasStateChanged()
+function Autosaving.HasStatesChanged()
   for state, value in pairs(Autosaving.states) do
-    if Autosaving.oldStates[state] ~= value then
+    if Autosaving.changedStates[state] == true and state ~= "waitingForAutosave" then
+      -- Utils.DebugPrint(2, "State " .. state .. " has changed: " .. tostring(Autosaving.changedStates[state]))
       return true
     end
   end
   return false
 end
 
--- Function to copy current states to oldStates
-function Autosaving.UpdateOldStates()
+-- Function to copy current states to changedStates
+function Autosaving.ResetChangedStates()
   for state, value in pairs(Autosaving.states) do
-    Autosaving.oldStates[state] = value
+    Autosaving.changedStates[state] = false
   end
 end
+Autosaving.ResetChangedStates()
 
 --- Updates the state of Autosaving
 --- @param state string The key of `states` to update (e.g., 'isInDialogue', 'isInTrade', ...)
@@ -69,10 +70,12 @@ function Autosaving.UpdateState(state, value)
 
   -- Update the state
   Autosaving.states[state] = value
+  Autosaving.changedStates[state] = true
 
   -- Handle potential autosaves if player leaves a state
   -- print(value)
   if value == false then
+    Utils.DebugPrint(2, "State " .. state .. " has changed to false, checking for potential autosave")
     Autosaving.HandlePotentialAutosave()
   end
 end
@@ -84,16 +87,16 @@ end
 --- Restarts the autosave timer for the next autosave attempt.
 function Autosaving.Autosave()
   -- Check if idle detection is enabled and if any state has changed since the last autosave
-  if Autosaving.HasStateChanged() or not JsonConfig.EVENTS.idle then
+  if not JsonConfig.EVENTS.idle or Autosaving.HasStatesChanged() then
     Osi.AutoSave()
     Utils.DebugPrint(0, "Game saved")
     Autosaving.UpdateState("waitingForAutosave", false)
-    Autosaving.UpdateOldStates()
+    Autosaving.ResetChangedStates()
+    -- Autosaving.StartOrRestartTimer()
   else
     Utils.DebugPrint(0, "Idle detection active: no significant activity, skipping autosave")
+    Autosaving.UpdateState("waitingForAutosave", true)
   end
-  -- Restart the timer for the next autosave attempt
-  Autosaving.StartOrRestartTimer()
 end
 
 --- Checks if dialogue should block saving by checking if player is in dialogue.
@@ -132,7 +135,7 @@ function Autosaving.StartOrRestartTimer()
   Utils.DebugPrint(2, "Starting or restarting timer to " .. tostring(Autosaving.AUTOSAVING_PERIOD * 1000) .. "ms")
   Osi.TimerCancel(Autosaving.TIMER_NAME)
   Osi.TimerLaunch(Autosaving.TIMER_NAME, Autosaving.AUTOSAVING_PERIOD * 1000)
-  Autosaving.UpdateState("waitingForAutosave", false)
+  -- Autosaving.UpdateState("waitingForAutosave", false)
 end
 
 function Autosaving.ProxyIsUsingRespecOrMirror()
@@ -150,7 +153,7 @@ function Autosaving.ProxyIsUsingRespecOrMirror()
     respecProxy = true
   end
 
-  Utils.DebugPrint(2, "Is respeccing or using mirror? " .. tostring(respecProxy))
+  Utils.DebugPrint(3, "Is respeccing or using mirror? " .. tostring(respecProxy))
 
   return respecProxy
 end
@@ -184,6 +187,9 @@ end
 -- Function to handle potential autosave after actions
 function Autosaving.HandlePotentialAutosave()
   -- Do not autosave if the states are true, even if we're waiting for an autosave
+  -- Utils.DebugPrint(2,
+  --   "Checking if we should autosave: " ..
+  --   tostring(Autosaving.states.waitingForAutosave) .. " and " .. tostring(Autosaving.CanAutosave()))
   if Autosaving.states.waitingForAutosave and Autosaving.CanAutosave() then
     Autosaving.Autosave()
   end
