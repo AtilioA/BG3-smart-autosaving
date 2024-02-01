@@ -9,7 +9,7 @@ function Utils.DebugPrint(level, ...)
     if (JsonConfig.DEBUG.level == 0) then
       print("[Smart Autosaving] " .. ...)
     else
-      print("[DEBUG LEVEL " .. level .. "]: " .. ...)
+      print("[Smart Autosaving][D" .. level .. "]: " .. ...)
     end
   end
 end
