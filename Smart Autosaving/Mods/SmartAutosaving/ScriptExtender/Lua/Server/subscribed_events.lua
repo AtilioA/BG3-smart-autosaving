@@ -55,12 +55,6 @@ local function SubscribeToEvents()
       Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
     end
 
-    -- if JsonConfig.EVENTS.looting_containers then
-    -- Ext.Osiris.RegisterListener("TemplateOpening", 3, "before", EHandlers.onOpened)
-    -- Ext.Osiris.RegisterListener("Closed", 1, "before", EHandlers.onClosed)
-    -- end
-
-    -- I still gotta try out this event trigger in-game
     if JsonConfig.EVENTS.looting_characters then
       Ext.Osiris.RegisterListener("RequestCanLoot", 2, "after", EHandlers.onRequestCanLoot)
       Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", EHandlers.onCharacterLootedCharacter)
@@ -77,6 +71,24 @@ local function SubscribeToEvents()
       Ext.Osiris.RegisterListener("RespecCancelled", 1, "before", EHandlers.OnRespecCancelled)
       Ext.Osiris.RegisterListener("RespecCompleted", 1, "before", EHandlers.OnRespecCompleted)
     end
+
+    -- Ext.Osiris.RegisterListener("MovedBy", 2, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("MoveCapabilityChanged", 2, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("TextEvent", 1, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("UserEvent", 2, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("ForceMoveEnded", 3, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("ForceMoveStarted", 3, "before", EHandlers.DebugEvent)
+
+    -- Ext.Osiris.RegisterListener("CharacterMadePlayer", 1, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("CharacterMoveFailedUseJump", 1, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("CharacterMoveToAndTalkFailed", 4, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("CharacterMoveToAndTalkRequestDialog", 4, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("CharacterMoveToCancelled", 2, "before", EHandlers.DebugEvent)
+
+    -- Ext.Osiris.RegisterListener("AutomatedDialogEnded", 2, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("AutomatedDialogForceStopping", 2, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("AutomatedDialogRequestFailed", 2, "before", EHandlers.DebugEvent)
+    -- Ext.Osiris.RegisterListener("AutomatedDialogStarted", 2, "before", EHandlers.DebugEvent)
 
     -- Can't be used:
     -- Ext.Osiris.RegisterListener("LeveledUp", 1, "before", EHandlers.OnLeveledUp)

@@ -134,7 +134,7 @@ end
 -- end
 
 function EHandlers.OnUseStarted(character, item)
-  if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
+  if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 and (Osi.IsContainer(item) == 1 or Osi.IsLadder(item)) then
     Utils.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
     Utils.DebugPrint(2, "useCount: " .. EHandlers.useCount)
 
@@ -144,7 +144,7 @@ function EHandlers.OnUseStarted(character, item)
 end
 
 function EHandlers.OnUseEnded(character, item, result)
-  if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 then
+  if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 and (Osi.IsContainer(item) == 1 or Osi.IsLadder(item)) then
     Utils.DebugPrint(2, "useCount: " .. EHandlers.useCount)
     if EHandlers.useCount > 0 then
       EHandlers.useCount = EHandlers.useCount - 1
@@ -156,19 +156,6 @@ function EHandlers.OnUseEnded(character, item, result)
     Utils.DebugPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result .. " " .. EHandlers.useCount)
   end
 end
-
-
--- function EHandlers.onOpened(ITEMROOT, ITEM, CHARACTER)
--- Utils.DebugPrint(2, "Opened item: " .. item)
--- If in party ...
--- Autosaving.UpdateState("isInContainer", true)
--- end
--- function EHandlers.onClosed()
--- Utils.DebugPrint(2, "onClosed")
---   Autosaving.UpdateState("isInContainer", false)
---
---   -- TODO: ...
--- end
 
 -- Entered and Left Force Turn-Based
 function EHandlers.OnEnteredForceTurnBased(object)

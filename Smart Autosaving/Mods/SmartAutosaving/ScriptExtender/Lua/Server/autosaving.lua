@@ -18,7 +18,6 @@ Autosaving.states = {
   combatTurnEnded = false,
 
   isUsingItem = false,
-  -- isInContainer = false,
   isLootingCharacter = false,
 
   isLockpicking = false,
@@ -36,7 +35,7 @@ Autosaving.changedStates = {}
 function Autosaving.HasStatesChanged()
   for state, value in pairs(Autosaving.states) do
     if Autosaving.changedStates[state] == true and state ~= "waitingForAutosave" then
-      -- Utils.DebugPrint(2, "State " .. state .. " has changed: " .. tostring(Autosaving.changedStates[state]))
+      Utils.DebugPrint(2, "State " .. state .. " has changed: " .. tostring(Autosaving.changedStates[state]))
       return true
     end
   end
@@ -49,6 +48,7 @@ function Autosaving.ResetChangedStates()
     Autosaving.changedStates[state] = false
   end
 end
+
 Autosaving.ResetChangedStates()
 
 --- Updates the state of Autosaving
