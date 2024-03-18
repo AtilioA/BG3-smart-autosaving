@@ -7,7 +7,7 @@ Config = Helpers.Config:New({
       timer_in_seconds = false
     },
     FEATURES = {
-      POSTPONEMENT = {
+      POSTPONEMENTS = {
         combat = true,
         combat_turn = true,
         dialogue = true,
@@ -33,6 +33,7 @@ Config = Helpers.Config:New({
 })
 
 function Config:ConvertConfig()
+  self.currentConfig = self:LoadConfig(self.configFilePath)
   if self.currentConfig.TIMER ~= nil or self.currentConfig.EVENTS ~= nil then
     local oldConfig = self.currentConfig
     local newConfig = {
@@ -68,9 +69,10 @@ function Config:ConvertConfig()
   end
 end
 
-Config:UpdateCurrentConfig()
--- Update the config file to v3 structure
 Config:ConvertConfig()
+Config:UpdateCurrentConfig()
+
+-- Update the config file to v3 structure
 
 Config:AddConfigReloadedCallback(function(configInstance)
   SAPrinter.DebugLevel = configInstance:GetCurrentDebugLevel()
