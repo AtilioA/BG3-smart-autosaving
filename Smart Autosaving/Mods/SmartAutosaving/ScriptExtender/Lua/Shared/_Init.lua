@@ -1,21 +1,37 @@
-Ext.Require("Shared/utils.lua")
-Ext.Require("config.lua")
-Ext.Require("Shared/Helpers/Object.lua")
-Ext.Require("Shared/autosaving.lua")
-Ext.Require("Shared/event_handlers.lua")
+setmetatable(Mods.SmartAutosaving, { __index = Mods.VolitionCabinet })
 
-MOD_UUID = "0c8bb2e9-aa96-4de7-b793-a733d68ee6f0"
-local MODVERSION = Ext.Mod.GetMod(MOD_UUID).Info.ModVersion
+---Ext.Require files at the path
+---@param path string
+---@param files string[]
+function RequireFiles(path, files)
+    for _, file in pairs(files) do
+        Ext.Require(string.format("%s%s.lua", path, file))
+    end
+end
 
+RequireFiles("Shared/", {
+    "Helpers/_Init",
+    "EventHandlers",
+    "SubscribedEvents",
+})
+
+local VCModuleUUID = "f97b43be-7398-4ea5-8fe2-be7eb3d4b5ca"
+if (not Ext.Mod.IsModLoaded(VCModuleUUID)) then
+  Ext.Utils.Print("VOLITION CABINET HAS NOT BEEN LOADED. PLEASE MAKE SURE IT IS ENABLED IN YOUR MOD MANAGER.")
+end
+
+local MODVERSION = Ext.Mod.GetMod(ModuleUUID).Info.ModVersion
 if MODVERSION == nil then
-    Utils.DebugPrint(0, "loaded (version unknown)")
+    SAWarn(0, "Volitio's Smart Autosaving loaded (version unknown)")
 else
     -- Remove the last element (build/revision number) from the MODVERSION table
     table.remove(MODVERSION)
 
     local versionNumber = table.concat(MODVERSION, ".")
-    Utils.DebugPrint(0, "version " .. versionNumber .. " loaded")
+    SAPrint(0, "Volitio's Smart Autosaving version " .. versionNumber .. " loaded")
+    SAPrint(2, "Config loaded: " .. Ext.Json.Stringify(Config:getCfg(), { Beautify = true }))
 end
 
-local EventSubscription = Ext.Require("Shared/subscribed_events.lua")
-EventSubscription.SubscribeToEvents()
+-- AutosavingHandlerInstance = AutosavingHandler:New()
+
+SubscribedEvents.SubscribeToEvents()
