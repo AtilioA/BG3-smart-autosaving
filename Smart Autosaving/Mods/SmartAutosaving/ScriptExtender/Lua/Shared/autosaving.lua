@@ -2,9 +2,9 @@ Autosaving = {}
 
 Autosaving.TIMER_NAME = "Volitios_Smart_Autosaving"
 
-Autosaving.AUTOSAVING_PERIOD = JsonConfig.TIMER.autosaving_period_in_minutes * 60
-if JsonConfig.DEBUG.timer_in_seconds then
-  Autosaving.AUTOSAVING_PERIOD = JsonConfig.TIMER.autosaving_period_in_minutes
+Autosaving.AUTOSAVING_PERIOD = Config:getCfg().FEATURES.TIMER.autosaving_period_in_minutes * 60
+if Config:getCfg().DEBUG.timer_in_seconds then
+  Autosaving.AUTOSAVING_PERIOD = Config:getCfg().FEATURES.TIMER.autosaving_period_in_minutes
 end
 
 -- State tracking variables
@@ -35,7 +35,7 @@ Autosaving.changedStates = {}
 function Autosaving.HasStatesChanged()
   for state, value in pairs(Autosaving.states) do
     if Autosaving.changedStates[state] == true and state ~= "waitingForAutosave" then
-      Utils.DebugPrint(2, "State " .. state .. " has changed: " .. tostring(Autosaving.changedStates[state]))
+      SAPrint(2, "State " .. state .. " has changed: " .. tostring(Autosaving.changedStates[state]))
       return true
     end
   end
@@ -75,7 +75,7 @@ function Autosaving.UpdateState(state, value)
   -- Handle potential autosaves if player leaves a state
   -- print(value)
   if value == false then
-    Utils.DebugPrint(2, "State " .. state .. " has changed to false, checking for potential autosave")
+    SAPrint(2, "State " .. state .. " has changed to false, checking for potential autosave")
     Autosaving.HandlePotentialAutosave()
   end
 end
@@ -87,14 +87,14 @@ end
 --- Restarts the autosave timer for the next autosave attempt.
 function Autosaving.Autosave()
   -- Check if idle detection is enabled and if any state has changed since the last autosave
-  if not JsonConfig.EVENTS.idle or Autosaving.HasStatesChanged() then
+  if not Config:getCfg().FEATURES.POSTPONEMENTS.idle or Autosaving.HasStatesChanged() then
     Osi.AutoSave()
-    Utils.DebugPrint(0, "Game saved")
+    SAPrint(0, "Game saved")
     Autosaving.UpdateState("waitingForAutosave", false)
     Autosaving.ResetChangedStates()
     -- Autosaving.StartOrRestartTimer()
   else
-    Utils.DebugPrint(0, "Idle detection active: no significant activity, skipping autosave")
+    SAPrint(0, "Idle detection active: no significant activity, skipping autosave")
     Autosaving.UpdateState("waitingForAutosave", true)
   end
 end
@@ -102,7 +102,7 @@ end
 --- Checks if dialogue should block saving by checking if player is in dialogue.
 -- Only used if the corresponding option is enabled in the config JSON file.
 function Autosaving.ShouldDialogueBlockSaving()
-  if JsonConfig.EVENTS.dialogue == true then
+  if Config:getCfg().FEATURES.POSTPONEMENTS.dialogue == true then
     local entity = Ext.Entity.Get(Osi.GetHostCharacter())
     return entity.ServerCharacter.Flags.InDialog
   end
@@ -112,17 +112,17 @@ end
 --- Checks if combat should block saving by checking if player is in combat.
 -- Only used if the corresponding option is enabled in the config JSON file.
 function Autosaving.ShouldCombatBlockSaving()
-  if JsonConfig.EVENTS.combat == true then
+  if Config:getCfg().FEATURES.POSTPONEMENTS.combat == true then
     return Osi.IsInCombat(Osi.GetHostCharacter()) == 1
   end
   return false
 end
 
 function Autosaving.ShouldMovementBlockSaving()
-  if JsonConfig.EVENTS.movement == true then
+  if Config:getCfg().FEATURES.POSTPONEMENTS.movement == true then
     local partyMemberMoving = Utils.IsAnyPartyMemberMoving()
     if partyMemberMoving then
-      Utils.DebugPrint(2, partyMemberMoving.CharacterCreationStats.Name .. " is moving")
+      SAPrint(2, partyMemberMoving.CharacterCreationStats.Name .. " is moving")
       return true
     else
       return false
@@ -132,7 +132,7 @@ function Autosaving.ShouldMovementBlockSaving()
 end
 
 function Autosaving.StartOrRestartTimer()
-  Utils.DebugPrint(2, "Starting or restarting timer to " .. tostring(Autosaving.AUTOSAVING_PERIOD * 1000) .. "ms")
+  SAPrint(2, "Starting or restarting timer to " .. tostring(Autosaving.AUTOSAVING_PERIOD * 1000) .. "ms")
   Osi.TimerCancel(Autosaving.TIMER_NAME)
   Osi.TimerLaunch(Autosaving.TIMER_NAME, Autosaving.AUTOSAVING_PERIOD * 1000)
   -- Autosaving.UpdateState("waitingForAutosave", false)
@@ -153,7 +153,7 @@ function Autosaving.ProxyIsUsingRespecOrMirror()
     respecProxy = true
   end
 
-  Utils.DebugPrint(3, "Is respeccing or using mirror? " .. tostring(respecProxy))
+  SAPrint(3, "Is respeccing or using mirror? " .. tostring(respecProxy))
 
   return respecProxy
 end
@@ -187,7 +187,7 @@ end
 -- Function to handle potential autosave after actions
 function Autosaving.HandlePotentialAutosave()
   -- Do not autosave if the states are true, even if we're waiting for an autosave
-  -- Utils.DebugPrint(2,
+  -- SAPrint(2,
   --   "Checking if we should autosave: " ..
   --   tostring(Autosaving.states.waitingForAutosave) .. " and " .. tostring(Autosaving.CanAutosave()))
   if Autosaving.states.waitingForAutosave and Autosaving.CanAutosave() then
