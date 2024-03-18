@@ -96,7 +96,7 @@ end
 
 function EHandlers.OnTurnEnded(char)
   -- Potentially save if the turn ended for the avatar or party member (this should not trigger multiplayer or summons)
-  if Osi.IsInPartyWith(char, GetHostCharacter()) == 1 then
+  if Osi.IsInPartyWith(char, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "OnTurnEnded: " .. char)
     Autosaving.UpdateState("combatTurnEnded", true)
     Autosaving.HandlePotentialAutosave()
@@ -115,14 +115,14 @@ end
 
 -- This might cause problems if the target is 'owned' (has red highlight)
 function EHandlers.onRequestCanLoot(looter, target)
-  if Osi.IsInPartyWith(looter, GetHostCharacter()) == 1 then
+  if Osi.IsInPartyWith(looter, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "RequestCanLoot: " .. looter .. " " .. target)
     Autosaving.UpdateState("isLootingCharacter", true)
   end
 end
 
 function EHandlers.onCharacterLootedCharacter(player, lootedCharacter)
-  if Osi.IsInPartyWith(player, GetHostCharacter()) == 1 then
+  if Osi.IsInPartyWith(player, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "CharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
     Autosaving.UpdateState("isLootingCharacter", false)
   end
@@ -134,7 +134,7 @@ end
 -- end
 
 function EHandlers.OnUseStarted(character, item)
-  if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 and (Osi.IsContainer(item) == 1 or Osi.IsLadder(item)) then
+  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 and (Osi.IsContainer(item) == 1 or Osi.IsLadder(item)) then
     Utils.DebugPrint(2, "UseStarted: " .. character .. " " .. item)
     Utils.DebugPrint(2, "useCount: " .. EHandlers.useCount)
 
@@ -144,7 +144,7 @@ function EHandlers.OnUseStarted(character, item)
 end
 
 function EHandlers.OnUseEnded(character, item, result)
-  if Osi.IsInPartyWith(character, GetHostCharacter()) == 1 and (Osi.IsContainer(item) == 1 or Osi.IsLadder(item)) then
+  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 and (Osi.IsContainer(item) == 1 or Osi.IsLadder(item)) then
     Utils.DebugPrint(2, "useCount: " .. EHandlers.useCount)
     if EHandlers.useCount > 0 then
       EHandlers.useCount = EHandlers.useCount - 1
@@ -159,14 +159,14 @@ end
 
 -- Entered and Left Force Turn-Based
 function EHandlers.OnEnteredForceTurnBased(object)
-  if Object.IsCharacter(object) and Osi.IsInPartyWith(object, GetHostCharacter()) == 1 then
+  if Helpers.Object:IsCharacter(object) and Osi.IsInPartyWith(object, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "Entered force turn-based: " .. object)
     Autosaving.UpdateState("isInTurnBased", true)
   end
 end
 
 function EHandlers.OnLeftForceTurnBased(object)
-  if Object.IsCharacter(object) and Osi.IsInPartyWith(object, GetHostCharacter()) == 1 then
+  if Helpers.Object:IsCharacter(object) and Osi.IsInPartyWith(object, Osi.GetHostCharacter()) == 1 then
     Utils.DebugPrint(2, "Left force turn-based: " .. object)
     Autosaving.UpdateState("isInTurnBased", false)
   end
