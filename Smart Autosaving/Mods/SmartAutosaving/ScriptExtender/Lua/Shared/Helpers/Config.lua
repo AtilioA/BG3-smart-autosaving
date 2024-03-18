@@ -7,7 +7,7 @@ Config = Helpers.Config:New({
       timer_in_seconds = false
     },
     FEATURES = {
-      POSTPONEMENTS = {
+      POSTPONE_ON = {
         combat = true,
         combat_turn = true,
         dialogue = true,
@@ -24,7 +24,15 @@ Config = Helpers.Config:New({
         autosaving_period_in_minutes = 10,
         load_aware = true,
         save_aware = true
-      }
+      },
+      -- SAVE_ON_START_OF = {
+      --   combat = false,
+      --   combat_turn = false,
+      --   dialogue = false,
+      --   lockpicking = false,
+      --   trade = false,
+      --   turn_based_mode = false,
+      -- },
     },
     GENERAL = {
       enabled = true -- (previously TIMER.enabled)
@@ -39,7 +47,7 @@ function Config:ConvertConfig()
     local newConfig = {
       ["DEBUG"] = oldConfig["DEBUG"], -- Copy DEBUG as-is
       ["FEATURES"] = {
-        ["POSTPONEMENTS"] = {
+        ["POSTPONE_ON"] = {
           ["combat"] = oldConfig["EVENTS"]["combat"],
           ["combat_turn"] = oldConfig["EVENTS"]["combat_turn"],
           ["dialogue"] = oldConfig["EVENTS"]["dialogue"],

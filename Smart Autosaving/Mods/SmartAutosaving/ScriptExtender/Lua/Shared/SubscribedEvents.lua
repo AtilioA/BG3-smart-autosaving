@@ -21,21 +21,21 @@ function SubscribedEvents.SubscribeToEvents()
 
     -- Events that can restrict autosaving
     -- Dialogue
-    if Config:getCfg().FEATURES.POSTPONEMENTS.dialogue then
+    if Config:getCfg().FEATURES.POSTPONE_ON.dialogue then
       Ext.Osiris.RegisterListener("DialogStartRequested", 2, "before", EHandlers.OnDialogStart)
       Ext.Osiris.RegisterListener("DialogStarted", 2, "before", EHandlers.OnDialogStart)
       Ext.Osiris.RegisterListener("DialogEnded", 2, "before", EHandlers.OnDialogEnd)
     end
 
     -- Trading
-    if Config:getCfg().FEATURES.POSTPONEMENTS.trade then
+    if Config:getCfg().FEATURES.POSTPONE_ON.trade then
       Ext.Osiris.RegisterListener("RequestTrade", 4, "before", EHandlers.OnTradeStart)
       Ext.Osiris.RegisterListener("TradeEnds", 2, "before", EHandlers.OnTradeEnd)
       Ext.Osiris.RegisterListener("MovedFromTo", 4, "after", EHandlers.OnMovedFromTo)
     end
 
     -- Combat
-    if Config:getCfg().FEATURES.POSTPONEMENTS.combat then
+    if Config:getCfg().FEATURES.POSTPONE_ON.combat then
       -- REVIEW: I don't know if this event is triggered when combat starts only with the player or with any character, perhaps we should not listen to this at all (combat is already handled with other checks anyways)
       Ext.Osiris.RegisterListener("CombatStarted", 1, "before", EHandlers.OnCombatStart)
       Ext.Osiris.RegisterListener("CombatEnded", 1, "before", EHandlers.OnCombatEnd)
@@ -43,33 +43,33 @@ function SubscribedEvents.SubscribeToEvents()
       -- Ext.Osiris.RegisterListener("CombatRoundStarted", 1, "before", EHandlers.onCombatRoundStarted)
     end
 
-    if Config:getCfg().FEATURES.POSTPONEMENTS.combat_turn then
+    if Config:getCfg().FEATURES.POSTPONE_ON.combat_turn then
       Ext.Osiris.RegisterListener("TurnEnded", 1, "after", EHandlers.OnTurnEnded)
     end
 
-    if Config:getCfg().FEATURES.POSTPONEMENTS.lockpicking then
+    if Config:getCfg().FEATURES.POSTPONE_ON.lockpicking then
       Ext.Osiris.RegisterListener("StartedLockpicking", 2, "before", EHandlers.OnLockpickingStart)
       Ext.Osiris.RegisterListener("StoppedLockpicking", 2, "before", EHandlers.OnLockpickingEnd)
     end
 
-    if Config:getCfg().FEATURES.POSTPONEMENTS.using_items then
+    if Config:getCfg().FEATURES.POSTPONE_ON.using_items then
       Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)
       Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
     end
 
-    if Config:getCfg().FEATURES.POSTPONEMENTS.looting_characters then
+    if Config:getCfg().FEATURES.POSTPONE_ON.looting_characters then
       Ext.Osiris.RegisterListener("RequestCanLoot", 2, "after", EHandlers.onRequestCanLoot)
       Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", EHandlers.onCharacterLootedCharacter)
     end
 
-    if Config:getCfg().FEATURES.POSTPONEMENTS.turn_based then
+    if Config:getCfg().FEATURES.POSTPONE_ON.turn_based then
       Ext.Osiris.RegisterListener("EnteredForceTurnBased", 1, "before", EHandlers.OnEnteredForceTurnBased)
       Ext.Osiris.RegisterListener("LeftForceTurnBased", 1, "before", EHandlers.OnLeftForceTurnBased)
       -- I don't know what this is used for, it is not for things like shadow-curse
       -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
     end
 
-    if Config:getCfg().FEATURES.POSTPONEMENTS.respec_and_mirror then
+    if Config:getCfg().FEATURES.POSTPONE_ON.respec_and_mirror then
       Ext.Osiris.RegisterListener("RespecCancelled", 1, "before", EHandlers.OnRespecCancelled)
       Ext.Osiris.RegisterListener("RespecCompleted", 1, "before", EHandlers.OnRespecCompleted)
     end

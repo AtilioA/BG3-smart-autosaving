@@ -87,7 +87,7 @@ end
 --- Restarts the autosave timer for the next autosave attempt.
 function Autosaving.Autosave()
   -- Check if idle detection is enabled and if any state has changed since the last autosave
-  if not Config:getCfg().FEATURES.POSTPONEMENTS.idle or Autosaving.HasStatesChanged() then
+  if not Config:getCfg().FEATURES.POSTPONE_ON.idle or Autosaving.HasStatesChanged() then
     Osi.AutoSave()
     SAPrint(0, "Game saved")
     Autosaving.UpdateState("waitingForAutosave", false)
@@ -102,7 +102,7 @@ end
 --- Checks if dialogue should block saving by checking if player is in dialogue.
 -- Only used if the corresponding option is enabled in the config JSON file.
 function Autosaving.ShouldDialogueBlockSaving()
-  if Config:getCfg().FEATURES.POSTPONEMENTS.dialogue == true then
+  if Config:getCfg().FEATURES.POSTPONE_ON.dialogue == true then
     local entity = Ext.Entity.Get(Osi.GetHostCharacter())
     return entity.ServerCharacter.Flags.InDialog
   end
@@ -112,14 +112,14 @@ end
 --- Checks if combat should block saving by checking if player is in combat.
 -- Only used if the corresponding option is enabled in the config JSON file.
 function Autosaving.ShouldCombatBlockSaving()
-  if Config:getCfg().FEATURES.POSTPONEMENTS.combat == true then
+  if Config:getCfg().FEATURES.POSTPONE_ON.combat == true then
     return Osi.IsInCombat(Osi.GetHostCharacter()) == 1
   end
   return false
 end
 
 function Autosaving.ShouldMovementBlockSaving()
-  if Config:getCfg().FEATURES.POSTPONEMENTS.movement == true then
+  if Config:getCfg().FEATURES.POSTPONE_ON.movement == true then
     local partyMemberMoving = Utils.IsAnyPartyMemberMoving()
     if partyMemberMoving then
       SAPrint(2, partyMemberMoving.CharacterCreationStats.Name .. " is moving")
