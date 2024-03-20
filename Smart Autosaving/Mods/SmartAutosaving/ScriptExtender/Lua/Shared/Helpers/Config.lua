@@ -1,4 +1,4 @@
-Config = Helpers.Config:New({
+Config = VCHelpers.Config:New({
   folderName = "SmartAutosaving",
   configFilePath = "smart_autosaving_config.json",
   defaultConfig = {
@@ -57,7 +57,7 @@ function Config:ConvertConfig()
           ["movement"] = oldConfig["EVENTS"]["movement"],
           ["respec_and_mirror"] = oldConfig["EVENTS"]["respec_and_mirror"],
           ["trade"] = oldConfig["EVENTS"]["trade"],
-          ["turn_based_mode"] = oldConfig["EVENTS"]["turn_based"],       -- Renamed from "turn_based" to "turn_based_mode"
+          ["turn_based_mode"] = oldConfig["EVENTS"]["turn_based"], -- Renamed from "turn_based" to "turn_based_mode"
           ["using_items"] = oldConfig["EVENTS"]["using_items"],
         },
         ["TIMER"] = {
@@ -67,7 +67,7 @@ function Config:ConvertConfig()
         }
       },
       ["GENERAL"] = {
-        ["enabled"] = oldConfig["TIMER"]["enabled"]       -- Moved from TIMER.enabled to GENERAL.enabled
+        ["enabled"] = oldConfig["TIMER"]["enabled"] -- Moved from TIMER.enabled to GENERAL.enabled
       }
     }
 

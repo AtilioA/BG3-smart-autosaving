@@ -159,14 +159,14 @@ end
 
 -- Entered and Left Force Turn-Based
 function EHandlers.OnEnteredForceTurnBased(object)
-  if Helpers.Object:IsCharacter(object) and Osi.IsInPartyWith(object, Osi.GetHostCharacter()) == 1 then
+  if VCHelpers.Object:IsCharacter(object) and Osi.IsInPartyWith(object, Osi.GetHostCharacter()) == 1 then
     SAPrint(2, "Entered force turn-based: " .. object)
     Autosaving.UpdateState("isInTurnBased", true)
   end
 end
 
 function EHandlers.OnLeftForceTurnBased(object)
-  if Helpers.Object:IsCharacter(object) and Osi.IsInPartyWith(object, Osi.GetHostCharacter()) == 1 then
+  if VCHelpers.Object:IsCharacter(object) and Osi.IsInPartyWith(object, Osi.GetHostCharacter()) == 1 then
     SAPrint(2, "Left force turn-based: " .. object)
     Autosaving.UpdateState("isInTurnBased", false)
   end
