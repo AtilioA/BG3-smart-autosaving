@@ -1,6 +1,7 @@
 Config = VCHelpers.Config:New({
   folderName = "SmartAutosaving",
   configFilePath = "smart_autosaving_config.json",
+  currentConfig = {},
   defaultConfig = {
     DEBUG = {
       level = 0,
@@ -41,46 +42,46 @@ Config = VCHelpers.Config:New({
 })
 
 function Config:ConvertConfig()
-  self.currentConfig = self:LoadConfig(self.configFilePath)
-  if self.currentConfig.TIMER ~= nil or self.currentConfig.EVENTS ~= nil then
-    local oldConfig = self.currentConfig
-    local newConfig = {
-      ["DEBUG"] = oldConfig["DEBUG"], -- Copy DEBUG as-is
-      ["FEATURES"] = {
-        ["POSTPONE_ON"] = {
-          ["combat"] = oldConfig["EVENTS"]["combat"],
-          ["combat_turn"] = oldConfig["EVENTS"]["combat_turn"],
-          ["dialogue"] = oldConfig["EVENTS"]["dialogue"],
-          ["idle"] = oldConfig["EVENTS"]["idle"],
-          ["lockpicking"] = oldConfig["EVENTS"]["lockpicking"],
-          ["looting_characters"] = oldConfig["EVENTS"]["looting_characters"],
-          ["movement"] = oldConfig["EVENTS"]["movement"],
-          ["respec_and_mirror"] = oldConfig["EVENTS"]["respec_and_mirror"],
-          ["trade"] = oldConfig["EVENTS"]["trade"],
-          ["turn_based_mode"] = oldConfig["EVENTS"]["turn_based"], -- Renamed from "turn_based" to "turn_based_mode"
-          ["using_items"] = oldConfig["EVENTS"]["using_items"],
+  if self.currentConfig then
+    if self.currentConfig.TIMER ~= nil or self.currentConfig.EVENTS ~= nil then
+      local oldConfig = self.currentConfig
+      local newConfig = {
+        ["DEBUG"] = oldConfig["DEBUG"], -- Copy DEBUG as-is
+        ["FEATURES"] = {
+          ["POSTPONE_ON"] = {
+            ["combat"] = oldConfig["EVENTS"]["combat"],
+            ["combat_turn"] = oldConfig["EVENTS"]["combat_turn"],
+            ["dialogue"] = oldConfig["EVENTS"]["dialogue"],
+            ["idle"] = oldConfig["EVENTS"]["idle"],
+            ["lockpicking"] = oldConfig["EVENTS"]["lockpicking"],
+            ["looting_characters"] = oldConfig["EVENTS"]["looting_characters"],
+            ["movement"] = oldConfig["EVENTS"]["movement"],
+            ["respec_and_mirror"] = oldConfig["EVENTS"]["respec_and_mirror"],
+            ["trade"] = oldConfig["EVENTS"]["trade"],
+            ["turn_based_mode"] = oldConfig["EVENTS"]["turn_based"], -- Renamed from "turn_based" to "turn_based_mode"
+            ["using_items"] = oldConfig["EVENTS"]["using_items"],
+          },
+          ["TIMER"] = {
+            ["autosaving_period_in_minutes"] = oldConfig["TIMER"]["autosaving_period_in_minutes"],
+            ["load_aware"] = oldConfig["TIMER"]["load_aware"],
+            ["save_aware"] = oldConfig["TIMER"]["save_aware"],
+          }
         },
-        ["TIMER"] = {
-          ["autosaving_period_in_minutes"] = oldConfig["TIMER"]["autosaving_period_in_minutes"],
-          ["load_aware"] = oldConfig["TIMER"]["load_aware"],
-          ["save_aware"] = oldConfig["TIMER"]["save_aware"],
+        ["GENERAL"] = {
+          ["enabled"] = oldConfig["TIMER"]["enabled"] -- Moved from TIMER.enabled to GENERAL.enabled
         }
-      },
-      ["GENERAL"] = {
-        ["enabled"] = oldConfig["TIMER"]["enabled"] -- Moved from TIMER.enabled to GENERAL.enabled
       }
-    }
 
-    if newConfig then
-      self:SaveConfig(self.configFilePath, newConfig)
+      if newConfig then
+        self:SaveConfig(self.configFilePath, newConfig)
+      end
     end
   end
 end
 
+-- Update the config file to v3 structure
 Config:ConvertConfig()
 Config:UpdateCurrentConfig()
-
--- Update the config file to v3 structure
 
 Config:AddConfigReloadedCallback(function(configInstance)
   SAPrinter.DebugLevel = configInstance:GetCurrentDebugLevel()
