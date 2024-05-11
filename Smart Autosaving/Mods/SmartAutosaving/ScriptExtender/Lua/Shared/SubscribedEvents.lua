@@ -1,79 +1,157 @@
 SubscribedEvents = {}
 
 function SubscribedEvents.SubscribeToEvents()
-  SAPrint(2, "Subscribing to events with JSON config: " .. Ext.Json.Stringify(Config:getCfg(), { Beautify = true }))
+    -- Not needed for this mod cause ... lmao
+    -- local function conditionalWrapper(handler)
+    --     return function(...)
+    --         if MCMGet("mod_enabled") then
+    --             handler(...)
+    --         else
+    --             WIEGDebug(1, "Event handling is disabled.")
+    --         end
+    --     end
+    -- end
 
-  if Config:getCfg().GENERAL.enabled == true then
+    SAPrint(2,
+        "Subscribing to events with JSON config: " ..
+        Ext.Json.Stringify(Mods.BG3MCM.MCMAPI:GetAllModSettings(ModuleUUID), { Beautify = true }))
+
     -- Registering general Osiris event listeners
     -- Start the timer when the game is loaded
-    Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", Autosaving.StartOrRestartTimer)
-    Ext.Osiris.RegisterListener("TimerFinished", 1, "before", EHandlers.OnTimerFinished)
+    Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", function(levelName, isEditorMode)
+        if MCMGet("mod_enabled") then
+            Autosaving.StartOrRestartTimer()
+        end
+    end)
+    Ext.Osiris.RegisterListener("TimerFinished", 1, "before", function(timer)
+        if MCMGet("mod_enabled") and MCMGet("save_aware") then
+            EHandlers.OnTimerFinished(timer)
+        end
+    end)
 
     -- Subscribe to the GameStateChanged event to detect when saves are created and reset the timer
     -- Note that it will also trigger with the mod's own autosaves, but there shouldn't be any issues with that
-    if Config:getCfg().FEATURES.TIMER.save_aware then
-      Ext.Events.GameStateChanged:Subscribe(EHandlers.OnGameStateChange)
-    end
-
-    if Config:getCfg().FEATURES.TIMER.load_aware then
-      Ext.Osiris.RegisterListener("SavegameLoaded", 0, "after", EHandlers.SavegameLoaded)
-    end
+    Ext.Events.GameStateChanged:Subscribe(function(e)
+        if MCMGet("mod_enabled") and MCMGet("save_aware") then
+            EHandlers.OnGameStateChange(e)
+        end
+    end)
 
     -- Events that can restrict autosaving
     -- Dialogue
-    if Config:getCfg().FEATURES.POSTPONE_ON.dialogue then
-      Ext.Osiris.RegisterListener("DialogStartRequested", 2, "before", EHandlers.OnDialogStart)
-      Ext.Osiris.RegisterListener("DialogStarted", 2, "before", EHandlers.OnDialogStart)
-      Ext.Osiris.RegisterListener("DialogEnded", 2, "before", EHandlers.OnDialogEnd)
-    end
+    Ext.Osiris.RegisterListener("DialogStartRequested", 2, "before", function()
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_dialogue") then
+            EHandlers.OnDialogStart()
+        end
+    end)
+    Ext.Osiris.RegisterListener("DialogStarted", 2, "before", function()
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_dialogue") then
+            EHandlers.OnDialogStart()
+        end
+    end)
+    Ext.Osiris.RegisterListener("DialogEnded", 2, "before", function()
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_dialogue") then
+            EHandlers.OnDialogEnd()
+        end
+    end)
 
     -- Trading
-    if Config:getCfg().FEATURES.POSTPONE_ON.trade then
-      Ext.Osiris.RegisterListener("RequestTrade", 4, "before", EHandlers.OnTradeStart)
-      Ext.Osiris.RegisterListener("TradeEnds", 2, "before", EHandlers.OnTradeEnd)
-      Ext.Osiris.RegisterListener("MovedFromTo", 4, "after", EHandlers.OnMovedFromTo)
-    end
+    Ext.Osiris.RegisterListener("RequestTrade", 4, "before", function(character, target, tradeMode, itemsTagFilter)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_trade") then
+            EHandlers.OnTradeStart()
+        end
+    end)
+    Ext.Osiris.RegisterListener("TradeEnds", 2, "before", function(character, target)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_trade") then
+            EHandlers.OnTradeEnd()
+        end
+    end)
+    Ext.Osiris.RegisterListener("MovedFromTo", 4, "after", function(movedObject, fromObject, toObject, isTrade)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_trade") then
+            EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
+        end
+    end)
 
     -- Combat
-    if Config:getCfg().FEATURES.POSTPONE_ON.combat then
-      -- REVIEW: I don't know if this event is triggered when combat starts only with the player or with any character, perhaps we should not listen to this at all (combat is already handled with other checks anyways)
-      Ext.Osiris.RegisterListener("CombatStarted", 1, "before", EHandlers.OnCombatStart)
-      Ext.Osiris.RegisterListener("CombatEnded", 1, "before", EHandlers.OnCombatEnd)
-      -- (Not actually working)
-      -- Ext.Osiris.RegisterListener("CombatRoundStarted", 1, "before", EHandlers.onCombatRoundStarted)
-    end
+    -- REVIEW: I don't know if this event is triggered when combat starts only with the player or with any character, perhaps we should not listen to this at all (combat is already handled with other checks anyways)
+    Ext.Osiris.RegisterListener("CombatStarted", 1, "before", function(combatGuid)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_combat") then
+            EHandlers.OnCombatStart()
+        end
+    end)
+    Ext.Osiris.RegisterListener("CombatEnded", 1, "before", function(combatGuid)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_combat") then
+            EHandlers.OnCombatEnd()
+        end
+    end)
+    -- (Not actually working)
+    -- Ext.Osiris.RegisterListener("CombatRoundStarted", 1, "before", EHandlers.onCombatRoundStarted)
+    Ext.Osiris.RegisterListener("TurnEnded", 1, "after", function(character)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_combat_turn") then
+            EHandlers.OnTurnEnded(character)
+        end
+    end)
 
-    if Config:getCfg().FEATURES.POSTPONE_ON.combat_turn then
-      Ext.Osiris.RegisterListener("TurnEnded", 1, "after", EHandlers.OnTurnEnded)
-    end
+    Ext.Osiris.RegisterListener("StartedLockpicking", 2, "before", function(character, item)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_lockpicking") then
+            EHandlers.OnLockpickingStart()
+        end
+    end)
+    Ext.Osiris.RegisterListener("StoppedLockpicking", 2, "before", function(character, item)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_lockpicking") then
+            EHandlers.OnLockpickingEnd()
+        end
+    end)
 
-    if Config:getCfg().FEATURES.POSTPONE_ON.lockpicking then
-      Ext.Osiris.RegisterListener("StartedLockpicking", 2, "before", EHandlers.OnLockpickingStart)
-      Ext.Osiris.RegisterListener("StoppedLockpicking", 2, "before", EHandlers.OnLockpickingEnd)
-    end
+    Ext.Osiris.RegisterListener("UseStarted", 2, "before", function(character, item)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_using_items") then
+            EHandlers.OnUseStarted(character, item)
+        end
+    end)
+    Ext.Osiris.RegisterListener("UseFinished", 3, "before", function(character, item, result)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_using_items") then
+            EHandlers.OnUseEnded(character, item, result)
+        end
+    end)
 
-    if Config:getCfg().FEATURES.POSTPONE_ON.using_items then
-      Ext.Osiris.RegisterListener("UseStarted", 2, "before", EHandlers.OnUseStarted)
-      Ext.Osiris.RegisterListener("UseFinished", 3, "before", EHandlers.OnUseEnded)
-    end
+    Ext.Osiris.RegisterListener("RequestCanLoot", 2, "after", function(looter, target)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_looting_characters") then
+            EHandlers.onRequestCanLoot(looter, target)
+        end
+    end)
+    Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", function(player, lootedCharacter)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_looting_characters") then
+            EHandlers.onCharacterLootedCharacter(player, lootedCharacter)
+        end
+    end)
 
-    if Config:getCfg().FEATURES.POSTPONE_ON.looting_characters then
-      Ext.Osiris.RegisterListener("RequestCanLoot", 2, "after", EHandlers.onRequestCanLoot)
-      Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", EHandlers.onCharacterLootedCharacter)
-    end
+    Ext.Osiris.RegisterListener("EnteredForceTurnBased", 1, "before", function(object)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_turn_based_mode") then
+            EHandlers.OnEnteredForceTurnBased(object)
+        end
+    end)
+    Ext.Osiris.RegisterListener("LeftForceTurnBased", 1, "before", function(object)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_turn_based_mode") then
+            EHandlers.OnLeftForceTurnBased(object)
+        end
+    end)
 
-    if Config:getCfg().FEATURES.POSTPONE_ON.turn_based then
-      Ext.Osiris.RegisterListener("EnteredForceTurnBased", 1, "before", EHandlers.OnEnteredForceTurnBased)
-      Ext.Osiris.RegisterListener("LeftForceTurnBased", 1, "before", EHandlers.OnLeftForceTurnBased)
-      -- I don't know what this is used for, it is not for things like shadow-curse
-      -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
-    end
-
-    if Config:getCfg().FEATURES.POSTPONE_ON.respec_and_mirror then
-      Ext.Osiris.RegisterListener("RespecCancelled", 1, "before", EHandlers.OnRespecCancelled)
-      Ext.Osiris.RegisterListener("RespecCompleted", 1, "before", EHandlers.OnRespecCompleted)
-    end
-
+    -- I don't know what this is used for, it is not for things like shadow-curse
+    -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
+    Ext.Osiris.RegisterListener("RespecCancelled", 1, "before", function(character)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_respec_and_mirror") then
+            EHandlers.OnRespecCancelled(character)
+        end
+    end)
+    Ext.Osiris.RegisterListener("RespecCompleted", 1, "before", function(character)
+        if MCMGet("mod_enabled") and MCMGet("postpone_on_respec_and_mirror") then
+            EHandlers.OnRespecCompleted(character)
+        end
+    end)
+    -- This would require ModVars and I don't want to implement that for such an uneeded feature
+    -- if MCMGet("load_aware") then
+    --   Ext.Osiris.RegisterListener("SavegameLoaded", 0, "after", EHandlers.SavegameLoaded)
+    -- end
     -- Ext.Osiris.RegisterListener("MovedBy", 2, "before", EHandlers.DebugEvent)
     -- Ext.Osiris.RegisterListener("MoveCapabilityChanged", 2, "before", EHandlers.DebugEvent)
     -- Ext.Osiris.RegisterListener("TextEvent", 1, "before", EHandlers.DebugEvent)
@@ -93,20 +171,19 @@ function SubscribedEvents.SubscribeToEvents()
     -- Ext.Osiris.RegisterListener("AutomatedDialogStarted", 2, "before", EHandlers.DebugEvent)
 
     -- Can't be used:
-    -- Ext.Osiris.RegisterListener("LeveledUp", 1, "before", EHandlers.OnLeveledUp)
-    -- Ext.Osiris.RegisterListener("UserEvent", 2, "before", EHandlers.OnUserEvent)
-    -- Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", EHandlers.OnLevelGameplayStarted)
-    -- Ext.Osiris.RegisterListener("LevelTemplateLoaded", 1, "before", EHandlers.OnLevelTemplateLoaded)
-    -- Ext.Osiris.RegisterListener("LevelUnloading", 1, "before", EHandlers.OnLevelUnloading)
+    -- Ext.Osiris.RegisterListener("LeveledUp", 1, "before", conditionalWrapper(EHandlers.OnLeveledUp))
+    -- Ext.Osiris.RegisterListener("UserEvent", 2, "before", conditionalWrapper(EHandlers.OnUserEvent))
+    -- Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", conditionalWrapper(EHandlers.OnLevelGameplayStarted))
+    -- Ext.Osiris.RegisterListener("LevelTemplateLoaded", 1, "before", conditionalWrapper(EHandlers.OnLevelTemplateLoaded))
+    -- Ext.Osiris.RegisterListener("LevelUnloading", 1, "before", conditionalWrapper(EHandlers.OnLevelUnloading))
 
-    -- Ext.Osiris.RegisterListener("PuzzleUIUsed", 5, "before", EHandlers.OnPuzzleUIUsed)
-    -- Ext.Osiris.RegisterListener("PuzzleUIClosed", 3, "before", EHandlers.OnPuzzleUIClosed)
+    -- Ext.Osiris.RegisterListener("PuzzleUIUsed", 5, "before", conditionalWrapper(EHandlers.OnPuzzleUIUsed))
+    -- Ext.Osiris.RegisterListener("PuzzleUIClosed", 3, "before", conditionalWrapper(EHandlers.OnPuzzleUIClosed))
 
     -- -- https://www.youtube.com/watch?v=o5LlIdAd5h8
-    -- Ext.Osiris.RegisterListener("VoiceBarkEnded", 2, "before", EHandlers.OnVoiceBarkEnded)
-    -- Ext.Osiris.RegisterListener("VoiceBarkFailed", 1, "before", EHandlers.OnVoiceBarkFailed)
-    -- Ext.Osiris.RegisterListener("VoiceBarkStarted", 2, "before", EHandlers.OnVoiceBarkStarted)
-  end
+    -- Ext.Osiris.RegisterListener("VoiceBarkEnded", 2, "before", conditionalWrapper(EHandlers.OnVoiceBarkEnded))
+    -- Ext.Osiris.RegisterListener("VoiceBarkFailed", 1, "before", conditionalWrapper(EHandlers.OnVoiceBarkFailed))
+    -- Ext.Osiris.RegisterListener("VoiceBarkStarted", 2, "before", conditionalWrapper(EHandlers.OnVoiceBarkStarted))
 end
 
 return SubscribedEvents

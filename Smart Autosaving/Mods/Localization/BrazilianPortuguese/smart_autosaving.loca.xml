@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<contentList>
+    <content contentuid="h650d0ccb63264aef8f72295a8d7dbcec8fdb" version="1">Habilitar mod</content>
+    <content contentuid="h97e04efb063c4fea83f60e8d57376b0ae4b8" version="1">Nível de depuração</content>
+    <content contentuid="h77a85a6ea2e14ea5b81b2312a0298891b5c2" version="1">Adiar em combate</content>
+    <content contentuid="h9879769f689f4cbc9bbfca583c82616ff071" version="1">Adiar no turno de combate</content>
+    <content contentuid="hfe03e9624f864e2baccbebb5eeb1e6f09655" version="1">Adiar em diálogo</content>
+    <content contentuid="hdfa3fbb8d1f2403faf16490c25ed89d48e62" version="1">Adiar enquanto ocioso</content>
+    <content contentuid="h47ce4fcd32ed4e2ba7ba6dad8c054ff0acf4" version="1">Adiar em arrombamento</content>
+    <content contentuid="h9ba0310464d047b18242f2c663a4fa3f90b3" version="1">Adiar ao saquear personagens</content>
+    <content contentuid="h1887cc4dd06347b88cc4044f233a24d88268" version="1">Adiar enquanto em movimento</content>
+    <content contentuid="h7dd817bdeb61421c9dc71462d2e505bff19b" version="1">Adiar enquanto em respec e espelho</content>
+    <content contentuid="h3b5af6ce60ba40f2bfcf1a8cf8e3c04b4cae" version="1">Adiar enquanto em negociação</content>
+    <content contentuid="h632f4bb605e64d9a94a3646c7ba357901abg" version="1">Adiar enquanto em modo por turnos</content>
+    <content contentuid="hc702cc8327ab43f19c6be3fa10afdd75bc93" version="1">Adiar enquanto usando itens</content>
+    <content contentuid="h65b42cd85c1144b8933ba0e17cc9fec734f1" version="1">Período de salvamento automático em minutos</content>
+    <content contentuid="h7dbb8eafef8f4c80ba639ea7f957795e4331" version="1">Reiniciar temporizador ao salvar</content>
+    <content contentuid="he6e430773fa641fb95c53544ce5707b996f7" version="1">Se deve reiniciar o temporizador quando qualquer salvamento for feito.</content>
+    <content contentuid="h66e8dd40664d4c1b8a237a4a6aea57e40f1e" version="1">0 = sem depuração, 1 = mínimo, 2 = logs de depuração detalhados.</content>
+    <content contentuid="hcadb1cef26854459ab512d4be0cfd156gdeg" version="1">Se deve adiar o salvamento automático durante o combate.</content>
+    <content contentuid="h0a77b7f945c1495e9209524c6bff119dbffd" version="1">Se deve permitir o salvamento automático durante o combate, mas apenas após o seu turno terminar.</content>
+    <content contentuid="h04cfd5f991154dc090880bf145144ca08473" version="1">Se deve adiar o salvamento automático durante diálogos.</content>
+    <content contentuid="h9c664f1a8ba94e93b6a4cd8f649e95500277" version="1">Se deve adiar o salvamento automático se você estiver ocioso.&lt;br&gt;Nota: funciona melhor se você tiver as outras opções habilitadas.</content>
+    <content contentuid="h86522c6464154e809ec453682b9ff82f3009" version="1">Se deve adiar o salvamento automático durante lockpicking.</content>
+    <content contentuid="h7753b91de3b1465abc755163d176d22c29ab" version="1">Se deve adiar o salvamento automático enquanto saqueia personagens.</content>
+    <content contentuid="ha7ec785a961247cbbaa55cc6de7275c54aed" version="1">Se deve adiar o salvamento automático enquanto qualquer membro do grupo estiver se movendo.</content>
+    <content contentuid="h836a7c7593814d69953bad3e987587997b86" version="1">Se deve adiar o salvamento automático enquanto estiver fazendo respec ou usando o espelho.</content>
+    <content contentuid="h9af1d465e1fb478785218ed3ad2285d15985" version="1">Se deve adiar o salvamento automático enquanto negociando/barganhando.</content>
+    <content contentuid="heb88c640db984bd6a4ba3af668c9ff4c8c47" version="1">Se deve adiar o salvamento automático enquanto no modo por turnos.</content>
+    <content contentuid="h5d80f8b885fa4a2db8e4ca97b315a3f6ab27" version="1">Se deve adiar o salvamento automático enquanto 'usa' itens.&lt;br&gt;Nota: isso inclui escadas e containers.</content>
+    <content contentuid="hb53df522319b42618ba3e1f988c7733e3f2a" version="1">Intervalo em minutos para salvamento automático. 10 = espera 10 minutos para tentar salvar.</content>
+    <content contentuid="h2ca558d47008421f9c503a548b7ab28c8fg3" version="1">Ativar/desativar o mod sem desinstalá-lo.</content>
+    <content contentuid="hcd2095614e384f0c8923b412a1d0da0f53f6" version="1">Controle de adiamento de salvamento automático</content>
+    <content contentuid="he30c37fe6ff54c12a25089af3ecfa7b81f4c" version="1">Configurações do temporizador de salvamento</content>
+    <content contentuid="h231242910ccd4b288609e8f5c4aedc53951a" version="1">Timer in seconds</content>
+    <content contentuid="h58a59145a82d41128c5970e26ba671517d94" version="1">Whether to use the timer period as seconds instead of minutes.</content>
+</contentList>
