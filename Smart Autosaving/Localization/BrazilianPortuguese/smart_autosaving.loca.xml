@@ -32,6 +32,4 @@
     <content contentuid="h2ca558d47008421f9c503a548b7ab28c8fg3" version="1">Ativar/desativar o mod sem desinstalá-lo.</content>
     <content contentuid="hcd2095614e384f0c8923b412a1d0da0f53f6" version="1">Controle de adiamento de salvamento automático</content>
     <content contentuid="he30c37fe6ff54c12a25089af3ecfa7b81f4c" version="1">Configurações do temporizador de salvamento</content>
-    <content contentuid="h231242910ccd4b288609e8f5c4aedc53951a" version="1">Timer in seconds</content>
-    <content contentuid="h58a59145a82d41128c5970e26ba671517d94" version="1">Whether to use the timer period as seconds instead of minutes.</content>
 </contentList>
