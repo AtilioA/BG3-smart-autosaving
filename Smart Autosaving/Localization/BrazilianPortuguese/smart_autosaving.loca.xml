@@ -28,7 +28,7 @@
     <content contentuid="h9af1d465e1fb478785218ed3ad2285d15985" version="1">Se deve adiar o salvamento automático enquanto negociando/barganhando.</content>
     <content contentuid="heb88c640db984bd6a4ba3af668c9ff4c8c47" version="1">Se deve adiar o salvamento automático enquanto no modo por turnos.</content>
     <content contentuid="h5d80f8b885fa4a2db8e4ca97b315a3f6ab27" version="1">Se deve adiar o salvamento automático enquanto 'usa' itens.&lt;br&gt;Nota: isso inclui escadas e containers.</content>
-    <content contentuid="hb53df522319b42618ba3e1f988c7733e3f2a" version="1">Intervalo em minutos para salvamento automático. 10 = espera 10 minutos para tentar salvar.</content>
+    <content contentuid="hb53df522319b42618ba3e1f988c7733e3f2a" version="1">Intervalo em minutos para salvamento automático.&lt;br&gt;10 = espera 10 minutos para tentar salvar.</content>
     <content contentuid="h2ca558d47008421f9c503a548b7ab28c8fg3" version="1">Ativar/desativar o mod sem desinstalá-lo.</content>
     <content contentuid="hcd2095614e384f0c8923b412a1d0da0f53f6" version="1">Controle de adiamento de salvamento automático</content>
     <content contentuid="he30c37fe6ff54c12a25089af3ecfa7b81f4c" version="1">Configurações do temporizador de salvamento</content>
