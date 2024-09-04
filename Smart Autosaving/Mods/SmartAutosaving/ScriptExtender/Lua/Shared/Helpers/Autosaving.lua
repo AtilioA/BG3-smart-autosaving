@@ -162,7 +162,7 @@ function Autosaving.ProxyIsUsingRespecOrMirror()
     return respecProxy
 end
 
-function Autosaving.CanAutosave()
+function Autosaving.CanAutosaveServerSide()
     local isRespeccingOrUsingMirror = Autosaving.ProxyIsUsingRespecOrMirror() -- and not Autosaving.states.respecEnded
 
     -- These checks ensure that players loading a save in combat or dialogue will not autosave (if the corresponding options are set to true)
@@ -193,18 +193,25 @@ function Autosaving.HandlePotentialAutosave()
     -- Do not autosave if the states are true, even if we're waiting for an autosave
     -- SAPrint(2,
     --   "Checking if we should autosave: " ..
-    --   tostring(Autosaving.states.waitingForAutosave) .. " and " .. tostring(Autosaving.CanAutosave()))
-    if Autosaving.states.waitingForAutosave and Autosaving.CanAutosave() then
-        Autosaving.Autosave()
+    --   tostring(Autosaving.states.waitingForAutosave) .. " and " .. tostring(Autosaving.CanAutosaveServerSide()))
+    if Autosaving.states.waitingForAutosave and Autosaving.CanAutosaveServerSide() then
+        Autosaving.CheckClientSide()
     end
+
     -- Set this to false regardless; if we're in combat, we'll set it to true again when a new round ends
     -- Also don't use the function to update the state to avoid recursion
     Autosaving.states.combatTurnEnded = false
 end
 
+function Autosaving.CheckClientSide()
+    if Ext.IsServer() then
+        Ext.Net.BroadcastMessage("SA_CheckClientSide", Ext.Json.Stringify({}))
+    end
+end
+
 function Autosaving.SaveIfWaiting()
     if Autosaving.states.waitingForAutosave then
-        Autosaving.Autosave()
+        Autosaving.CheckClientSide()
     end
 end
 

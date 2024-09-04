@@ -148,6 +148,14 @@ function SubscribedEvents.SubscribeToEvents()
             EHandlers.OnRespecCompleted(character)
         end
     end)
+
+    Ext.RegisterNetListener("SA_ClientAutosaveStatus", function(call, payload)
+        local data = Ext.Json.Parse(payload)
+        if MCMGet("mod_enabled") then
+            EHandlers.OnClientMayAutosave(data)
+        end
+    end)
+
     -- This would require ModVars and I don't want to implement that for such an uneeded feature
     -- if MCMGet("load_aware") then
     --   Ext.Osiris.RegisterListener("SavegameLoaded", 0, "after", EHandlers.SavegameLoaded)

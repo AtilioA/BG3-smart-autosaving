@@ -8,80 +8,80 @@ EHandlers.hasMovedItemDuringTrade = false
 ---@param timer string The name of the timer that finished
 ---@return nil
 function EHandlers.OnTimerFinished(timer)
-  -- entity = Ext.Entity.Get(Osi.GetHostCharacter())
-  -- Ext.IO.SaveFile('character-entity.json', Ext.DumpExport(entity:GetAllComponents()))
-  if timer == Autosaving.TIMER_NAME then
-    if Autosaving.CanAutosave() then
-      Autosaving.Autosave()
-      Autosaving.StartOrRestartTimer()
-    else -- timer finished but we can't autosave yet, so we'll wait for the next event to try again
-      SAPrint(2, "OnTimerFinished: Can't autosave yet, waiting for next event")
-      Autosaving.UpdateState("waitingForAutosave", true)
+    -- entity = Ext.Entity.Get(Osi.GetHostCharacter())
+    -- Ext.IO.SaveFile('character-entity.json', Ext.DumpExport(entity:GetAllComponents()))
+    if timer == Autosaving.TIMER_NAME then
+        Autosaving.UpdateState("waitingForAutosave", true)
+        if Autosaving.CanAutosaveServerSide() then
+            Autosaving.CheckClientSide()
+            Autosaving.StartOrRestartTimer()
+        else -- timer finished but we can't autosave yet, so we'll wait for the next event to try again
+            SAPrint(2, "OnTimerFinished: Can't autosave yet, waiting for next event")
+        end
     end
-  end
 end
 
 --- Handler when the game state changes
 ---@param e table The event object
 ---@return nil
 function EHandlers.OnGameStateChange(e)
-  -- Reset the timer if the game state changes to 'Save'
-  -- String comparison isn't ideal, but it should be fine for this
-  local toStateStr = tostring(e.ToState)
-  if toStateStr == 'Save' then
-    Autosaving.StartOrRestartTimer()
-  end
+    -- Reset the timer if the game state changes to 'Save'
+    -- String comparison isn't ideal, but it should be fine for this
+    local toStateStr = tostring(e.ToState)
+    if toStateStr == 'Save' then
+        Autosaving.StartOrRestartTimer()
+    end
 end
 
 function EHandlers.SavegameLoaded()
-  -- Reset the timer when a save is loaded
-  Autosaving.StartOrRestartTimer()
+    -- Reset the timer when a save is loaded
+    Autosaving.StartOrRestartTimer()
 end
 
 function EHandlers.OnDialogStart()
-  SAPrint(2, "Dialogue started")
-  -- entity = Ext.Entity.Get(Osi.GetHostCharacter())
-  -- Ext.IO.SaveFile('character-entity.json', Ext.DumpExport(entity:GetAllComponents()))
-  -- print(entity:GetAllComponents().ServerCharacter)
+    SAPrint(2, "Dialogue started")
+    -- entity = Ext.Entity.Get(Osi.GetHostCharacter())
+    -- Ext.IO.SaveFile('character-entity.json', Ext.DumpExport(entity:GetAllComponents()))
+    -- print(entity:GetAllComponents().ServerCharacter)
 
-  Autosaving.UpdateState("isInDialogue", true)
+    Autosaving.UpdateState("isInDialogue", true)
 end
 
 function EHandlers.OnDialogEnd()
-  SAPrint(2, "Dialogue ended")
+    SAPrint(2, "Dialogue ended")
 
-  Autosaving.UpdateState("isInDialogue", false)
+    Autosaving.UpdateState("isInDialogue", false)
 end
 
 function EHandlers.OnTradeStart()
-  EHandlers.hasMovedItemDuringTrade = false
-  SAPrint(2, "OnTradeStart")
-  Autosaving.UpdateState("isInTrade", true)
+    EHandlers.hasMovedItemDuringTrade = false
+    SAPrint(2, "OnTradeStart")
+    Autosaving.UpdateState("isInTrade", true)
 end
 
 function EHandlers.OnTradeEnd()
-  SAPrint(2, "OnTradeEnd")
-  Autosaving.UpdateState("isInTrade", false)
+    SAPrint(2, "OnTradeEnd")
+    Autosaving.UpdateState("isInTrade", false)
 
-  -- If moved item during trade, save
-  if EHandlers.hasMovedItemDuringTrade then
-    -- Save regardless of dialogue state
-    Autosaving.SaveIfWaiting()
-  else
-    SAPrint(2, "No items moved during trade, not checking for autosave")
-  end
+    -- If moved item during trade, save
+    if EHandlers.hasMovedItemDuringTrade then
+        -- Save regardless of dialogue state
+        Autosaving.SaveIfWaiting()
+    else
+        SAPrint(2, "No items moved during trade, not checking for autosave")
+    end
 end
 
 function EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
-  if (Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) or Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter())) and isTrade == 1 then
-    SAPrint(2, "OnMovedFromTo: " .. movedObject .. " " .. fromObject .. " " .. toObject .. " " .. isTrade)
-    EHandlers.hasMovedItemDuringTrade = true
-  end
+    if (Osi.IsInPartyWith(toObject, Osi.GetHostCharacter()) or Osi.IsInPartyWith(fromObject, Osi.GetHostCharacter())) and isTrade == 1 then
+        SAPrint(2, "OnMovedFromTo: " .. movedObject .. " " .. fromObject .. " " .. toObject .. " " .. isTrade)
+        EHandlers.hasMovedItemDuringTrade = true
+    end
 end
 
 function EHandlers.OnCombatStart()
-  SAPrint(2, "OnCombatStart")
-  Autosaving.UpdateState("isInCombat", true)
+    SAPrint(2, "OnCombatStart")
+    Autosaving.UpdateState("isInCombat", true)
 end
 
 -- I didn't manage to get this to work, so I'm using TurnEnded instead
@@ -90,42 +90,42 @@ end
 --     Autosaving.UpdateState("combatTurnEnded", true)
 -- end
 function EHandlers.OnCombatEnd()
-  SAPrint(2, "OnCombatEnd")
-  Autosaving.UpdateState("isInCombat", false)
+    SAPrint(2, "OnCombatEnd")
+    Autosaving.UpdateState("isInCombat", false)
 end
 
 function EHandlers.OnTurnEnded(char)
-  -- Potentially save if the turn ended for the avatar or party member (this should not trigger multiplayer or summons)
-  if Osi.IsInPartyWith(char, Osi.GetHostCharacter()) == 1 then
-    SAPrint(2, "OnTurnEnded: " .. char)
-    Autosaving.UpdateState("combatTurnEnded", true)
-    Autosaving.HandlePotentialAutosave()
-  end
+    -- Potentially save if the turn ended for the avatar or party member (this should not trigger multiplayer or summons)
+    if Osi.IsInPartyWith(char, Osi.GetHostCharacter()) == 1 then
+        SAPrint(2, "OnTurnEnded: " .. char)
+        Autosaving.UpdateState("combatTurnEnded", true)
+        Autosaving.HandlePotentialAutosave()
+    end
 end
 
 function EHandlers.OnLockpickingStart()
-  SAPrint(2, "Lockpicking started")
-  Autosaving.UpdateState("isLockpicking", true)
+    SAPrint(2, "Lockpicking started")
+    Autosaving.UpdateState("isLockpicking", true)
 end
 
 function EHandlers.OnLockpickingEnd()
-  SAPrint(2, "Lockpicking ended")
-  Autosaving.UpdateState("isLockpicking", false)
+    SAPrint(2, "Lockpicking ended")
+    Autosaving.UpdateState("isLockpicking", false)
 end
 
 -- This might cause problems if the target is 'owned' (has red highlight)
 function EHandlers.onRequestCanLoot(looter, target)
-  if Osi.IsInPartyWith(looter, Osi.GetHostCharacter()) == 1 then
-    SAPrint(2, "RequestCanLoot: " .. looter .. " " .. target)
-    Autosaving.UpdateState("isLootingCharacter", true)
-  end
+    if Osi.IsInPartyWith(looter, Osi.GetHostCharacter()) == 1 then
+        SAPrint(2, "RequestCanLoot: " .. looter .. " " .. target)
+        Autosaving.UpdateState("isLootingCharacter", true)
+    end
 end
 
 function EHandlers.onCharacterLootedCharacter(player, lootedCharacter)
-  if Osi.IsInPartyWith(player, Osi.GetHostCharacter()) == 1 then
-    SAPrint(2, "CharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
-    Autosaving.UpdateState("isLootingCharacter", false)
-  end
+    if Osi.IsInPartyWith(player, Osi.GetHostCharacter()) == 1 then
+        SAPrint(2, "CharacterLootedCharacter: " .. player .. " " .. lootedCharacter)
+        Autosaving.UpdateState("isLootingCharacter", false)
+    end
 end
 
 -- WIP/looking for means of detection
@@ -134,87 +134,97 @@ end
 -- end
 
 function EHandlers.OnUseStarted(character, item)
-  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 and (Osi.IsContainer(item) == 1 or Osi.IsLadder(item)) then
-    SAPrint(2, "UseStarted: " .. character .. " " .. item)
-    SAPrint(2, "useCount: " .. EHandlers.useCount)
+    if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 and (Osi.IsContainer(item) == 1 or Osi.IsLadder(item)) then
+        SAPrint(2, "UseStarted: " .. character .. " " .. item)
+        SAPrint(2, "useCount: " .. EHandlers.useCount)
 
-    EHandlers.useCount = EHandlers.useCount + 1
-    Autosaving.UpdateState("isUsingItem", true)
-  end
+        EHandlers.useCount = EHandlers.useCount + 1
+        Autosaving.UpdateState("isUsingItem", true)
+    end
 end
 
 function EHandlers.OnUseEnded(character, item, result)
-  if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 and (Osi.IsContainer(item) == 1 or Osi.IsLadder(item)) then
-    SAPrint(2, "useCount: " .. EHandlers.useCount)
-    if EHandlers.useCount > 0 then
-      EHandlers.useCount = EHandlers.useCount - 1
-      if EHandlers.useCount == 0 then
-        Autosaving.UpdateState("isUsingItem", false)
-      end
-    end
+    if Osi.IsInPartyWith(character, Osi.GetHostCharacter()) == 1 and (Osi.IsContainer(item) == 1 or Osi.IsLadder(item)) then
+        SAPrint(2, "useCount: " .. EHandlers.useCount)
+        if EHandlers.useCount > 0 then
+            EHandlers.useCount = EHandlers.useCount - 1
+            if EHandlers.useCount == 0 then
+                Autosaving.UpdateState("isUsingItem", false)
+            end
+        end
 
-    SAPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result .. " " .. EHandlers.useCount)
-  end
+        SAPrint(2, "UseEnded: " .. character .. " " .. item .. " " .. result .. " " .. EHandlers.useCount)
+    end
 end
 
 -- Entered and Left Force Turn-Based
 function EHandlers.OnEnteredForceTurnBased(object)
-  if VCHelpers.Object:IsCharacter(object) and Osi.IsInPartyWith(object, Osi.GetHostCharacter()) == 1 then
-    SAPrint(2, "Entered force turn-based: " .. object)
-    Autosaving.UpdateState("isInTurnBased", true)
-  end
+    if VCHelpers.Object:IsCharacter(object) and Osi.IsInPartyWith(object, Osi.GetHostCharacter()) == 1 then
+        SAPrint(2, "Entered force turn-based: " .. object)
+        Autosaving.UpdateState("isInTurnBased", true)
+    end
 end
 
 function EHandlers.OnLeftForceTurnBased(object)
-  if VCHelpers.Object:IsCharacter(object) and Osi.IsInPartyWith(object, Osi.GetHostCharacter()) == 1 then
-    SAPrint(2, "Left force turn-based: " .. object)
-    Autosaving.UpdateState("isInTurnBased", false)
-  end
+    if VCHelpers.Object:IsCharacter(object) and Osi.IsInPartyWith(object, Osi.GetHostCharacter()) == 1 then
+        SAPrint(2, "Left force turn-based: " .. object)
+        Autosaving.UpdateState("isInTurnBased", false)
+    end
 end
 
 function EHandlers.OnLevelGameplayStarted(levelName, isEditorMode)
-  -- print("OnLevelGameplayStarted called")
-  if levelName == 'SYS_CC_I' then
-    Autosaving.UpdateState("isInCharacterCreation", true)
-  end
+    -- print("OnLevelGameplayStarted called")
+    if levelName == 'SYS_CC_I' then
+        Autosaving.UpdateState("isInCharacterCreation", true)
+    end
 end
 
 function EHandlers.OnLevelUnloading(level)
-  if level == 'SYS_CC_I' then
-    Autosaving.UpdateState("isInCharacterCreation", false)
-  end
+    if level == 'SYS_CC_I' then
+        Autosaving.UpdateState("isInCharacterCreation", false)
+    end
 end
 
 -- Respec Events
 function EHandlers.OnRespecCancelled(character)
-  SAPrint(2, "Character" .. character .. " cancelled respec")
-  -- We can't actually use this, since it will break logic for players who respec then use the mirror
-  Autosaving.UpdateState("respecEnded", true)
-  Autosaving.SaveIfWaiting()
+    SAPrint(2, "Character" .. character .. " cancelled respec")
+    -- We can't actually use this, since it will break logic for players who respec then use the mirror
+    Autosaving.UpdateState("respecEnded", true)
+    Autosaving.SaveIfWaiting()
 end
 
 function EHandlers.OnRespecCompleted(character)
-  SAPrint(2, "Character" .. character .. " completed respec")
-  -- We can't actually use this, since it will break logic for players who respec then use the mirror
-  Autosaving.UpdateState("respecEnded", true)
-  Autosaving.SaveIfWaiting()
+    SAPrint(2, "Character" .. character .. " completed respec")
+    -- We can't actually use this, since it will break logic for players who respec then use the mirror
+    Autosaving.UpdateState("respecEnded", true)
+    Autosaving.SaveIfWaiting()
 end
 
 function EHandlers.DebugEvent(param1, param2, param3, param4)
-  local debugString = "DebugEvent: "
-  if param1 ~= nil then
-    debugString = debugString .. param1 .. " "
-  end
-  if param2 ~= nil then
-    debugString = debugString .. param2 .. " "
-  end
-  if param3 ~= nil then
-    debugString = debugString .. param3 .. " "
-  end
-  if param4 ~= nil then
-    debugString = debugString .. param4
-  end
-  SAPrint(2, debugString)
+    local debugString = "DebugEvent: "
+    if param1 ~= nil then
+        debugString = debugString .. param1 .. " "
+    end
+    if param2 ~= nil then
+        debugString = debugString .. param2 .. " "
+    end
+    if param3 ~= nil then
+        debugString = debugString .. param3 .. " "
+    end
+    if param4 ~= nil then
+        debugString = debugString .. param4
+    end
+    SAPrint(2, debugString)
+end
+
+---@param data table<string, boolean>
+function EHandlers.OnClientMayAutosave(data)
+    if data.canAutosave then
+        SADebug(1, "Client stated we may autosave: " .. Ext.DumpExport(data))
+        Autosaving.Autosave()
+    else
+        SADebug(1, "Client stated we may NOT autosave: " .. Ext.DumpExport(data))
+    end
 end
 
 -- IsMoving
