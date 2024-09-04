@@ -72,6 +72,11 @@ function Autosaving.UpdateState(state, value)
         return
     end
 
+    if Autosaving.states[state] == value then
+        SADebug(1, "State " .. state .. " is already " .. tostring(value))
+        return
+    end
+
     -- Update the state
     Autosaving.states[state] = value
     Autosaving.changedStates[state] = true
