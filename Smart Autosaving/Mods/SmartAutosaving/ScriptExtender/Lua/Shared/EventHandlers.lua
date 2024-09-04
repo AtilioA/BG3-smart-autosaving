@@ -227,6 +227,10 @@ function EHandlers.OnClientMayAutosave(data)
     end
 end
 
+function EHandlers.OnLastPaperdollDestroyed()
+    Autosaving.SaveIfWaiting()
+end
+
 -- IsMoving
 -- GetDebugCharacter
 

@@ -1,5 +1,6 @@
-ClientSideChecks = {}
+setmetatable(Mods.SmartAutosaving, { __index = Mods.VolitionCabinet })
 
+ClientSideChecks = {}
 
 function ClientSideChecks.HasPaperdoll()
     return not table.isEmpty(Ext.Entity.GetAllEntitiesWithComponent("ClientPaperdoll"))
@@ -26,3 +27,22 @@ function ClientSideChecks.CanAutosave()
 
     return canAutosave, reasons
 end
+
+
+--- Client Events
+Ext.RegisterNetListener("SA_CheckClientSide", function(call, payload)
+    local canAutosave, reasons = ClientSideChecks.CanAutosave()
+
+    Ext.Net.PostMessageToServer("SA_ClientAutosaveStatus",
+        Ext.Json.Stringify({ canAutosave = canAutosave, reasons = reasons }))
+end)
+
+-- NOTE: technically would create problems if more client checks are added, but we're (afterwards) doing a roundtrip check with the server anyways
+Ext.Entity.OnDestroy("ClientPaperdoll", function(entity)
+    -- Timing bullshit :prayge:
+    VCHelpers.Timer:OnTicks(5, function()
+        if not ClientSideChecks.HasPaperdoll() then
+            Ext.Net.PostMessageToServer("SA_LastPaperdollDestroyed", Ext.Json.Stringify({}))
+        end
+    end)
+end)

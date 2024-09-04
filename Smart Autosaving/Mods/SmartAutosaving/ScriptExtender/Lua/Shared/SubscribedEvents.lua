@@ -156,6 +156,12 @@ function SubscribedEvents.SubscribeToEvents()
         end
     end)
 
+    Ext.RegisterNetListener("SA_LastPaperdollDestroyed", function(call, payload)
+        if MCMGet("mod_enabled") then
+            EHandlers.OnLastPaperdollDestroyed()
+        end
+    end)
+
     -- This would require ModVars and I don't want to implement that for such an uneeded feature
     -- if MCMGet("load_aware") then
     --   Ext.Osiris.RegisterListener("SavegameLoaded", 0, "after", EHandlers.SavegameLoaded)
