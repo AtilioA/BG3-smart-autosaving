@@ -222,7 +222,9 @@ function EHandlers.OnClientMayAutosave(data)
     for reason, value in pairs(data.reasons) do
         Autosaving.UpdateState(reason, value)
     end
-    if data.canAutosave then
+
+    -- NOTE: CanAutosaveServerSide may now be used since the client has sent the data
+    if Autosaving.CanAutosaveServerSide() then
         SADebug(1, "Client stated we may autosave: " .. Ext.DumpExport(data))
         Autosaving.Autosave()
     else

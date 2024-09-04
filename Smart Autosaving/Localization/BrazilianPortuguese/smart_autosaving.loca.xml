@@ -32,4 +32,6 @@
     <content contentuid="h2ca558d47008421f9c503a548b7ab28c8fg3" version="1">Ativar/desativar o mod sem desinstalá-lo.</content>
     <content contentuid="hcd2095614e384f0c8923b412a1d0da0f53f6" version="1">Controle de adiamento de salvamento automático</content>
     <content contentuid="he30c37fe6ff54c12a25089af3ecfa7b81f4c" version="1">Configurações do temporizador de salvamento</content>
+    <content contentuid="he3891a097f034b92a1d5a2e267f60776c84c" version="1">Se deve adiar o salvamento automático enquanto usa o inventário.</content>
+    <content contentuid="h3d2a951473c841b79ee3c900a7bcb6165e3c" version="1">Adiar enquanto usa o inventário</content>
 </contentList>

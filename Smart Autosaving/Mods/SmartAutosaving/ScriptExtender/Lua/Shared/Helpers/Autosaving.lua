@@ -129,6 +129,13 @@ function Autosaving.ShouldCombatBlockSaving()
     return false
 end
 
+function Autosaving.ShouldInventoryBlockSaving()
+    if MCMGet("postpone_on_inventory") == true then
+        return Autosaving.states.isUsingInventory
+    end
+    return false
+end
+
 function Autosaving.ShouldMovementBlockSaving()
     if MCMGet("postpone_on_movement") == true then
         local partyMemberMoving = Utils.IsAnyPartyMemberMoving()
@@ -177,6 +184,7 @@ function Autosaving.CanAutosaveServerSide()
     local combatCheck = Autosaving.ShouldCombatBlockSaving()
     local dialogueCheck = Autosaving.ShouldDialogueBlockSaving()
     local movementCheck = Autosaving.ShouldMovementBlockSaving()
+    local inventoryCheck = Autosaving.ShouldInventoryBlockSaving()
 
     local notInAnyBlockingState = not Autosaving.states.isInDialogue and
         -- not Autosaving.states.isInCombat and -- Temporarily disabled since this event does not check players involved in combat
@@ -189,6 +197,7 @@ function Autosaving.CanAutosaveServerSide()
         not combatCheck and
         not dialogueCheck and
         not movementCheck and
+        not inventoryCheck and
         not isRespeccingOrUsingMirror
 
     return (Autosaving.states.combatTurnEnded or notInAnyBlockingState)

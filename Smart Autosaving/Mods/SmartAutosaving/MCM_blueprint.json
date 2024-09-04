@@ -103,6 +103,39 @@
                     },
                     "Settings": [
                         {
+                            "Id": "postpone_on_idle",
+                            "Name": "Postpone on idle",
+                            "Handles": {
+                                "NameHandle": "hdfa3fbb8d1f2403faf16490c25ed89d48e62",
+                                "DescriptionHandle": "h9c664f1a8ba94e93b6a4cd8f649e95500277"
+                            },
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Whether to postpone autosaving if you're idle.\nNote: this works best if you have other options enabled."
+                        },
+                        {
+                            "Id": "postpone_on_inventory",
+                            "Name": "Postpone on inventory",
+                            "Handles": {
+                                "NameHandle": "h3d2a951473c841b79ee3c900a7bcb6165e3c",
+                                "DescriptionHandle": "he3891a097f034b92a1d5a2e267f60776c84c"
+                            },
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Whether to postpone autosaving while using the inventory."
+                        },
+                        {
+                            "Id": "postpone_on_dialogue",
+                            "Name": "Postpone on dialogue",
+                            "Handles": {
+                                "NameHandle": "hfe03e9624f864e2baccbebb5eeb1e6f09655",
+                                "DescriptionHandle": "h04cfd5f991154dc090880bf145144ca08473"
+                            },
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Whether to postpone autosaving during dialogue."
+                        },
+                        {
                             "Id": "postpone_on_combat",
                             "Name": "Postpone on combat",
                             "Handles": {
@@ -123,28 +156,6 @@
                             "Type": "checkbox",
                             "Default": true,
                             "Description": "Whether to allow autosaving during combat, but only after your turn ends."
-                        },
-                        {
-                            "Id": "postpone_on_dialogue",
-                            "Name": "Postpone on dialogue",
-                            "Handles": {
-                                "NameHandle": "hfe03e9624f864e2baccbebb5eeb1e6f09655",
-                                "DescriptionHandle": "h04cfd5f991154dc090880bf145144ca08473"
-                            },
-                            "Type": "checkbox",
-                            "Default": true,
-                            "Description": "Whether to postpone autosaving during dialogue."
-                        },
-                        {
-                            "Id": "postpone_on_idle",
-                            "Name": "Postpone on idle",
-                            "Handles": {
-                                "NameHandle": "hdfa3fbb8d1f2403faf16490c25ed89d48e62",
-                                "DescriptionHandle": "h9c664f1a8ba94e93b6a4cd8f649e95500277"
-                            },
-                            "Type": "checkbox",
-                            "Default": true,
-                            "Description": "Whether to postpone autosaving if you're idle.\nNote: this works best if you have other options enabled."
                         },
                         {
                             "Id": "postpone_on_lockpicking",
