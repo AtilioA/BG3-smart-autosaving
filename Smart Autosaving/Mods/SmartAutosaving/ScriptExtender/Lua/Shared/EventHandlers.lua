@@ -217,8 +217,11 @@ function EHandlers.DebugEvent(param1, param2, param3, param4)
     SAPrint(2, debugString)
 end
 
----@param data table<string, boolean>
+---@param data table<string, boolean|table<string, boolean>>
 function EHandlers.OnClientMayAutosave(data)
+    for reason, value in pairs(data.reasons) do
+        Autosaving.UpdateState(reason, value)
+    end
     if data.canAutosave then
         SADebug(1, "Client stated we may autosave: " .. Ext.DumpExport(data))
         Autosaving.Autosave()
@@ -228,6 +231,7 @@ function EHandlers.OnClientMayAutosave(data)
 end
 
 function EHandlers.OnLastPaperdollDestroyed()
+    Autosaving.UpdateState("isUsingInventory", false)
     Autosaving.SaveIfWaiting()
 end
 

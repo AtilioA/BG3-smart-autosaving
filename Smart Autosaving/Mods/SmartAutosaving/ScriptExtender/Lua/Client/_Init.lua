@@ -9,7 +9,7 @@ end
 ---@return table<string, boolean> reasons
 function ClientSideChecks.VerifyClientSideAutosavingStates()
     local reasons = {}
-    reasons["hasPaperdoll"] = ClientSideChecks.HasPaperdoll()
+    reasons["isUsingInventory"] = ClientSideChecks.HasPaperdoll()
 
     return reasons
 end

@@ -30,6 +30,8 @@ Autosaving.states = {
 
     respecEnded = false,
 
+    isUsingInventory = false,
+
     waitingForAutosave = false,
 }
 
