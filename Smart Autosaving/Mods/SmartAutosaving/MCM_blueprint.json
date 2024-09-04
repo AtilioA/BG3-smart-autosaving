@@ -61,6 +61,41 @@
             "TabName": "Features",
             "Sections": [
                 {
+                    "SectionId": "timer_settings",
+                    "SectionName": "Timer settings",
+                    "Handles": {
+                        "NameHandle": "he30c37fe6ff54c12a25089af3ecfa7b81f4c"
+                    },
+                    "Settings": [
+                        {
+                            "Id": "autosaving_period_in_minutes",
+                            "Name": "Autosaving period in minutes",
+                            "Handles": {
+                                "NameHandle": "h65b42cd85c1144b8933ba0e17cc9fec734f1",
+                                "DescriptionHandle": "hb53df522319b42618ba3e1f988c7733e3f2a"
+                            },
+                            "Type": "slider_int",
+                            "Default": 10,
+                            "Options": {
+                                "Min": 1,
+                                "Max": 120
+                            },
+                            "Description": "Interval in minutes for autosaving. Set to 10 for a ten-minute interval."
+                        },
+                        {
+                            "Id": "save_aware",
+                            "Name": "Save-aware",
+                            "Handles": {
+                                "NameHandle": "h7dbb8eafef8f4c80ba639ea7f957795e4331",
+                                "DescriptionHandle": "he6e430773fa641fb95c53544ce5707b996f7"
+                            },
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Whether to reset the timer when any save is made."
+                        }
+                    ]
+                },
+                {
                     "SectionId": "postponement",
                     "SectionName": "Postponement control",
                     "Handles": {
@@ -187,41 +222,6 @@
                             "Type": "checkbox",
                             "Default": true,
                             "Description": "Whether to postpone autosaving while using items.\nThis includes ladders and containers."
-                        }
-                    ]
-                },
-                {
-                    "SectionId": "timer_settings",
-                    "SectionName": "Timer settings",
-                    "Handles": {
-                        "NameHandle": "he30c37fe6ff54c12a25089af3ecfa7b81f4c"
-                    },
-                    "Settings": [
-                        {
-                            "Id": "autosaving_period_in_minutes",
-                            "Name": "Autosaving period in minutes",
-                            "Handles": {
-                                "NameHandle": "h65b42cd85c1144b8933ba0e17cc9fec734f1",
-                                "DescriptionHandle": "hb53df522319b42618ba3e1f988c7733e3f2a"
-                            },
-                            "Type": "slider_int",
-                            "Default": 10,
-                            "Options": {
-                                "Min": 1,
-                                "Max": 120
-                            },
-                            "Description": "Interval in minutes for autosaving. Set to 10 for a ten-minute interval."
-                        },
-                        {
-                            "Id": "save_aware",
-                            "Name": "Save-aware",
-                            "Handles": {
-                                "NameHandle": "h7dbb8eafef8f4c80ba639ea7f957795e4331",
-                                "DescriptionHandle": "he6e430773fa641fb95c53544ce5707b996f7"
-                            },
-                            "Type": "checkbox",
-                            "Default": true,
-                            "Description": "Whether to reset the timer when any save is made."
                         }
                     ]
                 }
