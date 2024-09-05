@@ -40,7 +40,7 @@ end)
 -- NOTE: technically would create problems if more client checks are added, but we're (afterwards) doing a roundtrip check with the server anyways
 Ext.Entity.OnDestroy("ClientPaperdoll", function(entity)
     -- Timing bullshit :prayge:
-    VCHelpers.Timer:OnTicks(5, function()
+    VCHelpers.Timer:OnTicks(8, function()
         if not ClientSideChecks.HasPaperdoll() then
             Ext.Net.PostMessageToServer("SA_LastPaperdollDestroyed", Ext.Json.Stringify({}))
         end
