@@ -20,6 +20,7 @@ function SubscribedEvents.SubscribeToEvents()
     -- Start the timer when the game is loaded
     Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", function(levelName, isEditorMode)
         if MCMGet("mod_enabled") then
+            Autosaving.CheckGameAutosavingSettings()
             Autosaving.StartOrRestartTimer()
         end
     end)

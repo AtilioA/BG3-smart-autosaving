@@ -2,6 +2,30 @@ Autosaving = {}
 
 Autosaving.TIMER_NAME = "Volitios_Smart_Autosaving"
 
+function Autosaving.CheckGameAutosavingSettings()
+    if not Ext.Net.IsHost() then return end
+    local globalSwitches = Ext.Utils.GetGlobalSwitches()
+    if globalSwitches == nil then return end
+
+
+    if globalSwitches["CanAutoSave"] ~= true then
+        SAWarn(0, "Autosaving is disabled in the game settings.\nPlease enable it to use Smart Autosaving.")
+        Ext.Timer.WaitFor(2000, function()
+            local hostCharacter = Osi.GetHostCharacter()
+            if hostCharacter then
+                Osi.OpenMessageBox(hostCharacter,
+                    "Autosaving is disabled in the game settings.\nPlease enable it to use Smart Autosaving.")
+            end
+        end)
+    end
+    if globalSwitches["MaxNrOfAutoSaves"] < 10 then
+        SAWarn(1,
+            "The maximum number of autosaves is set to " ..
+            globalSwitches["MaxNrOfAutoSaves"] ..
+            ".\nIt is recommended to set it to at least 10 to use Smart Autosaving.")
+    end
+end
+
 function Autosaving.GetAutosavingPeriod()
     local autosavingPeriodInMinutes = MCMGet("autosaving_period_in_minutes")
     if MCMGet("timer_in_seconds") then
