@@ -7,17 +7,16 @@ function Autosaving.CheckGameAutosavingSettings()
     local globalSwitches = Ext.Utils.GetGlobalSwitches()
     if globalSwitches == nil then return end
 
+    xpcall(function()
+        if globalSwitches["CanAutoSave"] ~= true then
+            Ext.Utils.GetGlobalSwitches().CanAutoSave = true
+            SAWarn(0,
+            "Autosaving was disabled in the game settings and has been re-enabled, as it is required for Smart Autosaving.")
+        end
+    end, function(err)
+        SAWarn(0, "Error while checking or enabling autosaving: " .. tostring(err))
+    end)
 
-    if globalSwitches["CanAutoSave"] ~= true then
-        SAWarn(0, "Autosaving is disabled in the game settings.\nPlease enable it to use Smart Autosaving.")
-        Ext.Timer.WaitFor(2000, function()
-            local hostCharacter = Osi.GetHostCharacter()
-            if hostCharacter then
-                Osi.OpenMessageBox(hostCharacter,
-                    "Autosaving is disabled in the game settings.\nPlease enable it to use Smart Autosaving.")
-            end
-        end)
-    end
     if globalSwitches["MaxNrOfAutoSaves"] < 10 then
         SAWarn(1,
             "The maximum number of autosaves is set to " ..
