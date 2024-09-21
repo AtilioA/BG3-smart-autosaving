@@ -11,7 +11,7 @@ function Autosaving.CheckGameAutosavingSettings()
         if globalSwitches["CanAutoSave"] ~= true then
             Ext.Utils.GetGlobalSwitches().CanAutoSave = true
             SAWarn(0,
-            "Autosaving was disabled in the game settings and has been re-enabled, as it is required for Smart Autosaving.")
+                "Autosaving was disabled in the game settings and has been re-enabled, as it is required for Smart Autosaving.")
         end
     end, function(err)
         SAWarn(0, "Error while checking or enabling autosaving: " .. tostring(err))
@@ -138,8 +138,17 @@ end
 function Autosaving.ShouldDialogueBlockSaving()
     if MCMGet("postpone_on_dialogue") == true then
         local entity = Ext.Entity.Get(Osi.GetHostCharacter())
-        return entity.ServerCharacter.Flags.InDialog
+        return xpcall(function()
+            if entity and entity.ServerCharacter then
+                return entity.ServerCharacter.Flags.InDialog
+            end
+            return false
+        end, function(err)
+            SAWarn(0, "Handled error in ShouldDialogueBlockSaving: " .. tostring(err))
+            return false
+        end)
     end
+
     return false
 end
 
