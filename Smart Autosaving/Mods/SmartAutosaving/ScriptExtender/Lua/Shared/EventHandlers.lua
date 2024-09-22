@@ -228,7 +228,7 @@ function EHandlers.OnClientMayAutosave(data)
         SADebug(1, "Client stated we may autosave: " .. Ext.DumpExport(data))
         Autosaving.Autosave()
     else
-        SADebug(1, "Client stated we may NOT autosave: " .. Ext.DumpExport(data))
+        SADebug(1, "Server decided not to autosave")
     end
 end
 

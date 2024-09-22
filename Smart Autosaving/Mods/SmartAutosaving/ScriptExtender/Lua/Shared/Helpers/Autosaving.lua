@@ -135,18 +135,19 @@ end
 
 --- Checks if dialogue should block saving by checking if player is in dialogue.
 -- Only used if the corresponding option is enabled in the config JSON file.
+---@return boolean
 function Autosaving.ShouldDialogueBlockSaving()
     if MCMGet("postpone_on_dialogue") == true then
         local entity = Ext.Entity.Get(Osi.GetHostCharacter())
-        return xpcall(function()
+        local success, result = xpcall(function()
             if entity and entity.ServerCharacter then
                 return entity.ServerCharacter.Flags.InDialog
             end
-            return false
         end, function(err)
             SAWarn(0, "Handled error in ShouldDialogueBlockSaving: " .. tostring(err))
             return false
         end)
+        return result
     end
 
     return false
