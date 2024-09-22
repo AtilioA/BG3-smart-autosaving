@@ -139,17 +139,14 @@ end
 function Autosaving.ShouldDialogueBlockSaving()
     if MCMGet("postpone_on_dialogue") == true then
         local entity = Ext.Entity.Get(Osi.GetHostCharacter())
-        local success, result = xpcall(function()
-            if entity and entity.ServerCharacter then
-                return entity.ServerCharacter.Flags.InDialog
-            end
+        local success, inDialog = xpcall(function()
+            return entity.ServerCharacter.Flags.InDialog
         end, function(err)
-            SAWarn(0, "Handled error in ShouldDialogueBlockSaving: " .. tostring(err))
+            SAWarn(1, "Error checking dialogue block: " .. tostring(err))
             return false
         end)
-        return result
+        return success and inDialog
     end
-
     return false
 end
 
