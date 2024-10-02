@@ -4,7 +4,7 @@ function SubscribedEvents.SubscribeToEvents()
     -- Not needed for this mod cause ... lmao
     -- local function conditionalWrapper(handler)
     --     return function(...)
-    --         if MCMGet("mod_enabled") then
+    --         if MCM.Get("mod_enabled") then
     --             handler(...)
     --         else
     --             WIEGDebug(1, "Event handling is disabled.")
@@ -19,7 +19,7 @@ function SubscribedEvents.SubscribeToEvents()
     -- Registering general Osiris event listeners
     -- Start the timer when the game is loaded
     Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", function(levelName, isEditorMode)
-        if MCMGet("mod_enabled") then
+        if MCM.Get("mod_enabled") then
             Autosaving.CheckGameAutosavingSettings()
             Autosaving.StartOrRestartTimer()
         end
@@ -33,7 +33,7 @@ function SubscribedEvents.SubscribeToEvents()
     -- Subscribe to the GameStateChanged event to detect when saves are created and reset the timer
     -- Note that it will also trigger with the mod's own autosaves, but there shouldn't be any issues with that
     Ext.Events.GameStateChanged:Subscribe(function(e)
-        if MCMGet("mod_enabled") and MCMGet("save_aware") then
+        if MCM.Get("mod_enabled") and MCM.Get("save_aware") then
             EHandlers.OnGameStateChange(e)
         end
     end)
@@ -41,34 +41,34 @@ function SubscribedEvents.SubscribeToEvents()
     -- Events that can restrict autosaving
     -- Dialogue
     Ext.Osiris.RegisterListener("DialogStartRequested", 2, "before", function()
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_dialogue") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_dialogue") then
             EHandlers.OnDialogStart()
         end
     end)
     Ext.Osiris.RegisterListener("DialogStarted", 2, "before", function()
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_dialogue") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_dialogue") then
             EHandlers.OnDialogStart()
         end
     end)
     Ext.Osiris.RegisterListener("DialogEnded", 2, "before", function()
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_dialogue") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_dialogue") then
             EHandlers.OnDialogEnd()
         end
     end)
 
     -- Trading
     Ext.Osiris.RegisterListener("RequestTrade", 4, "before", function(character, target, tradeMode, itemsTagFilter)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_trade") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_trade") then
             EHandlers.OnTradeStart()
         end
     end)
     Ext.Osiris.RegisterListener("TradeEnds", 2, "before", function(character, target)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_trade") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_trade") then
             EHandlers.OnTradeEnd()
         end
     end)
     Ext.Osiris.RegisterListener("MovedFromTo", 4, "after", function(movedObject, fromObject, toObject, isTrade)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_trade") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_trade") then
             EHandlers.OnMovedFromTo(movedObject, fromObject, toObject, isTrade)
         end
     end)
@@ -76,63 +76,63 @@ function SubscribedEvents.SubscribeToEvents()
     -- Combat
     -- REVIEW: I don't know if this event is triggered when combat starts only with the player or with any character, perhaps we should not listen to this at all (combat is already handled with other checks anyways)
     Ext.Osiris.RegisterListener("CombatStarted", 1, "before", function(combatGuid)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_combat") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_combat") then
             EHandlers.OnCombatStart()
         end
     end)
     Ext.Osiris.RegisterListener("CombatEnded", 1, "before", function(combatGuid)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_combat") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_combat") then
             EHandlers.OnCombatEnd()
         end
     end)
     -- (Not actually working)
     -- Ext.Osiris.RegisterListener("CombatRoundStarted", 1, "before", EHandlers.onCombatRoundStarted)
     Ext.Osiris.RegisterListener("TurnEnded", 1, "after", function(character)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_combat_turn") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_combat_turn") then
             EHandlers.OnTurnEnded(character)
         end
     end)
 
     Ext.Osiris.RegisterListener("StartedLockpicking", 2, "before", function(character, item)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_lockpicking") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_lockpicking") then
             EHandlers.OnLockpickingStart()
         end
     end)
     Ext.Osiris.RegisterListener("StoppedLockpicking", 2, "before", function(character, item)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_lockpicking") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_lockpicking") then
             EHandlers.OnLockpickingEnd()
         end
     end)
 
     Ext.Osiris.RegisterListener("UseStarted", 2, "before", function(character, item)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_using_items") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_using_items") then
             EHandlers.OnUseStarted(character, item)
         end
     end)
     Ext.Osiris.RegisterListener("UseFinished", 3, "before", function(character, item, result)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_using_items") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_using_items") then
             EHandlers.OnUseEnded(character, item, result)
         end
     end)
 
     Ext.Osiris.RegisterListener("RequestCanLoot", 2, "after", function(looter, target)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_looting_characters") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_looting_characters") then
             EHandlers.onRequestCanLoot(looter, target)
         end
     end)
     Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", function(player, lootedCharacter)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_looting_characters") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_looting_characters") then
             EHandlers.onCharacterLootedCharacter(player, lootedCharacter)
         end
     end)
 
     Ext.Osiris.RegisterListener("EnteredForceTurnBased", 1, "before", function(object)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_turn_based_mode") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_turn_based_mode") then
             EHandlers.OnEnteredForceTurnBased(object)
         end
     end)
     Ext.Osiris.RegisterListener("LeftForceTurnBased", 1, "before", function(object)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_turn_based_mode") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_turn_based_mode") then
             EHandlers.OnLeftForceTurnBased(object)
         end
     end)
@@ -140,31 +140,31 @@ function SubscribedEvents.SubscribeToEvents()
     -- I don't know what this is used for, it is not for things like shadow-curse
     -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
     Ext.Osiris.RegisterListener("RespecCancelled", 1, "before", function(character)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_respec_and_mirror") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_respec_and_mirror") then
             EHandlers.OnRespecCancelled(character)
         end
     end)
     Ext.Osiris.RegisterListener("RespecCompleted", 1, "before", function(character)
-        if MCMGet("mod_enabled") and MCMGet("postpone_on_respec_and_mirror") then
+        if MCM.Get("mod_enabled") and MCM.Get("postpone_on_respec_and_mirror") then
             EHandlers.OnRespecCompleted(character)
         end
     end)
 
     Ext.RegisterNetListener("SA_ClientAutosaveStatus", function(call, payload)
         local data = Ext.Json.Parse(payload)
-        if MCMGet("mod_enabled") then
+        if MCM.Get("mod_enabled") then
             EHandlers.OnClientMayAutosave(data)
         end
     end)
 
     Ext.RegisterNetListener("SA_LastPaperdollDestroyed", function(call, payload)
-        if MCMGet("mod_enabled") then
+        if MCM.Get("mod_enabled") then
             EHandlers.OnLastPaperdollDestroyed()
         end
     end)
 
     -- This would require ModVars and I don't want to implement that for such an uneeded feature
-    -- if MCMGet("load_aware") then
+    -- if MCM.Get("load_aware") then
     --   Ext.Osiris.RegisterListener("SavegameLoaded", 0, "after", EHandlers.SavegameLoaded)
     -- end
     -- Ext.Osiris.RegisterListener("MovedBy", 2, "before", EHandlers.DebugEvent)
