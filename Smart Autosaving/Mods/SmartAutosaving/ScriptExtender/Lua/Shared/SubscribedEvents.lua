@@ -25,7 +25,7 @@ function SubscribedEvents.SubscribeToEvents()
         end
     end)
     Ext.Osiris.RegisterListener("TimerFinished", 1, "before", function(timer)
-        if MCMGet("mod_enabled") and MCMGet("save_aware") then
+        if MCM.Get("mod_enabled") then
             EHandlers.OnTimerFinished(timer)
         end
     end)
