@@ -34,4 +34,21 @@
     <content contentuid="he30c37fe6ff54c12a25089af3ecfa7b81f4c" version="1">Configurações do temporizador de salvamento</content>
     <content contentuid="he3891a097f034b92a1d5a2e267f60776c84c" version="1">Se deve adiar o salvamento automático enquanto usa o inventário.</content>
     <content contentuid="h3d2a951473c841b79ee3c900a7bcb6165e3c" version="1">Adiar enquanto usa o inventário</content>
+    <content contentuid="hc534b4cd37a04de1925ef57c22aac832bb32" version="1">Geral</content>
+    <content contentuid="hd0cc39cec2474c3bbe99fecf432c629cdacc" version="1">Limites de slot</content>
+    <content contentuid="h50b87e50d7304747b6eb55eb8713c4eb69e3" version="1">Condições</content>
+    <content contentuid="h5166f3e11bdc42e18f5523cb8217fd45a834" version="1">Configurações de substituição</content>
+    <content contentuid="h78e52ed9b07248efb9558489fafb25d6658g" version="1">As configurações abaixo permitem aumentar o número máximo de salvamentos automáticos e salvamentos rápidos além do limite padrão.&lt;br&gt;Se você decidir substituir os valores padrão, altere-os apenas via MCM para consistência.</content>
+    <content contentuid="h5cee0b83772b438488b021ddce6f7c95f1bc" version="1">Substituir limites padrão</content>
+    <content contentuid="h82cc249bc689449ba91940ccf1c6e4c427c4" version="1">Se deve substituir os limites padrão para salvamentos automáticos e salvamentos rápidos.&lt;br&gt;Se desativado, os valores abaixo serão ignorados. Isso não é retroativo.</content>
+    <content contentuid="h2b63f0b26c0448408cf8c45fb81b87a8gb77" version="1">Número de salvamentos automáticos</content>
+    <content contentuid="h8da10d2ea90b4070b918c5757847a6a0642e" version="1">Define o número máximo de salvamentos automáticos que podem ser criados.&lt;br&gt;Isso ajustará o limite máximo exibido para salvamentos automáticos na interface, se necessário.</content>
+    <content contentuid="h8708d8d6c13e46bc8ed2687cd4c3530e1276" version="1">Número de salvamentos rápidos</content>
+    <content contentuid="hfda56ad1e04f435c8a7660e5fd5f3d90bgb3" version="1">Define o número máximo de salvamentos rápidos que podem ser criados.&lt;br&gt;Isso ajustará o limite máximo exibido para salvamentos rápidos na interface, se necessário.</content>
+    <content contentuid="hf5347cdcbd934001ac03f76d3c4d70ed119e" version="1">Configurações adicionais de substituição</content>
+    <content contentuid="haca3e675408542d5b3850f740c5911e9fe14" version="1">As configurações abaixo são redundantes, pois você pode apenas definir o número para a quantidade desejada com as configurações acima, mas estas permitem que você defina apenas o máximo.</content>
+    <content contentuid="h863722f22fbf4f3eb10740426660a90fg224" version="1">Número máximo de salvamentos automáticos</content>
+    <content contentuid="h7e9fcfae339542e2bac0d2ecfd8c7f5408e3" version="1">Define o número máximo de salvamentos automáticos permitidos.</content>
+    <content contentuid="hf23ce524f0c74232bd1bbf7bb662527aab4d" version="1">Número máximo de salvamentos rápidos</content>
+    <content contentuid="h040176e87e5645f89e5b70d7302ead5a97c4" version="1">Define o número máximo de salvamentos rápidos permitidos.</content>
 </contentList>
