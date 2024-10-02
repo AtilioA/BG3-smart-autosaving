@@ -2,12 +2,140 @@ Autosaving = {}
 
 Autosaving.TIMER_NAME = "Volitios_Smart_Autosaving"
 
+-- Initialize the guard flag to prevent recursive event handling
+local isAdjustingSettings = false
+
+-- Define pairs of maximum and current save settings
+local saveSettingsPairs = {
+    {
+        maxSettingId = "max_nr_of_autosaves",
+        currentSettingId = "nr_of_autosaves",
+    },
+    {
+        maxSettingId = "max_nr_of_quicksaves",
+        currentSettingId = "nr_of_quicksaves",
+    }
+}
+
+-- Helper function to handle boundary checks and adjustments
+local function HandleSettingChange(pair, changedSettingId, changedValue)
+    if not MCM.Get("override_vanilla_limits") then return end
+
+    local maxSettingId = pair.maxSettingId
+    local currentSettingId = pair.currentSettingId
+
+    -- Retrieve current values
+    local maxValue = MCM.Get(maxSettingId)
+    local currentValue = MCM.Get(currentSettingId)
+
+    -- Initialize a table to track changes for logging
+    local changes = {}
+
+    if changedSettingId == maxSettingId then
+        -- If maximum was changed, ensure current does not exceed new maximum
+        if currentValue > changedValue then
+            changes[currentSettingId] = changedValue
+        end
+    elseif changedSettingId == currentSettingId then
+        -- If current was changed, ensure maximum is not less than current
+        if changedValue > maxValue then
+            changes[maxSettingId] = changedValue
+        end
+    end
+
+    -- Apply necessary boundary adjustments
+    for settingId, newValue in pairs(changes) do
+        local existingValue = MCM.Get(settingId)
+        if existingValue ~= newValue then
+            MCM.Set(settingId, newValue)
+            SADebug(1, "Adjusting '" .. settingId .. "' to " .. tostring(newValue))
+        end
+    end
+
+    -- Update global switches after adjustments
+    local globalSwitches = Ext.Utils.GetGlobalSwitches()
+    globalSwitches.NrOfAutoSaves = MCM.Get("nr_of_autosaves")
+    globalSwitches.MaxNrOfAutoSaves = MCM.Get("max_nr_of_autosaves")
+    globalSwitches.NrOfQuickSaves = MCM.Get("nr_of_quicksaves")
+    globalSwitches.MaxNrOfQuickSaves = MCM.Get("max_nr_of_quicksaves")
+end
+
+-- Listener to handle setting changes and ensure consistency between current and max values
+Ext.ModEvents.BG3MCM['MCM_Setting_Saved']:Subscribe(function(payload)
+    -- Validate payload
+    if not payload or payload.modUUID ~= ModuleUUID or not payload.settingId then
+        return
+    end
+
+    -- If settings are being adjusted programmatically, skip processing to prevent recursion
+    if isAdjustingSettings then
+        SADebug(2, "Settings adjustment in progress. Ignoring event for settingId: " .. payload.settingId)
+        return
+    end
+
+    if payload.settingId == "override_vanilla_limits" then Autosaving.ApplyInitialSavingSettings() end
+
+    -- Iterate through each settings pair to find if the changed setting belongs to any pair
+    for _, pair in ipairs(saveSettingsPairs) do
+        if payload.settingId == pair.maxSettingId or payload.settingId == pair.currentSettingId then
+            -- Set the guard flag to indicate programmatic adjustments are in progress
+            isAdjustingSettings = true
+
+            -- Handle the setting change
+            HandleSettingChange(pair, payload.settingId, payload.value)
+
+            -- Reset the guard flag after adjustments are complete
+            isAdjustingSettings = false
+
+            -- Since the changed setting belongs to this pair, no need to check other pairs
+            break
+        end
+    end
+end)
+
+-- Function to apply initial boundary checks during mod initialization
+function Autosaving.ApplyInitialSavingSettings()
+    if not MCM.Get("override_vanilla_limits") then return end
+
+    isAdjustingSettings = true
+
+    for _, pair in ipairs(saveSettingsPairs) do
+        local maxValue = MCM.Get(pair.maxSettingId)
+        local currentValue = MCM.Get(pair.currentSettingId)
+
+        -- Check if current exceeds max and adjust if necessary
+        if currentValue > maxValue then
+            MCM.Set(pair.maxSettingId, pair.currentSettingId)
+            SADebug(1, "Initial adjustment: '" .. pair.maxSettingId .. "' set to " .. tostring(currentValue))
+        end
+    end
+
+    -- Update global switches based on validated settings
+    local globalSwitches = Ext.Utils.GetGlobalSwitches()
+    for _, pair in ipairs(saveSettingsPairs) do
+        local updatedMax = MCM.Get(pair.maxSettingId)
+        local updatedCurrent = MCM.Get(pair.currentSettingId)
+
+        if pair.maxSettingId == "max_nr_of_autosaves" then
+            globalSwitches.NrOfAutoSaves = updatedCurrent
+            globalSwitches.MaxNrOfAutoSaves = updatedMax
+        elseif pair.maxSettingId == "max_nr_of_quicksaves" then
+            globalSwitches.NrOfQuickSaves = updatedCurrent
+            globalSwitches.MaxNrOfQuickSaves = updatedMax
+        end
+    end
+
+    isAdjustingSettings = false
+end
+
 function Autosaving.CheckGameAutosavingSettings()
     if not Ext.Net.IsHost() then return end
     local globalSwitches = Ext.Utils.GetGlobalSwitches()
     if globalSwitches == nil then return end
 
     xpcall(function()
+        Autosaving.ApplyInitialSavingSettings()
+
         if globalSwitches["CanAutoSave"] ~= true then
             Ext.Utils.GetGlobalSwitches().CanAutoSave = true
             SAWarn(0,
@@ -26,8 +154,8 @@ function Autosaving.CheckGameAutosavingSettings()
 end
 
 function Autosaving.GetAutosavingPeriod()
-    local autosavingPeriodInMinutes = MCMGet("autosaving_period_in_minutes")
-    if MCMGet("timer_in_seconds") then
+    local autosavingPeriodInMinutes = MCM.Get("autosaving_period_in_minutes")
+    if MCM.Get("timer_in_seconds") then
         return autosavingPeriodInMinutes
     else
         return autosavingPeriodInMinutes * 60
@@ -121,7 +249,7 @@ end
 --- Restarts the autosave timer for the next autosave attempt.
 function Autosaving.Autosave()
     -- Check if idle detection is enabled and if any state has changed since the last autosave
-    if not MCMGet("postpone_on_idle") or Autosaving.HasStatesChanged() then
+    if not MCM.Get("postpone_on_idle") or Autosaving.HasStatesChanged() then
         Osi.AutoSave()
         SAPrint(0, "Game saved")
         Autosaving.UpdateState("waitingForAutosave", false)
@@ -137,7 +265,7 @@ end
 -- Only used if the corresponding option is enabled in the config JSON file.
 ---@return boolean
 function Autosaving.ShouldDialogueBlockSaving()
-    if MCMGet("postpone_on_dialogue") == true then
+    if MCM.Get("postpone_on_dialogue") == true then
         local entity = Ext.Entity.Get(Osi.GetHostCharacter())
         local success, inDialog = xpcall(function()
             return entity.ServerCharacter.Flags.InDialog
@@ -153,21 +281,21 @@ end
 --- Checks if combat should block saving by checking if player is in combat.
 -- Only used if the corresponding option is enabled in the config JSON file.
 function Autosaving.ShouldCombatBlockSaving()
-    if MCMGet("postpone_on_combat") == true then
+    if MCM.Get("postpone_on_combat") == true then
         return Osi.IsInCombat(Osi.GetHostCharacter()) == 1
     end
     return false
 end
 
 function Autosaving.ShouldInventoryBlockSaving()
-    if MCMGet("postpone_on_inventory") == true then
+    if MCM.Get("postpone_on_inventory") == true then
         return Autosaving.states.isUsingInventory
     end
     return false
 end
 
 function Autosaving.ShouldMovementBlockSaving()
-    if MCMGet("postpone_on_movement") == true then
+    if MCM.Get("postpone_on_movement") == true then
         local partyMemberMoving = Utils.IsAnyPartyMemberMoving()
         if partyMemberMoving then
             SAPrint(2, partyMemberMoving.CharacterCreationStats.Name .. " is moving")
