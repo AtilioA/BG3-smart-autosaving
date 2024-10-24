@@ -98,7 +98,7 @@
                             "Description": "Defines the maximum number of auto saves that can be created.\nThis will adjust the displayed maximum limit for auto saves in the UI if necessary.",
                             "Options": {
                                 "Min": 1,
-                                "Max": 500
+                                "Max": 1000
                             }
                         },
                         {
@@ -113,7 +113,7 @@
                             "Description": "Defines the maximum number of quick saves that can be created.\nThis will adjust the displayed maximum limit for quick saves in the UI if necessary.",
                             "Options": {
                                 "Min": 1,
-                                "Max": 500
+                                "Max": 1000
                             }
                         }
                     ]
@@ -131,7 +131,7 @@
                     },
                     "Settings": [
                         {
-                            "Id": "max_nr_of_auto_saves",
+                            "Id": "max_nr_of_autosaves",
                             "Name": "Maximum number of auto saves",
                             "Handles": {
                                 "NameHandle": "h863722f22fbf4f3eb10740426660a90fg224",
