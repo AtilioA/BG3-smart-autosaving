@@ -237,6 +237,10 @@ function EHandlers.OnLastPaperdollDestroyed()
     Autosaving.SaveIfWaiting()
 end
 
+function EHandlers.OnLastPaperdollCreated()
+    Autosaving.UpdateState("isUsingInventory", true)
+end
+
 -- IsMoving
 -- GetDebugCharacter
 

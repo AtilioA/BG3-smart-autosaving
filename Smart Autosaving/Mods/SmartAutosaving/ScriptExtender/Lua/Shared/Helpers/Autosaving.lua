@@ -249,7 +249,10 @@ end
 --- Restarts the autosave timer for the next autosave attempt.
 function Autosaving.Autosave()
     -- Check if idle detection is enabled and if any state has changed since the last autosave
-    if not MCM.Get("postpone_on_idle") or Autosaving.HasStatesChanged() then
+    local idlePostponed = MCM.Get("postpone_on_idle")
+    local statesChanged = Autosaving.HasStatesChanged()
+
+    if not idlePostponed or statesChanged then
         Osi.AutoSave()
         SAPrint(0, "Game saved")
         Autosaving.UpdateState("waitingForAutosave", false)

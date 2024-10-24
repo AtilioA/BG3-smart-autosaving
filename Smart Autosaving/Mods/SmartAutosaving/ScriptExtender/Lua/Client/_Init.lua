@@ -28,7 +28,6 @@ function ClientSideChecks.CanAutosave()
     return canAutosave, reasons
 end
 
-
 --- Client Events
 Ext.RegisterNetListener("SA_CheckClientSide", function(call, payload)
     local canAutosave, reasons = ClientSideChecks.CanAutosave()
@@ -44,5 +43,11 @@ Ext.Entity.OnDestroy("ClientPaperdoll", function(entity)
         if not ClientSideChecks.HasPaperdoll() then
             Ext.Net.PostMessageToServer("SA_LastPaperdollDestroyed", Ext.Json.Stringify({}))
         end
+    end)
+end)
+
+Ext.Entity.OnCreate("ClientPaperdoll", function(entity)
+    VCHelpers.Timer:OnTicks(8, function()
+        Ext.Net.PostMessageToServer("SA_LastPaperdollCreated", Ext.Json.Stringify({}))
     end)
 end)
