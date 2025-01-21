@@ -66,7 +66,7 @@ function EHandlers.OnTradeEnd()
     -- If moved item during trade, save
     if EHandlers.hasMovedItemDuringTrade then
         -- Save regardless of dialogue state
-        Autosaving.SaveIfWaiting()
+        Autosaving.HandlePotentialAutosave()
     else
         SAPrint(2, "No items moved during trade, not checking for autosave")
     end
@@ -190,14 +190,14 @@ function EHandlers.OnRespecCancelled(character)
     SAPrint(2, "Character" .. character .. " cancelled respec")
     -- We can't actually use this, since it will break logic for players who respec then use the mirror
     Autosaving.UpdateState("respecEnded", true)
-    Autosaving.SaveIfWaiting()
+    Autosaving.HandlePotentialAutosave()
 end
 
 function EHandlers.OnRespecCompleted(character)
     SAPrint(2, "Character" .. character .. " completed respec")
     -- We can't actually use this, since it will break logic for players who respec then use the mirror
     Autosaving.UpdateState("respecEnded", true)
-    Autosaving.SaveIfWaiting()
+    Autosaving.HandlePotentialAutosave()
 end
 
 function EHandlers.DebugEvent(param1, param2, param3, param4)
@@ -234,7 +234,7 @@ end
 
 function EHandlers.OnLastPaperdollDestroyed()
     Autosaving.UpdateState("isUsingInventory", false)
-    Autosaving.SaveIfWaiting()
+    Autosaving.HandlePotentialAutosave()
 end
 
 function EHandlers.OnLastPaperdollCreated()
