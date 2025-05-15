@@ -60,111 +60,6 @@
             ]
         },
         {
-            "TabId": "slot_limits",
-            "TabName": "Slot limits",
-            "Handles": {
-                "NameHandle": "hd0cc39cec2474c3bbe99fecf432c629cdacc"
-            },
-            "Sections": [
-                {
-                    "SectionId": "override_settings",
-                    "SectionName": "Override settings",
-                    "SectionDescription": "The settings below allow increasing the maximum number of auto saves and quick saves further than the vanilla limit.\nIf you decide to override vanilla values, please only change them via MCM for consistency.",
-                    "Handles": {
-                        "NameHandle": "h5166f3e11bdc42e18f5523cb8217fd45a834",
-                        "DescriptionHandle": "h78e52ed9b07248efb9558489fafb25d6658g"
-                    },
-                    "Settings": [
-                        {
-                            "Id": "override_vanilla_limits",
-                            "Name": "Override vanilla limits",
-                            "Handles": {
-                                "NameHandle": "h5cee0b83772b438488b021ddce6f7c95f1bc",
-                                "DescriptionHandle": "h82cc249bc689449ba91940ccf1c6e4c427c4"
-                            },
-                            "Type": "checkbox",
-                            "Default": true,
-                            "Description": "Whether to override the default vanilla limits for auto saves and quick saves."
-                        },
-                        {
-                            "Id": "nr_of_autosaves",
-                            "Name": "Number of auto saves",
-                            "Handles": {
-                                "NameHandle": "h2b63f0b26c0448408cf8c45fb81b87a8gb77",
-                                "DescriptionHandle": "h8da10d2ea90b4070b918c5757847a6a0642e"
-                            },
-                            "Type": "slider_int",
-                            "Default": 100,
-                            "Description": "Defines the maximum number of auto saves that can be created.\nThis will adjust the displayed maximum limit for auto saves in the UI if necessary.",
-                            "Options": {
-                                "Min": 1,
-                                "Max": 1000
-                            }
-                        },
-                        {
-                            "Id": "nr_of_quicksaves",
-                            "Name": "Number of quick saves",
-                            "Handles": {
-                                "NameHandle": "h8708d8d6c13e46bc8ed2687cd4c3530e1276",
-                                "DescriptionHandle": "hfda56ad1e04f435c8a7660e5fd5f3d90bgb3"
-                            },
-                            "Type": "slider_int",
-                            "Default": 100,
-                            "Description": "Defines the maximum number of quick saves that can be created.\nThis will adjust the displayed maximum limit for quick saves in the UI if necessary.",
-                            "Options": {
-                                "Min": 1,
-                                "Max": 1000
-                            }
-                        }
-                    ]
-                },
-                {
-                    "SectionId": "additional_override_settings",
-                    "SectionName": "Additional override settings",
-                    "SectionDescription": "The settings below are redundant since you can just set the number to the desired amount with the settings above, but these ones allows you to define only the maximum.",
-                    "Options": {
-                        "IsCollapsible": true
-                    },
-                    "Handles": {
-                        "NameHandle": "hf5347cdcbd934001ac03f76d3c4d70ed119e",
-                        "DescriptionHandle": "haca3e675408542d5b3850f740c5911e9fe14"
-                    },
-                    "Settings": [
-                        {
-                            "Id": "max_nr_of_autosaves",
-                            "Name": "Maximum number of auto saves",
-                            "Handles": {
-                                "NameHandle": "h863722f22fbf4f3eb10740426660a90fg224",
-                                "DescriptionHandle": "h7e9fcfae339542e2bac0d2ecfd8c7f5408e3"
-                            },
-                            "Type": "slider_int",
-                            "Default": 100,
-                            "Description": "Sets the maximum number of auto saves allowed.",
-                            "Options": {
-                                "Min": 1,
-                                "Max": 1000
-                            }
-                        },
-                        {
-                            "Id": "max_nr_of_quicksaves",
-                            "Name": "Maximum number of quick saves",
-                            "Handles": {
-                                "NameHandle": "hf23ce524f0c74232bd1bbf7bb662527aab4d",
-                                "DescriptionHandle": "h040176e87e5645f89e5b70d7302ead5a97c4"
-                            },
-                            "Type": "slider_int",
-                            "Default": 100,
-                            "Description": "Sets the maximum number of quick saves allowed.",
-                            "Options": {
-                                "Min": 1,
-                                "Max": 1000
-                            }
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "TabId": "conditions",
             "TabName": "Conditions",
             "Handles": {
@@ -344,6 +239,111 @@
                             "Type": "checkbox",
                             "Default": true,
                             "Description": "Whether to postpone autosaving while using items.\nThis includes ladders and containers."
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "TabId": "slot_limits",
+            "TabName": "Slot limits",
+            "Handles": {
+                "NameHandle": "hd0cc39cec2474c3bbe99fecf432c629cdacc"
+            },
+            "Sections": [
+                {
+                    "SectionId": "override_settings",
+                    "SectionName": "Override settings",
+                    "SectionDescription": "The settings below allow increasing the maximum number of auto saves and quick saves further than the vanilla limit.\nIf you decide to override vanilla values, please only change them via MCM for consistency.",
+                    "Handles": {
+                        "NameHandle": "h5166f3e11bdc42e18f5523cb8217fd45a834",
+                        "DescriptionHandle": "h78e52ed9b07248efb9558489fafb25d6658g"
+                    },
+                    "Settings": [
+                        {
+                            "Id": "override_vanilla_limits",
+                            "Name": "Override vanilla limits",
+                            "Handles": {
+                                "NameHandle": "h5cee0b83772b438488b021ddce6f7c95f1bc",
+                                "DescriptionHandle": "h82cc249bc689449ba91940ccf1c6e4c427c4"
+                            },
+                            "Type": "checkbox",
+                            "Default": true,
+                            "Description": "Whether to override the default vanilla limits for auto saves and quick saves."
+                        },
+                        {
+                            "Id": "nr_of_autosaves",
+                            "Name": "Number of auto saves",
+                            "Handles": {
+                                "NameHandle": "h2b63f0b26c0448408cf8c45fb81b87a8gb77",
+                                "DescriptionHandle": "h8da10d2ea90b4070b918c5757847a6a0642e"
+                            },
+                            "Type": "slider_int",
+                            "Default": 100,
+                            "Description": "Defines the maximum number of auto saves that can be created.\nThis will adjust the displayed maximum limit for auto saves in the UI if necessary.",
+                            "Options": {
+                                "Min": 1,
+                                "Max": 1000
+                            }
+                        },
+                        {
+                            "Id": "nr_of_quicksaves",
+                            "Name": "Number of quick saves",
+                            "Handles": {
+                                "NameHandle": "h8708d8d6c13e46bc8ed2687cd4c3530e1276",
+                                "DescriptionHandle": "hfda56ad1e04f435c8a7660e5fd5f3d90bgb3"
+                            },
+                            "Type": "slider_int",
+                            "Default": 100,
+                            "Description": "Defines the maximum number of quick saves that can be created.\nThis will adjust the displayed maximum limit for quick saves in the UI if necessary.",
+                            "Options": {
+                                "Min": 1,
+                                "Max": 1000
+                            }
+                        }
+                    ]
+                },
+                {
+                    "SectionId": "additional_override_settings",
+                    "SectionName": "Additional override settings",
+                    "SectionDescription": "The settings below are redundant since you can just set the number to the desired amount with the settings above, but these ones allows you to define only the maximum.",
+                    "Options": {
+                        "IsCollapsible": true
+                    },
+                    "Handles": {
+                        "NameHandle": "hf5347cdcbd934001ac03f76d3c4d70ed119e",
+                        "DescriptionHandle": "haca3e675408542d5b3850f740c5911e9fe14"
+                    },
+                    "Settings": [
+                        {
+                            "Id": "max_nr_of_autosaves",
+                            "Name": "Maximum number of auto saves",
+                            "Handles": {
+                                "NameHandle": "h863722f22fbf4f3eb10740426660a90fg224",
+                                "DescriptionHandle": "h7e9fcfae339542e2bac0d2ecfd8c7f5408e3"
+                            },
+                            "Type": "slider_int",
+                            "Default": 100,
+                            "Description": "Sets the maximum number of auto saves allowed.",
+                            "Options": {
+                                "Min": 1,
+                                "Max": 1000
+                            }
+                        },
+                        {
+                            "Id": "max_nr_of_quicksaves",
+                            "Name": "Maximum number of quick saves",
+                            "Handles": {
+                                "NameHandle": "hf23ce524f0c74232bd1bbf7bb662527aab4d",
+                                "DescriptionHandle": "h040176e87e5645f89e5b70d7302ead5a97c4"
+                            },
+                            "Type": "slider_int",
+                            "Default": 100,
+                            "Description": "Sets the maximum number of quick saves allowed.",
+                            "Options": {
+                                "Min": 1,
+                                "Max": 1000
+                            }
                         }
                     ]
                 }
