@@ -150,24 +150,24 @@ function SubscribedEvents.SubscribeToEvents()
         end
     end)
 
-    Ext.RegisterNetListener("SA_ClientAutosaveStatus", function(call, payload)
-        local data = Ext.Json.Parse(payload)
-        if MCM.Get("mod_enabled") then
-            EHandlers.OnClientMayAutosave(data)
-        end
-    end)
+    -- Ext.RegisterNetListener("SA_ClientAutosaveStatus", function(call, payload)
+    --     local data = Ext.Json.Parse(payload)
+    --     if MCM.Get("mod_enabled") then
+    --         EHandlers.OnClientMayAutosave(data)
+    --     end
+    -- end)
 
-    Ext.RegisterNetListener("SA_LastPaperdollDestroyed", function(call, payload)
-        if MCM.Get("mod_enabled") then
-            EHandlers.OnLastPaperdollDestroyed()
-        end
-    end)
+    -- Ext.RegisterNetListener("SA_LastPaperdollDestroyed", function(call, payload)
+    --     if MCM.Get("mod_enabled") then
+    --         EHandlers.OnLastPaperdollDestroyed()
+    --     end
+    -- end)
 
-    Ext.RegisterNetListener("SA_LastPaperdollCreated", function(call, payload)
-        if MCM.Get("mod_enabled") then
-            EHandlers.OnLastPaperdollCreated()
-        end
-    end)
+    -- Ext.RegisterNetListener("SA_LastPaperdollCreated", function(call, payload)
+    --     if MCM.Get("mod_enabled") then
+    --         EHandlers.OnLastPaperdollCreated()
+    --     end
+    -- end)
 
     -- This would require ModVars and I don't want to implement that for such an uneeded feature
     -- if MCM.Get("load_aware") then

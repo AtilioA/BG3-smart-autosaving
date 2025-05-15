@@ -290,12 +290,12 @@ function Autosaving.ShouldCombatBlockSaving()
     return false
 end
 
-function Autosaving.ShouldInventoryBlockSaving()
-    if MCM.Get("postpone_on_inventory") == true then
-        return Autosaving.states.isUsingInventory
-    end
-    return false
-end
+-- function Autosaving.ShouldInventoryBlockSaving()
+--     if MCM.Get("postpone_on_inventory") == true then
+--         return Autosaving.states.isUsingInventory
+--     end
+--     return false
+-- end
 
 function Autosaving.ShouldMovementBlockSaving()
     if MCM.Get("postpone_on_movement") == true then
@@ -345,7 +345,7 @@ function Autosaving.CanAutosaveServerSide()
     local combatCheck = Autosaving.ShouldCombatBlockSaving()
     local dialogueCheck = Autosaving.ShouldDialogueBlockSaving()
     local movementCheck = Autosaving.ShouldMovementBlockSaving()
-    local inventoryCheck = Autosaving.ShouldInventoryBlockSaving()
+    local inventoryCheck = false --Autosaving.ShouldInventoryBlockSaving()
 
     local notInAnyBlockingState = not Autosaving.states.isInDialogue and
         -- not Autosaving.states.isInCombat and -- Temporarily disabled since this event does not check players involved in combat
@@ -370,25 +370,23 @@ function Autosaving.HandlePotentialAutosave()
     -- Do not autosave if the states are true, even if we're waiting for an autosave
     -- SAPrint(2,
     --   "Checking if we should autosave: " ..
-    --   tostring(Autosaving.states.waitingForAutosave) .. " and " .. tostring(Autosaving.CanAutosaveServerSide()))
+    --   tostring(Autosaving.states.waitingForAutosave) .. " and " .. tostring(Autosaving.CanAutosave()))
     if Autosaving.states.waitingForAutosave and Autosaving.CanAutosaveServerSide() then
-        Autosaving.CheckClientSide()
+        Autosaving.Autosave()
     end
-
     -- Set this to false regardless; if we're in combat, we'll set it to true again when a new round ends
     -- Also don't use the function to update the state to avoid recursion
     Autosaving.states.combatTurnEnded = false
 end
 
+function Autosaving.SaveIfWaiting()
+    if Autosaving.states.waitingForAutosave then
+        Autosaving.Autosave()
+    end
+end
 function Autosaving.CheckClientSide()
     if Ext.IsServer() then
         Ext.Net.BroadcastMessage("SA_CheckClientSide", Ext.Json.Stringify({}))
-    end
-end
-
-function Autosaving.SaveIfWaiting()
-    if Autosaving.states.waitingForAutosave then
-        Autosaving.CheckClientSide()
     end
 end
 

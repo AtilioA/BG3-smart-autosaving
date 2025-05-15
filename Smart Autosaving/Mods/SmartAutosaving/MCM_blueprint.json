@@ -224,17 +224,17 @@
                             "Default": true,
                             "Description": "Whether to postpone autosaving if you're idle.\nNote: this works best if you have other options enabled."
                         },
-                        {
-                            "Id": "postpone_on_inventory",
-                            "Name": "Postpone on inventory",
-                            "Handles": {
-                                "NameHandle": "h3d2a951473c841b79ee3c900a7bcb6165e3c",
-                                "DescriptionHandle": "he3891a097f034b92a1d5a2e267f60776c84c"
-                            },
-                            "Type": "checkbox",
-                            "Default": true,
-                            "Description": "Whether to postpone autosaving while using the inventory."
-                        },
+                        // {
+                        //     "Id": "postpone_on_inventory",
+                        //     "Name": "Postpone on inventory",
+                        //     "Handles": {
+                        //         "NameHandle": "h3d2a951473c841b79ee3c900a7bcb6165e3c",
+                        //         "DescriptionHandle": "he3891a097f034b92a1d5a2e267f60776c84c"
+                        //     },
+                        //     "Type": "checkbox",
+                        //     "Default": true,
+                        //     "Description": "Whether to postpone autosaving while using the inventory."
+                        // },
                         {
                             "Id": "postpone_on_dialogue",
                             "Name": "Postpone on dialogue",
