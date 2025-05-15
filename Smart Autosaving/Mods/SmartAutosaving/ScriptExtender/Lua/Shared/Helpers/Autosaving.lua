@@ -105,7 +105,7 @@ function Autosaving.ApplyInitialSavingSettings()
 
         -- Check if current exceeds max and adjust if necessary
         if currentValue > maxValue then
-            MCM.Set(pair.maxSettingId, pair.currentSettingId)
+            MCM.Set(pair.maxSettingId, currentValue)
             SADebug(1, "Initial adjustment: '" .. pair.maxSettingId .. "' set to " .. tostring(currentValue))
         end
     end
@@ -384,6 +384,7 @@ function Autosaving.SaveIfWaiting()
         Autosaving.Autosave()
     end
 end
+
 function Autosaving.CheckClientSide()
     if Ext.IsServer() then
         Ext.Net.BroadcastMessage("SA_CheckClientSide", Ext.Json.Stringify({}))
