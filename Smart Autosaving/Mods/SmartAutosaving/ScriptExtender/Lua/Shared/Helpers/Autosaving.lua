@@ -339,6 +339,12 @@ end
 
 function Autosaving.CanAutosaveServerSide()
     local isRespeccingOrUsingMirror = Autosaving.ProxyIsUsingRespecOrMirror() -- and not Autosaving.states.respecEnded
+    local isPartyDead = Utils.IsPartyDead()
+
+    if isPartyDead then
+        SAPrint(2, "Party is dead, blocking autosave")
+        return false
+    end
 
     -- These checks ensure that players loading a save in combat or dialogue will not autosave (if the corresponding options are set to true)
     -- We could just use this instead of listening to the events, but most logic is done through events (which is also more efficient)
@@ -359,7 +365,8 @@ function Autosaving.CanAutosaveServerSide()
         not dialogueCheck and
         not movementCheck and
         not inventoryCheck and
-        not isRespeccingOrUsingMirror
+        not isRespeccingOrUsingMirror and
+        not isPartyDead
 
     return (Autosaving.states.combatTurnEnded or notInAnyBlockingState)
 end
