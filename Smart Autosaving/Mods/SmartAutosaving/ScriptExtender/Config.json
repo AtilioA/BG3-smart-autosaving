@@ -1,5 +1,5 @@
 {
-    "RequiredVersion": 19,
+    "RequiredVersion": 32,
     "ModTable": "SmartAutosaving",
     "FeatureFlags": [
         "Lua"
