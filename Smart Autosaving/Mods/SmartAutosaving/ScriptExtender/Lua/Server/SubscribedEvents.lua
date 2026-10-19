@@ -18,13 +18,13 @@ function SubscribedEvents.SubscribeToEvents()
 
     -- Registering general Osiris event listeners
     -- Start the timer when the game is loaded
-    Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "before", function(levelName, isEditorMode)
+    Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(levelName, isEditorMode)
         if MCM.Get("mod_enabled") then
             Autosaving.CheckGameAutosavingSettings()
             Autosaving.StartOrRestartTimer()
         end
     end)
-    Ext.Osiris.RegisterListener("TimerFinished", 1, "before", function(timer)
+    Ext.Osiris.RegisterListener("TimerFinished", 1, "after", function(timer)
         if MCM.Get("mod_enabled") then
             EHandlers.OnTimerFinished(timer)
         end
@@ -40,29 +40,29 @@ function SubscribedEvents.SubscribeToEvents()
 
     -- Events that can restrict autosaving
     -- Dialogue
-    Ext.Osiris.RegisterListener("DialogStartRequested", 2, "before", function()
+    Ext.Osiris.RegisterListener("DialogStartRequested", 2, "after", function()
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_dialogue") then
             EHandlers.OnDialogStart()
         end
     end)
-    Ext.Osiris.RegisterListener("DialogStarted", 2, "before", function()
+    Ext.Osiris.RegisterListener("DialogStarted", 2, "after", function()
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_dialogue") then
             EHandlers.OnDialogStart()
         end
     end)
-    Ext.Osiris.RegisterListener("DialogEnded", 2, "before", function()
+    Ext.Osiris.RegisterListener("DialogEnded", 2, "after", function()
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_dialogue") then
             EHandlers.OnDialogEnd()
         end
     end)
 
     -- Trading
-    Ext.Osiris.RegisterListener("RequestTrade", 4, "before", function(character, target, tradeMode, itemsTagFilter)
+    Ext.Osiris.RegisterListener("RequestTrade", 4, "after", function(character, target, tradeMode, itemsTagFilter)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_trade") then
             EHandlers.OnTradeStart()
         end
     end)
-    Ext.Osiris.RegisterListener("TradeEnds", 2, "before", function(character, target)
+    Ext.Osiris.RegisterListener("TradeEnds", 2, "after", function(character, target)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_trade") then
             EHandlers.OnTradeEnd()
         end
@@ -75,12 +75,12 @@ function SubscribedEvents.SubscribeToEvents()
 
     -- Combat
     -- REVIEW: I don't know if this event is triggered when combat starts only with the player or with any character, perhaps we should not listen to this at all (combat is already handled with other checks anyways)
-    Ext.Osiris.RegisterListener("CombatStarted", 1, "before", function(combatGuid)
+    Ext.Osiris.RegisterListener("CombatStarted", 1, "after", function(combatGuid)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_combat") then
             EHandlers.OnCombatStart()
         end
     end)
-    Ext.Osiris.RegisterListener("CombatEnded", 1, "before", function(combatGuid)
+    Ext.Osiris.RegisterListener("CombatEnded", 1, "after", function(combatGuid)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_combat") then
             EHandlers.OnCombatEnd()
         end
@@ -93,23 +93,23 @@ function SubscribedEvents.SubscribeToEvents()
         end
     end)
 
-    Ext.Osiris.RegisterListener("StartedLockpicking", 2, "before", function(character, item)
+    Ext.Osiris.RegisterListener("StartedLockpicking", 2, "after", function(character, item)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_lockpicking") then
             EHandlers.OnLockpickingStart()
         end
     end)
-    Ext.Osiris.RegisterListener("StoppedLockpicking", 2, "before", function(character, item)
+    Ext.Osiris.RegisterListener("StoppedLockpicking", 2, "after", function(character, item)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_lockpicking") then
             EHandlers.OnLockpickingEnd()
         end
     end)
 
-    Ext.Osiris.RegisterListener("UseStarted", 2, "before", function(character, item)
+    Ext.Osiris.RegisterListener("UseStarted", 2, "after", function(character, item)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_using_items") then
             EHandlers.OnUseStarted(character, item)
         end
     end)
-    Ext.Osiris.RegisterListener("UseFinished", 3, "before", function(character, item, result)
+    Ext.Osiris.RegisterListener("UseFinished", 3, "after", function(character, item, result)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_using_items") then
             EHandlers.OnUseEnded(character, item, result)
         end
@@ -120,18 +120,18 @@ function SubscribedEvents.SubscribeToEvents()
             EHandlers.onRequestCanLoot(looter, target)
         end
     end)
-    Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "before", function(player, lootedCharacter)
+    Ext.Osiris.RegisterListener("CharacterLootedCharacter", 2, "after", function(player, lootedCharacter)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_looting_characters") then
             EHandlers.onCharacterLootedCharacter(player, lootedCharacter)
         end
     end)
 
-    Ext.Osiris.RegisterListener("EnteredForceTurnBased", 1, "before", function(object)
+    Ext.Osiris.RegisterListener("EnteredForceTurnBased", 1, "after", function(object)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_turn_based_mode") then
             EHandlers.OnEnteredForceTurnBased(object)
         end
     end)
-    Ext.Osiris.RegisterListener("LeftForceTurnBased", 1, "before", function(object)
+    Ext.Osiris.RegisterListener("LeftForceTurnBased", 1, "after", function(object)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_turn_based_mode") then
             EHandlers.OnLeftForceTurnBased(object)
         end
@@ -139,12 +139,12 @@ function SubscribedEvents.SubscribeToEvents()
 
     -- I don't know what this is used for, it is not for things like shadow-curse
     -- Ext.Osiris.RegisterListener("EnteredSharedForceTurnBased", 2, "before", EHandlers.OnEnteredSharedForceTurnBased)
-    Ext.Osiris.RegisterListener("RespecCancelled", 1, "before", function(character)
+    Ext.Osiris.RegisterListener("RespecCancelled", 1, "after", function(character)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_respec_and_mirror") then
             EHandlers.OnRespecCancelled(character)
         end
     end)
-    Ext.Osiris.RegisterListener("RespecCompleted", 1, "before", function(character)
+    Ext.Osiris.RegisterListener("RespecCompleted", 1, "after", function(character)
         if MCM.Get("mod_enabled") and MCM.Get("postpone_on_respec_and_mirror") then
             EHandlers.OnRespecCompleted(character)
         end

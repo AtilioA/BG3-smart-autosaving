@@ -1,4 +1,4 @@
-RequireFiles("Shared/Helpers/", {
+RequireFiles("Server/Helpers/", {
   "Printer",
   "Utils",
   "Autosaving",
