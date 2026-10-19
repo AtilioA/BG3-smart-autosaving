@@ -12,10 +12,6 @@ function SubscribedEvents.SubscribeToEvents()
     --     end
     -- end
 
-    SAPrint(2,
-        "Subscribing to events with JSON config: " ..
-        Ext.Json.Stringify(Mods.BG3MCM.MCMAPI:GetAllModSettings(ModuleUUID), { Beautify = true }))
-
     -- Registering general Osiris event listeners
     -- Start the timer when the game is loaded
     Ext.Osiris.RegisterListener("LevelGameplayStarted", 2, "after", function(levelName, isEditorMode)
